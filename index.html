@@ -11,9 +11,10 @@
             font-family: 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.5;
             background-color: #eaeaea;
             color: #333;
+            font-size: 14px;
         }
 
         .container {
@@ -30,27 +31,48 @@
         h1 {
             text-align: center;
             color: #2c3e50;
-            font-size: 2.5em;
+            font-size: 3em;
             margin-bottom: 10px;
         }
 
-        h2,
-        h3 {
+        h2 {
+            font-size: 1.5em;
             margin-top: 25px;
             color: #34495e;
             border-bottom: 2px solid #007acc;
             padding-bottom: 5px;
         }
 
+        .overview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #007acc;
+        }
+
+        .overview p {
+            margin: 10px 0;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .highlight {
+            color: #007acc;
+            font-weight: 600;
+        }
+
         a {
             color: #007acc;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color 0.3s, transform 0.2s;
+            display: inline-block;
         }
 
         a:hover {
             color: #005f8d;
             text-decoration: underline;
+            transform: translateY(-1px);
         }
 
         ul {
@@ -60,52 +82,88 @@
 
         li {
             margin: 8px 0;
-            padding: 10px;
+            padding: 12px;
             background: #f9f9f9;
             border-radius: 5px;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
         }
 
         li:hover {
             background: #f1f1f1;
+            border-left-color: #007acc;
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            text-align: center;
         }
 
         .social-links a {
-            margin-right: 15px;
+            margin: 0 15px;
             font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+
+        .social-links a:hover {
+            background: #007acc;
+            color: white;
+            text-decoration: none;
         }
 
         .section {
             margin-bottom: 30px;
-        }
-
-        .profile-image {
-            width: 100%;
-            max-width: 200px;
-            border-radius: 50%;
-            display: block;
-            margin: 20px auto;
-            border: 3px solid #007acc;
+            padding: 0 10px;
         }
 
         .image-gallery {
             display: flex;
-            justify-content: space-between;
             flex-wrap: wrap;
+            gap: 20px;
             margin-top: 20px;
         }
 
+        .image-gallery>div {
+            flex: 1 1 calc(50% - 10px);
+            min-width: 250px;
+        }
+
         .image-gallery img {
-            width: 48%;
+            width: 100%;
+            height: auto;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .image-gallery img:hover {
+            transform: scale(1.02);
         }
 
         .image-description {
             text-align: center;
-            margin-top: 5px;
+            margin-top: 8px;
             font-size: 0.9em;
-            color: #555;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+            }
+
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            .social-links a {
+                display: block;
+                margin: 10px 0;
+            }
         }
     </style>
 </head>
@@ -113,135 +171,152 @@
 <body>
     <div class="container">
         <h1>Mostofa Adib Shakib</h1>
+
+        <div class="overview">
+            <h2>Summary</h2>
+            <p>Wanted to do big things but lacked family support, so I started my first business in high school with $5, turning it
+            into a 6000x return. That success funded my US education, and today, I live in the US on an extraordinary talent visa,
+            chasing even bigger dreams</p>
+        </div>
+
+        <div class="section">
+            <h2>Notable Achievements</h2>
+            <ul>
+                <li> Princeton & Rice University Hackathon Winner </li>
+                <li> US Government (NSF I-Corps) Grant Recipient </li>
+                <li>Country Highest Marks in Mathematics in Bangladesh</li>
+            </ul>
+        </div>
+
         <div class="section">
             <h2>Current Endeavors</h2>
             <ul>
                 <li> <strong> Founder </strong> at <strong>Stealth Startup</strong>: Exploring AI Agent Verticals </li>
-                <li> <strong> Founder </strong> at <a href="https://www.csbmain.com/" target="_blank"><strong>CSB</strong></a>: Land your dream job 10X faster; generated $4M TC & scaled to 60k people </li>
-                <!-- <li> <strong> Founder </strong> at <a href="https://www.variantc.com/" target="_blank"><strong>Variant Technologies</strong></a>: Software Agency; Cutting costs for SMEs with the use of AI </li> -->
+                <li> <strong> Founder </strong> at <a href="https://www.csbmain.com/"
+                        target="_blank"><strong>CSB</strong></a>: Scaled to 60K+ engineers globally to land their dream job 10x Faster </li>
             </ul>
         </div>
 
         <div class="section">
             <h2>Past Endeavors</h2>
             <ul>
-                <li> <strong> Software Engineer II </strong> at <strong>ZipRecruiter</strong>: Lead Engineering for UI Test Automation infrastructure from scratch </li>
-                <li> <strong> Software Engineer </strong> at <strong>Snapchat</strong>: Shipped username change (#1 user-requested feature) to 360M DAU </li>
-                <!-- <li> <strong> Founder & CEO </strong> at <a href="https://www.linkedin.com/company/promethiumexchange" target="_blank"><strong>Promethium</strong></a>: Founded a blockchain DeFi payment startup with funding from the US Government</li> -->
-                <!-- <li> <strong> Founder/President </strong> at <a href="https://www.facebook.com/raiderhacks/" target="_blank"><strong>RaiderHacks</strong></a>: Founded West Texas's first hackathon organization; scaled to 140 students</li> -->
-                <li> <strong> AI Researcher </strong> at <strong>Applied Vision Lab</strong>: Developed affordable unmanned vision system for early cotton yield analysis </li>
-                <li> <strong> Founder/CEO </strong> at <a href="https://www.facebook.com/kurtssteamstore" target="_blank"><strong>KurT's Steam Store</strong></a>: Founded Bangladesh's largest eSports eCommerce with 6000X ROI </li>
+                <li> <strong> Software Engineer II </strong> at <strong>ZipRecruiter</strong>: Built the entire UI
+                    testing infrastructure from scratch </li>
+                <li> <strong> Software Engineer </strong> at <strong>Snapchat</strong>: Shipped the number 1
+                    user-requested feature (username change) for 360M DAU </li>
+                <li> <strong> Founder/President </strong> at <strong>RaiderHacks</strong>: Created Texas' first hackathon organization that carpools and competes at prestigious hackathons </li>
+                <li> <strong> AI Researcher </strong> at <strong>Applied Vision Lab</strong>: Developed affordable
+                    unmanned vision system for early cotton yield analysis </li>
+                <li> <strong> STEM Peer Tutor </strong> at <strong>Texas Tech University</strong>: Taught students DSA, Mathematics, and Machine Learning </li>
+                <li> <strong> Founder/CEO </strong> at <a href="https://www.facebook.com/kurtssteamstore"
+                        target="_blank"><strong>KurT's Steam Store</strong></a>: Founded Bangladesh's largest eSports
+                    arbritrage with 6000 times ROI </li>
             </ul>
         </div>
 
         <div class="section">
             <h2>Education</h2>
             <ul>
-                <li><strong>Carnegie Mellon University - MSCS </strong>: Opted out from MSCS with focus in Scalable Systems & Artificial Intelligence </li>
-                <li><strong>Texas Tech University - CS, Math & EE </strong>: Graduated with Honors, 2 Bachelor Degrees, 2 Minors and 6 SWE internships  </li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Notable Achievements</h2>
-            <ul>
-                <!-- <li>Built Bangladesh's best eSports <a href="https://youtu.be/IknVHDlDylM" target="_blank"> arbitrage </a> in high school to fund my US education (6000X ROI) </li> -->
-                <li> Princeton & Rice University Hackathon Winner </li>
-                <li> US Government (NSF I-Corps) Grant Recipient </li>
-                <li>Country Highest Marks in Mathematics in Bangladesh</li>
-                <!-- <li>O1A Visa Holder: Extraordinary Ability US Talent Visa </li> -->
+                <li><strong>Carnegie Mellon University </strong>: Opted out from <strong>MSCS</strong> with focus in Scalable Systems & Artificial Intelligence (Ranked #1 in the world)</li>
+                <li><strong>Texas Tech University </strong>: Presidential Scholar; Graduated with honors, degrees in <strong>CS, Math, EE</strong> and 6 Software internships in 4 years </li>
             </ul>
         </div>
 
         <div class="section">
             <h2>Social Impact</h2>
             <ul>
-                <li>Organized Bangladesh's first international <a href="https://hackcsb.devpost.com/" target="_blank"> Hackathon </a> with leaders from Google, and Microsoft</li>
-                <!-- <li>Helped people get high paid jobs and generated over $4M+ in total compensation.</li> -->
-                <li>Created Texas' first hackathon organization, scaled to 140 students and won prizes at Princeton & Rice University</li>
-                <!-- <li>Helped people to pursue higher studies in the US who received over $500K in scholarships & fundings </li> -->
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Affiliations</h2>
-            <ul>
-                <li><strong>Founder Fellow</strong> at <a href="https://www.beondeck.com/" target="_blank">OnDeck</a></li>
-                <!-- <li><strong>Global Fellow</strong> at <a href="https://ai2030.org/" target="_blank">AI2030</a></li> -->
-                <li><strong>Member</strong> of <a href="https://councils.forbes.com/profile/Mostofa-Shakib-Founder-CEO-Variant-Technologies/fdfc43c6-7fb0-412b-966b-9c5f62c822c8" target="_blank">Forbes Business Council</a></li>
-                <!-- <li><strong>Investor</strong> at <a href="https://www.gaingels.com/" target="_blank">GaingelsVC</a></li> -->
-                <li><strong>Startup Mentor</strong> at <a href="https://fi.co/mentors/11163" target="_blank">Founder's Institute</a></li>
-                <li><strong>Startup Mentor</strong> at <a href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa" target="_blank">Texas Tech University's Innovation Hub</a></li>
-                <!-- <li><strong>Venture Scout</strong> at <a href="https://flashpoint.vc/" target="_blank">Flashpoint Venture Capital</a> </li> -->
+                <li> Created one of South Asia's largest Hackathon <a href="https://hackcsb.devpost.com/" target="_blank">
+                        (HackCSB) </a> with leaders from Google/Microsoft, and best universities in the country</li>
+                <li>Created Texas' first hackathon organization, scaled to 140 students and won prizes at Princeton &
+                    Rice University</li>
             </ul>
         </div>
 
         <div class="section">
             <h2>Projects</h2>
             <ul>
-                <li> <strong>AI Talent Manager: </strong> <a href="https://github.com/mostofashakib/AI-Talent-Manager" target="_blank"> Get tailored brand recommendation & automate affiliate marketing </a> </li>
-                <li> <strong>AutoFlow: </strong> <a href="https://github.com/mostofashakib/AutoFlow" target="_blank"> Voice-activated workflow automation assistant </a> </li>
+                <li> <strong>AI Talent Manager: </strong> <a href="https://github.com/mostofashakib/AI-Talent-Manager"
+                        target="_blank"> Get tailored brand recommendation & automate affiliate marketing </a> </li>
+                <li> <strong>AutoFlow: </strong> <a href="https://github.com/mostofashakib/AutoFlow" target="_blank">
+                        Voice-activated workflow automation assistant </a> </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Affiliations</h2>
+            <ul>
+                <li><strong>Founder Fellow</strong> at <a href="https://www.beondeck.com/" target="_blank">OnDeck</a>
+                </li>
+                <li><strong>Member</strong> of <a
+                        href="https://councils.forbes.com/profile/Mostofa-Shakib-Founder-CEO-Variant-Technologies/fdfc43c6-7fb0-412b-966b-9c5f62c822c8"
+                        target="_blank">Forbes Business Council</a></li>
+                <li><strong>Startup Mentor</strong> at <a href="https://fi.co/mentors/11163" target="_blank">Founder's
+                        Institute</a></li>
+                <li><strong>Startup Mentor</strong> at <a
+                        href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa"
+                        target="_blank">Texas Tech University's Innovation Hub</a></li>
             </ul>
         </div>
 
         <div class="section">
             <h2>Public Speaking</h2>
             <ul>
-                <li> <strong>Guest Speaker </strong> at <a href="https://www.instagram.com/p/Ch04AegO8Mm/" target="_blank"> Texas Tech University </a> </li>
-                <li> <strong>Guest Lecturer </strong> at <a href="https://www.facebook.com/diucpc.official/posts/pfbid02jPSt8dtb1yPPRyUkNqwBwyby6f5Z7BMBHJcccxUicnkKNoxPWJrP5CHwFLaGiJHxl" target="_blank"> Daffodil International University </a> </li>
+                <li> <strong>Guest Speaker </strong> at <a href="https://www.instagram.com/p/Ch04AegO8Mm/"
+                        target="_blank"> Texas Tech University </a> </li>
+                <li> <strong>Guest Lecturer </strong> at <a
+                        href="https://www.facebook.com/diucpc.official/posts/pfbid02jPSt8dtb1yPPRyUkNqwBwyby6f5Z7BMBHJcccxUicnkKNoxPWJrP5CHwFLaGiJHxl"
+                        target="_blank"> Daffodil International University </a> </li>
             </ul>
         </div>
 
         <div class="section">
             <h2>Media Features </h2>
             <ul>
-                <li> Bootstrapping A Tech Startup? 20 Expert Tips For Finding Success <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2024/08/19/bootstrapping-a-tech-startup-20-expert-tips-for-finding-success/" target="_blank"> Forbes </a> </li>
-                <li> 20 Experts Share Tips For Aspiring Entrepreneurs <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2024/11/20/20-experts-share-tips-for-aspiring-entrepreneurs/" target="_blank"> Forbes </a> </li>
-                <li> Adib’s Path from Steam Trader to Silicon Valley <a href="https://www.usatoday.com/story/special/contributor-content/2024/06/11/adibs-path-from-steam-trader-to-silicon-valley/74061707007/" target="_blank"> USA Today </a> </li>
-                <li> Social Media Shoutout <a href="https://twitter.com/UNICEFinnovate/status/1858827565445902392" target="_blank"> UNICEF </a> </li>
-                <li> How a Gaming Arbitrage Strategy Led to Revolutionizing Tech Education <a href="https://www.msn.com/en-ca/news/technology/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/ar-AA1uaJnu" target="_blank"> Microsoft </a> </li>
-                <!-- <li> From Bangladesh to Texas: Shakib and the Power of Hackathons <a href="https://hackernoon.com/from-bangladesh-to-texas-shakib-and-the-power-of-hackathons" target="_blank"> Hackernoon </a> </li> -->
-                <li> Bangladesh’s tech sector energized by international hackathon <a href="https://www.dhakatribune.com/bangladesh/education/357156/bangladesh%E2%80%99s-tech-sector-energized-by" target="_blank"> Dhaka Tribune </a> </li>
-                <li> How a Bangladeshi hackathon is inspiring a generation <a href="https://thefinancialexpress.com.bd/sci-tech/how-a-bangladeshi-hackathon-is-inspiring-a-generation" target="_blank"> The Financial Express </a> </li>
-                <li> Shakib's Unstoppable Journey <a href="https://mzamin.com/news.php?news=103769&fbclid=IwAR14ocjEhgN_d-e0FeUu2ldmzbZAs2Z7XQxMiyrnsu9QITl6VtRlToXtXJ8_aem_AXmPyE7ssNDVVh671wbOlLaLP_t8Tn7_ELeENt8RplMbjbB8Yolt_DyB_AWhBscTJMd7PtDCOU5hw4xR2FcqV7os#gsc.tab=0" target="_blank"> Daily Manab Zamin </a> </li>
-                <!-- <li> HackCSB ignites innovation among Bangladesh’s tech students <a href="https://bangladeshpost.net/posts/hackcsb-ignites-innovation-among-bangladesh-s-tech-students-144881" target="_blank"> Bangladesh Post </a> </li> -->
-                <!-- <li> Interview with a Journalist <a href="https://canvasrebel.com/meet-mostofa-shakib/" target="_blank"> CanvasRebel </a> </li> -->
-                <!-- <li> Interview with a Journalist <a href="https://boldjourney.com/meet-mostofa-shakib/" target="_blank"> BoldJourney </a> </li> -->
-                <!-- <li> Social media feature by a prominent bangladeshi newsoutlet <a href="https://www.facebook.com/shortstoriessbd/posts/pfbid02VH96ZdhQyjetBvckwcpgtJwcQDGqtxXxeH77CogEWGDSVNVZinS6pdNoqLFqvBn4l" target="_blank"> Short Stories </a> </li> -->
-                <!-- <li> Podcast with a prominent bangladeshi <a href="https://youtu.be/lc6NeudSkMk?si=ei5qP7pDj6whFwvJ" target="_blank"> YouTuber </a> </li> -->
-                <!-- <li> Podcast with a prominent bangladeshi newsoutlet <a href="https://www.youtube.com/watch?v=4m5bO1p8SHg" target="_blank"> Short Stories </a> </li> -->
+                <li> Bootstrapping A Tech Startup? 20 Expert Tips For Finding Success <a
+                        href="https://www.forbes.com/councils/forbesbusinesscouncil/2024/08/19/bootstrapping-a-tech-startup-20-expert-tips-for-finding-success/"
+                        target="_blank"> Forbes </a> </li>
+                <li> Adib's Path from Steam Trader to Silicon Valley <a
+                        href="https://www.usatoday.com/story/special/contributor-content/2024/06/11/adibs-path-from-steam-trader-to-silicon-valley/74061707007/"
+                        target="_blank"> USA Today </a> </li>
+                <!-- <li> Social Media Shoutout <a href="https://twitter.com/UNICEFinnovate/status/1858827565445902392"
+                        target="_blank"> UNICEF </a> </li> -->
+                <li> How a Gaming Arbitrage Strategy Led to Revolutionizing Tech Education <a
+                        href="https://www.msn.com/en-ca/news/technology/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/ar-AA1uaJnu"
+                        target="_blank"> Microsoft </a> </li>
+                <li> Bangladesh's tech sector energized by international hackathon <a
+                        href="https://www.dhakatribune.com/bangladesh/education/357156/bangladesh%E2%80%99s-tech-sector-energized-by"
+                        target="_blank"> Dhaka Tribune </a> </li>
+                <li> How a Bangladeshi hackathon is inspiring a generation <a
+                        href="https://thefinancialexpress.com.bd/sci-tech/how-a-bangladeshi-hackathon-is-inspiring-a-generation"
+                        target="_blank"> The Financial Express </a> </li>
+                <li> Shakib's Unstoppable Journey <a
+                        href="https://mzamin.com/news.php?news=103769&fbclid=IwAR14ocjEhgN_d-e0FeUu2ldmzbZAs2Z7XQxMiyrnsu9QITl6VtRlToXtXJ8_aem_AXmPyE7ssNDVVh671wbOlLaLP_t8Tn7_ELeENt8RplMbjbB8Yolt_DyB_AWhBscTJMd7PtDCOU5hw4xR2FcqV7os#gsc.tab=0"
+                        target="_blank"> Daily Manab Zamin </a> </li>
             </ul>
         </div>
 
         <div class="section">
-            <h2>Authored Articles</h2>
-            <ul>
-                <li> Unexpected Catalyst For Innovation In Developing Nations <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2024/11/04/unexpected-catalyst-for-innovation-in-developing-nations/" target="_blank"> Forbes </a> </li>
-                <li> Solve Visual Tracking with Self-Supervised Learning <a href="https://hackernoon.com/solve-visual-tracking-with-self-supervised-learning" target="_blank"> Hackernoon </a> </li>
-                <li> How to Get the Most Out of Your University Life as a Software Engineer <a href="https://hackernoon.com/how-to-get-the-most-out-of-your-university-life-as-a-software-engineer" target="_blank"> Hackernoon </a> </li>
-                <!-- <li> Devin AI: End of Software Engineers or Just A Tool? <a href="https://hackernoon.com/devin-ai-end-of-software-engineers-or-just-a-tool" target="_blank"> Hackernoon </a> </li> -->
-                <!-- <li> Does OpenAI's Sora signal end of YouTubers? <a href="https://today.thefinancialexpress.com.bd/editorial/does-openais-sora-signal-end-of-youtubers-1713279487" target="_blank"> The Financial Express </a> </li> -->
-                <!-- <li> Unlocking Doors to Google & Facebook! <a href="https://hackernoon.com/unlocking-doors-to-google-and-facebook" target="_blank"> Hackernoon </a> </li> -->
-            </ul>
-        </div>
-        <div class="section">
             <h2>Gallery</h2>
             <div class="image-gallery" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
                 <div style="flex: 1 1 calc(33.33% - 10px); margin-bottom: 10px;">
-                    <img src="princetonU.jpg" alt="Description of image 1" style="width: 400px; height: 400px; display: block;">
+                    <img src="princetonU.jpg" alt="Description of image 1"
+                        style="width: 400px; height: 400px; display: block;">
                     <p class="image-description">Princeton University Hackathon Winner</p>
                 </div>
                 <div style="flex: 1 1 calc(33.33% - 10px); margin-bottom: 10px;">
-                    <img src="highschool.jpg" alt="Description of image 2" style="width: 400px; height: 400px; display: block;">
+                    <img src="highschool.jpg" alt="Description of image 2"
+                        style="width: 400px; height: 400px; display: block;">
                     <p class="image-description">Country Highest Marks in Mathematics</p>
                 </div>
                 <div style="flex: 1 1 calc(33.33% - 10px); margin-bottom: 10px;">
-                    <img src="berkeley.jpg" alt="Description of image 3" style="width: 400px; height: 400px; display: block;">
+                    <img src="berkeley.jpg" alt="Description of image 3"
+                        style="width: 400px; height: 400px; display: block;">
                     <p class="image-description">Top 2% Hacker at UC Berkeley</p>
                 </div>
                 <div style="flex: 1 1 calc(33.33% - 10px); margin-bottom: 10px;">
-                    <img src="rice.jpg" alt="Description of image 4" style="width: 400px; height: 400px; display: block;">
-                    <p class="image-description"> Rice University Hackathon Winner </p>
+                    <img src="rice.jpg" alt="Description of image 4"
+                        style="width: 400px; height: 400px; display: block;">
+                    <p class="image-description">Rice University Hackathon Winner</p>
                 </div>
             </div>
         </div>
