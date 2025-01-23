@@ -84,19 +84,34 @@
 
         .image-gallery {
             display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            justify-content: center;
+            gap: 40px;
         }
 
-        .image-gallery img {
+        .image-container {
+            position: relative;
+            text-align: center;
+            margin-bottom: 60px;
+            width: 250px;
+            height: 250px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-container img {
+            display: block;
             width: 100%;
-            max-width: 280px;
-            height: 280px;
+            height: 100%;
+            border-radius: 8px;
             object-fit: cover;
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+        }
+
+        .image-caption {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+            font-family: Arial, sans-serif;
+            text-align: center;
         }
 
         .image-gallery img:hover {
@@ -176,12 +191,21 @@
         </header>
 
         <div class="image-gallery">
-            <img src="princetonU.jpg" alt="Princeton University Hackathon">
-            <img src="highschool.jpg" alt="Mathematics Achievement">
-            <img src="rice.jpg" alt="Rice University Hackathon">
+            <div class="image-container">
+                <img src="princetonU.jpg" alt="Princeton University Hackathon">
+                <div class="image-caption">Princeton University Hackathon Winner</div>
+            </div>
+            <div class="image-container">
+                <img src="highschool.jpg" alt="Mathematics Achievement">
+                <div class="image-caption">Country Highest in Mathematics</div>
+            </div>
+            <div class="image-container">
+                <img src="rice.jpg" alt="Rice University Hackathon">
+                <div class="image-caption">Rice University Hackathon Winner</div>
+            </div>
         </div>
 
-        <section class="section">
+        <!-- <section class="section">
             <h2 class="section-title">Highlights</h2>
             <div class="project">
                 <ul>
@@ -190,7 +214,7 @@
                     <li>Highest Marks in Mathematics (Bangladesh)</li>
                 </ul>
             </div>
-        </section>
+        </section> -->
 
         <section class="section">
             <h2 class="section-title">Experience</h2>
