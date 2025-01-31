@@ -7,12 +7,11 @@
     <title>Mostofa Adib Shakib</title>
     <style>
         :root {
-            --bg-color: #f5f5f7;
-            --text-primary: #1d1d1f;
-            --text-secondary: #86868b;
-            --accent-blue: #0066cc;
-            --card-bg: white;
-            --border-color: #d2d2d7;
+            --bg-color: #0a0a0f;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a5;
+            --accent-blue: #3b82f6;
+            --card-bg: #1a1a1f;
         }
 
         * {
@@ -32,147 +31,116 @@
             max-width: 1000px;
             margin: 0 auto;
             padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 4rem;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .social-handles {
+        /* Previous styles for nav, sections, etc. remain the same */
+        .nav {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: rgba(26, 26, 31, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
         }
 
-        .social-handles a {
-            color: var(--accent-blue);
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s ease;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .social-handles a:hover {
-            opacity: 0.7;
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .main-content {
+            margin-top: 2rem;
         }
 
         .section {
-            background: var(--card-bg);
-            border-radius: 18px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 2rem;
+            font-weight: 700;
             color: var(--text-primary);
-            border-bottom: 2px solid var(--accent-blue);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
         }
 
-        .image-gallery {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
+        .content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
         }
 
-        .image-container {
-            position: relative;
-            text-align: center;
-            margin-bottom: 60px;
-            width: 250px;
-            height: 250px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
         }
 
-        .image-container img {
-            display: block;
+        a:hover {
+            opacity: 0.8;
+        }
+
+        .achievements-list {
+            list-style: none;
+            color: var(--text-secondary);
+        }
+
+        .achievements-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
             width: 100%;
-            height: 100%;
-            border-radius: 8px;
+            height: 200px;
             object-fit: cover;
         }
 
-        .image-caption {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #333;
-            font-family: Arial, sans-serif;
+        .gallery-caption {
+            padding: 1rem;
+            color: var(--text-secondary);
             text-align: center;
-        }
-
-        .image-gallery img:hover {
-            transform: scale(1.03);
-        }
-
-        .project {
-            background-color: var(--bg-color);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .project:hover {
-            background-color: #f0f0f3;
-        }
-
-        .project-title {
-            font-weight: 600;
-            color: var(--accent-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .external-link {
-            color: var(--accent-blue);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .external-link:hover {
-            text-decoration: underline;
-        }
-
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .merged-section .item {
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background-color: var(--bg-color);
-            border-radius: 12px;
-        }
-
-        .merged-section .item strong {
-            display: block;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
         }
 
         @media (max-width: 768px) {
-            .image-gallery {
-                flex-direction: column;
-                align-items: center;
+            .container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
-            .image-gallery img {
-                max-width: 100%;
+            .gallery {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -180,105 +148,95 @@
 
 <body>
     <div class="container">
-        <header class="header">
-            <h1>Mostofa Adib Shakib</h1>
-            <div class="social-handles">
-                <a href="https://www.linkedin.com/in/adibshakib/">LinkedIn</a>
-                <a href="https://twitter.com/AdibShakib">Twitter</a>
-                <a href="https://github.com/mostofashakib">GitHub</a>
-                <a href="https://www.youtube.com/@adibshakib">YouTube</a>
-                <!-- <a href="/">Blogs</a> -->
-            </div>
-        </header>
+        <div class="main-content">
+            <section class="section">
+                <div class="content">
+                    <p>Holla, I'm Adib Shakib 👋</p>
 
-        <div class="image-gallery">
-            <div class="image-container">
-                <img src="princetonU.jpg" alt="Princeton University Hackathon">
-                <div class="image-caption">Princeton University Hackathon Winner</div>
-            </div>
-            <div class="image-container">
-                <img src="highschool.jpg" alt="Mathematics Achievement">
-                <div class="image-caption">Country Highest in Mathematics</div>
-            </div>
-            <div class="image-container">
-                <img src="rice.jpg" alt="Rice University Hackathon">
-                <div class="image-caption">Rice University Hackathon Winner</div>
-            </div>
+                    <p>During high school, I spotted an untapped opportunity in <a href="https://www.facebook.com/kurtssteamstore">eSports
+                            arbitrage</a>, turning $5 into a 6000x return. That experience shaped how I approach building, leading me to
+                        fund my education in the US and later earn bachelor's degrees in Computer Science, Mathematics, and Electrical
+                        Engineering.</p>
+
+                    <p>In college, I founded RaiderHacks, Texas’s first hackathon organization designed to train and carpool teams to
+                        national competitions, winning prizes from <a href="https://1517fund.com/">1517 Fund</a>, Oklahoma State, and UT
+                        San Antonio. Later, I opted out of <a href="https://www.cs.cmu.edu/masters-programs">Carnegie Mellon’s</a> CS graduate
+                        program to focus on building.</p>
+
+                    <p>I've worked as a Software Engineer at <a href="https://www.snapchat.com">Snapchat</a>, where I shipped a feature
+                        impacting 440M+ daily users, and at <a href="https://www.ziprecruiter.com">ZipRecruiter</a>, where I built an
+                        automation systems from scartch that saved hundreds of QA time</p>
+
+                    <p>To bridge the gap between global talent and top tech companies, I built CSB, a community of 60K+ developers worldwide to help land jobs 10x faster. Seeing the impact,
+                        I later launched <a href="https://hackcsb.devpost.com/">HackCSB</a>, one of South Asia’s top hackathons, attracting 500+
+                        participants, Y Combinator-backed companies, and principal engineers from Google & Microsoft.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Gallery</h2>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="princetonU.jpg" alt="Princeton University Hackathon">
+                        <div class="gallery-caption">Princeton University Hackathon Winner</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="highschool.jpg" alt="Mathematics Achievement">
+                        <div class="gallery-caption">Country Highest in Mathematics</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="rice.jpg" alt="Rice University Hackathon">
+                        <div class="gallery-caption">Rice University Hackathon Winner</div>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <section class="section">
-            <h2 class="section-title">Experience</h2>
-            <div class="project">
-                <div class="project-title">Founder/CEO @ <a href="https://www.csbmain.com/"
-                        class="external-link">CSB</a></div>
-                <p>Scaled to 60K+ early-career developers, helping them land their dream jobs 10x faster</p>
-            </div>
-            <div class="project">
-                <div class="project-title">Software Engineer II @ ZipRecruiter</div>
-                <p>Built the entire UI testing infrastructure to automate manual testing workflows and save $MM</p>
-            </div>
-            <div class="project">
-                <div class="project-title">Software Engineer @ Snapchat</div>
-                <p>Shipped top user-requested feature (username change) impacting 440M daily active users</p>
-            </div>
-            <div class="project">
-                <div class="project-title">Founder/CEO @ <a href="https://www.facebook.com/kurtssteamstore"
-                        class="external-link">KurT's Steam Store</a></div>
-                <p>Built Bangladesh's best eSports arbitrage with $5, achieving 6000x ROI during high school</p>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">Education</h2>
-            <div class="project">
-                <div class="project-title">Carnegie Mellon University</div>
-                <p>Opted out from MSCS with focus in Artificial Intelligence & Scalable Systems
-                </p>
-            </div>
-            <div class="project">
-                <div class="project-title">Texas Tech University</div>
-                <p>Presidential Scholar; Graduated with honors, degrees in CS, Math, EE and 6 Software internships in 4
-                    years</p>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">Projects</h2>
-            <div class="project">
-                <div class="project-title"><a href="https://github.com/mostofashakib/AI-Talent-Manager"
-                        class="external-link">AI Talent Manager</a></div>
-                <p>Automated platform for brand deals and affiliate marketing, leveraging AI to streamline content monetization.</p>
-            </div>
-            <div class="project">
-                <div class="project-title"><a href="https://github.com/mostofashakib/AutoFlow"
-                        class="external-link">AutoFlow</a></div>
-                <p>Created a voice-activated workflow automation assistant to simplify complex task management</p>
-            </div>
-        </section>
-
-        <section class="section merged-section">
-            <h2 class="section-title">Additional</h2>
-            <div class="item">
-                <ul>
-                    <li>Created one of South Asia's most prestigious <a href="https://hackcsb.devpost.com/" class="external-link">hackathon</a> with YC companies, leaders from Google/Microsoft</li>
-                    <li>Founded Texas' first <a href="https://www.facebook.com/raiderhacks" class="external-link">hackathon</a> team, scaled to 140 students; won prizes from 1517 Fund, Oklahoma State, etc</li>
-                    <li>Mentor at <a
-                            href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa"
-                            class="external-link">Innovation Hub</a>; <a href="https://www.beondeck.com/" class="external-link">OnDeck</a> Founder Fellow; <a href="https://www.beondeck.com/" class="external-link">Forbes Business Council</a> Member; Angel Investor at <a href="https://www.beondeck.com/" class="external-link">Gaingels</a>
-                    </li>
-                    <li>Guest Speaker at <a href="https://www.instagram.com/p/Ch04AegO8Mm/" class="external-link">Texas Tech University</a> and <a href="https://www.facebook.com/diucpc.official/posts/pfbid02jPSt8dtb1yPPRyUkNqwBwyby6f5Z7BMBHJcccxUicnkKNoxPWJrP5CHwFLaGiJHxl" class="external-link">Daffodil International University</a>  </li>
-                    <li>Featured in: <a href="https://www.usatoday.com/story/special/contributor-content/2024/06/11/adibs-path-from-steam-trader-to-silicon-valley/74061707007/"
-                        class="external-link">USA Today</a>,
-                    <a href="https://www.under30ceo.com/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/"
-                        class="external-link">Under30CEO</a>,
-                    <a href="https://thefinancialexpress.com.bd/sci-tech/how-a-bangladeshi-hackathon-is-inspiring-a-generation"
-                        class="external-link">The Financial Express</a>,
-                    <a href="https://mzamin.com/news.php?news=103769" class="external-link">Manab Zamin</a> </li>
-                    <li>Honors: US Government Startup Grant Recipient, ZipRecruiter Company Hackathon Winner</li>
-                    <li>Fun Fact: First business/income during high school. Currently in the US on talent visa (O1A) </li>
+        <aside>
+            <section class="section">
+                <h2 class="section-title">Highlights</h2>
+                <ul class="achievements-list">
+                    <li>Princeton University Hackathon Winner</li>
+                    <li>Country Highest in Mathematics</li>
+                    <li>US Government Startup Grant Recipient</li>
+                    <li>Rice University Hackathon Winner</li>
+                    <li>ZipRecruiter Company Hackathon</li>
+                    <li>Featured in USA Today</li>
+                    <li>Featured in Forbes</li>
+                    <li>Featured in Under30CEO</li>
+                    <li>Featured in Daily Manab Zamin</li>
+                    <li>Guest Speaker at Texas Tech University</li>
+                    <li>Guest Speaker at Daffodil University</li>
                 </ul>
-            </div>
-        </section>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Affiliation</h2>
+                <ul class="social-list">
+                    <li>Startup Mentor at <a href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation Hub</a></li>
+                    <li>Member at <a href="https://councils.forbes.com/profile/Mostofa-Shakib-Founder-CEO-Variant-Technologies/fdfc43c6-7fb0-412b-966b-9c5f62c822c8">Forbes Business Council</a></li>
+                    <li>Founder Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li>
+                    <li>Angel Investor at <a href="https://gaingels.com/">GaingelsVC</a></li>
+                </ul>
+            </section>
+            
+            <section class="section">
+                <h2 class="section-title">Writings</h2>
+                <ul class="social-list">
+                    <li><a href="https://twitter.com/AdibShakib">How I Got The Talent Visa (O1A)</a></li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Socials</h2>
+                <p>
+                    <a href="https://twitter.com/AdibShakib">Twitter</a>,
+                    <a href="https://www.linkedin.com/in/adibshakib/">LinkedIn</a>,
+                    <a href="https://github.com/mostofashakib">GitHub</a>,
+                    <a href="https://www.youtube.com/@adibshakib">YouTube</a>
+                </p>
+            </section>
+        </aside>
     </div>
 </body>
 
