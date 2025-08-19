@@ -45,6 +45,7 @@
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
+            z-index: 100;
         }
 
         .logo {
@@ -61,6 +62,28 @@
         .site-title {
             font-size: 1.5rem;
             font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--accent-blue);
+            color: #fff;
         }
 
         .main-content {
@@ -132,6 +155,27 @@
             font-size: 0.9rem;
         }
 
+        /* Page content styles */
+        .page-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -142,108 +186,262 @@
             .gallery {
                 grid-template-columns: 1fr;
             }
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="main-content">
-            <section class="section">
+    <nav class="nav">
+        <div class="logo">
+            <!-- You can add a logo image here if you want -->
+            <!-- <img src="logo.png" alt="Logo"> -->
+            <span class="site-title">Mostofa Shakib</span>
+        </div>
+        <div class="nav-links">
+            <a onclick="showPage('home')" class="nav-item active">Home</a>
+            <a onclick="showPage('experiences')" class="nav-item">Experiences</a>
+            <a onclick="showPage('projects')" class="nav-item">Projects</a>
+            <a onclick="showPage('writings')" class="nav-item">Writings</a>
+            <a onclick="showPage('media')" class="nav-item">Media</a>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page-content active">
+        <div class="container">
+            <div class="main-content">
+                <section class="section" id="about">
+                    <div class="content">
+                        <p>Holla, I'm Mostofa Shakib 👋</p>
+
+                        <p>I was born and raised in Dhaka, Bangladesh, with a knack for reverse-engineering. In 2nd grade, I built a makeshift antenna using scrap wires and tapped
+                            into the signal from a nearby cable provider to watch Swat Kats since cable TV wasn't allowed in our home </p>
+
+                        <p>In high school, that same instinct led me to an untapped opportunity in <a href="https://www.facebook.com/kurtssteamstore">eSports
+                                arbitrage</a> on Steam, turning $5 into $30k (6000,000% ROI). Combined with scholarships, this helped fund my education in the US, where I earned bachelor's degrees in Computer
+                            Science, Mathematics, and Electrical Engineering. Later, I opted out of <a href="https://www.cs.cmu.edu/">Carnegie Mellon University</a>'s Computer Science grad school to build things people want </p>
+                    </div>
+                </section>
+
+                <section class="section" id="awards">
+                    <h2 class="section-title">🏆 Awards</h2>
+                    <div class="gallery">
+                        <div class="gallery-item">
+                            <img src="princetonU.jpg" alt="Princeton University Hackathon">
+                            <div class="gallery-caption">Princeton University Hackathon Winner</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="highschool.jpg" alt="Mathematics Achievement">
+                            <div class="gallery-caption">Country Highest in Mathematics</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="rice.jpg" alt="Rice University Hackathon">
+                            <div class="gallery-caption">Rice University Hackathon Winner</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <aside>
+                <section class="section" id="funfacts">
+                    <h2 class="section-title">🎉 Fun Facts</h2>
+                    <ul class="achievements-list">
+                        <li>Self-proclaimed gym rat</li>
+                        <li>Self-development junkie</li>
+                    </ul>
+                </section>
+
+                <section class="section" id="additional">
+                    <h2 class="section-title">🌍 Additional</h2>
+                    <ul class="achievements-list">
+                        <li>US Government Startup Grant Recipient</li>
+                        <li>ZipRecruiter Hackathon Winner</li>
+                        <li>Finalist at National Math Olympiad</li>
+                    </ul>
+                </section>
+
+                <section class="section" id="affiliation">
+                    <h2 class="section-title">💼 Affiliation</h2>
+                    <ul class="social-list">
+                        <li>Investor at <a href="https://www.gaingels.com/">Gaingels</a></li>
+                        <li>Founder Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li>
+                        <li>Global Fellow at <a href="https://ai2030.org/global-fellow-program/">AI2030</a></li>
+                        <li>Mentor at <a href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation Hub</a></li>
+                        <li>Mentor at <a href="https://www.linkedin.com/posts/bangladesh-angels_introducingmostofa-adib-shakib-ex-software-activity-7122250660636487680-jqS1/">Bangladesh Angels</a></li>
+                    </ul>
+                </section>
+
+                <section class="section" id="speaking">
+                    <h2 class="section-title">🎤 Speaking</h2>
+                    <ul class="achievements-list">
+                        <li><a href="https://www.facebook.com/diucpc.official/posts/pfbid02jitp6ctXB6geWnJ72FeGAPKJsYFWMpMvJf2nkNvARnY86dKVAZ6pu3mEBxDntAfxl">Daffodil International University</a></li>
+                        <li><a href="https://www.instagram.com/p/Ch04AegO8Mm/">Texas Tech University</a></li>
+                    </ul>
+                </section>
+
+                <section class="section" id="socials">
+                    <h2 class="section-title">🤝 Socials</h2>
+                    <p>
+                        <a href="https://x.com/mshakib01">X</a>,
+                        <a href="https://www.instagram.com/mshakib01">Instagram</a>,
+                        <a href="https://www.linkedin.com/in/mostofashakib">LinkedIn</a>,
+                        <a href="https://github.com/mostofashakib">GitHub</a>
+                    </p>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page-content">
+        <div class="container">
+            <div class="main-content">
+                <h1 class="section-title">About Me</h1>
                 <div class="content">
                     <p>Holla, I'm Mostofa Shakib 👋</p>
+                    <p>I was born and raised in Dhaka, Bangladesh, with a knack for reverse-engineering. In 2nd grade, I built a makeshift antenna using scrap wires and tapped into the signal from a nearby cable provider to watch Swat Kats since cable TV wasn't allowed in our home.</p>
+                    <p>In high school, that same instinct led me to an untapped opportunity in eSports arbitrage on Steam, turning $5 into $30k (6000,000% ROI). Combined with scholarships, this helped fund my education in the US, where I earned bachelor's degrees in Computer Science, Mathematics, and Electrical Engineering.</p>
+                    <p>Later, I opted out of Carnegie Mellon University's Computer Science grad school to build things people want.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                     <p>I was born and raised in Dhaka, Bangladesh, with a knack for reverse-engineering. In 2nd grade, I built a makeshift antenna using scrap wires and tapped
-                    into the signal from a nearby cable provider to watch Swat Kats since cable TV wasn’t allowed in our home </p>
-                    
-                    <p>In 5th grade, when my computer kept crashing with the blue screen of death, I spent hours taking it apart and wired a
-                    spare fan directly into the motherboard to keep it alive. </p>
-                    
-                    <p>In high school, that same instinct led me to an untapped opportunity in <a href="https://www.facebook.com/kurtssteamstore">eSports
-                        arbitrage</a> on Steam, turning $5 into $30k (6000,000% ROI). Combined with scholarships, this helped fund my education in the US, where I earned bachelor's degrees in Computer
-                        Science, Mathematics, and Electrical Engineering. Later, I opted out of <a href="https://www.cs.cmu.edu/">Carnegie Mellon University</a>’s Computer Science grad school to build things people want </p>
+    <!-- Experiences Page -->
+    <div id="experiences" class="page-content">
+        <div class="container">
+            <div class="main-content">
+                <h1 class="section-title">Experiences</h1>
+                <ul class="achievements-list">
+                    <li>Founded at Variant Labs (worked with OpenAI, Mercor, Series A Startups, SMBs, etc)</li>
+                    <li>Founded at CSB (Career OS to grow, and get hired. Scaled to 60k people)</li>
+                    <li>Founded HackCSB Hackathon (Featured in UNICEF, Dhaka Tribune, Financial Express)</li>
+                    <li>Software Engineer at ZipRecruiter (Tech Lead for Automation Infrastructure)</li>
+                    <li>Software Engineer at Snapchat (Messaging Platform & Performance)</li>
+                    <li>Founded Kurt's Steam Store (One of Bangladesh's best eSports eCommerce)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-                    <h2 class="section">Experiences</h2>
+    <!-- Media Page -->
+    <div id="media" class="page-content">
+        <div class="container">
+            <div class="main-content">
+                <h1 class="section-title">📰 Media</h1>
+                
+                <section class="section">
+                    <div class="content">
+                        <p>I've been featured in media outlets for my work:</p>
+                        <ul class="achievements-list">
+                            <li>Featured in <a href="https://www.businessinsider.com/pivoted-career-upskill-agentic-ai-software-engineering-2025-8">Business Insider</a></li>
+                            <li>Featured in <a href="https://www.usatoday.com/story/special/contributor-content/2024/06/11/adibs-path-from-steam-trader-to-silicon-valley/74061707007/">USA Today</a></li>
+                            <li>Featured in <a href="https://thefinancialexpress.com.bd/youth-and-entrepreneurship/rethinking-hiring-with-mostofa-adib-shakib">Financial Express</a></li>
+                            <li>Featured in <a href="https://www.under30ceo.com/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/">Under30CEO</a></li>
+                            <li>Featured in <a href="https://mzamin.com/news.php?news=103769&fbclid=IwAR14ocjEhgN_d-e0FeUu2ldmzbZAs2Z7XQxMiyrnsu9QITl6VtRlToXtXJ8_aem_AXmPyE7ssNDVVh671wbOlLaLP_t8Tn7X_ELeENt8RplMbjbB8Yolt_DyB_AWhBscTJMd7PtDCOU5hw4xR2FcqV7os">Manab Zamin</a></li>
+                            <li>Featured in <a href="https://hackernoon.com/from-bangladesh-to-texas-shakib-and-the-power-of-hackathons">Hackernoon</a></li>
+                            <li>Featured in <a href="https://canvasrebel.com/meet-mostofa-shakib/">CanvasRebel</a></li>
+                            <li>Featured in <a href="https://boldjourney.com/meet-mostofa-shakib/">BoldJourney</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2 class="section-title">🎙️ Podcasts</h2>
+                    <div class="content">
+                        <p>I've been on podcasts discussing tech, entrepreneurship, and career development:</p>
+                        <ul class="achievements-list">
+                            <li><a href="https://youtu.be/lc6NeudSkMk?si=-1ILIFRSJVuIU6mO">Seeam Shahid Noor:</a> Sharing my journey from zero to cracking Amazon, Twitter, etc</li>
+                            <li><a href="https://youtu.be/4m5bO1p8SHg?si=LrP2zD58KTMiUuiM">Short Stories:</a> Building the "Snapchat" of Crypto </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Page -->
+    <div id="projects" class="page-content">
+        <div class="container">
+            <div class="main-content">
+                <h1 class="section-title">🚀 Projects</h1>
+                <div class="content">
                     <ul class="achievements-list">
-                        <li>Founded at CSB (Career OS to grow, and get hired. Scaled to 60k people)</li>
-                        <li>Software Engineer at ZipRecruiter (Tech Lead for Automation Infrastructure)</li>
-                        <li>Software Engineer at Snapchat (POC for <a href="https://www.usatoday.com/story/tech/tips/2022/07/28/change-snapchat-username-display-name/10006707002/?fbclid=IwZXh0bgNhZW0CMTAAAR3rhM7iUn82UQIhHMw420YVY1e80ESIDpp62YunitLEsNsuiFTjMmYLutk_aem_QqJAE7S9v7L-uYk33JxxDA">username change;</a> impacted 460M+ DAU)</li>
-                        <li>Founded HackCSB Hackathon (Featured in <a href="https://x.com/UNICEFinnovate/status/1858827565445902392">UNICEF</a>, <a href="https://www.dhakatribune.com/bangladesh/education/357156/bangladesh%E2%80%99s-tech-sector-energized-by">Dhaka Tribune</a>, <a href="https://thefinancialexpress.com.bd/sci-tech/how-a-bangladeshi-hackathon-is-inspiring-a-generation">Financial Express</a>)</li>
+                        <li>Secure Chat: Coming Soon</li>
+                        <li><a href="https://github.com/mostofashakib/AutoFlow">AutoFlow: </a>AI Personal Assistant</li>
+                        <li><a href="https://github.com/mostofashakib/Project-portal">Portal: </a>AI Smart Door</li>
+                        <li><a href="https://github.com/mostofashakib/AI-Talent-Manager">ViralVisionAI: </a>AI Talent Manager</li>
+                        <li><a href="https://www.linkedin.com/posts/safallwa_chatgpt-resumegpt-activity-7284949715173974016-oay0/">ResumeGPT: </a>AI Resume Optimizer</li>
                     </ul>
                 </div>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">🏆 Awards</h2>
-                <div class="gallery">
-                    <div class="gallery-item">
-                        <img src="princetonU.jpg" alt="Princeton University Hackathon">
-                        <div class="gallery-caption">Princeton University Hackathon Winner</div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="highschool.jpg" alt="Mathematics Achievement">
-                        <div class="gallery-caption">Country Highest in Mathematics</div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="rice.jpg" alt="Rice University Hackathon">
-                        <div class="gallery-caption">Rice University Hackathon Winner</div>
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
-
-        <aside>
-            <section class="section">
-                <h2 class="section-title">🎉 Fun Facts</h2>
-                <ul class="achievements-list">
-                    <li>Self-proclaimed gym rat</li>
-                    <li>Self-development junkie</li>
-                </ul>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">🌍 Additional</h2>
-                <ul class="achievements-list">
-                    <li>US Government Startup Grant Recipient</li>
-                    <li>ZipRecruiter Hackathon Winner</li>
-                    <li>Finalist at National Math Olympiad</li>
-                    <li>Featured in <a href="https://thefinancialexpress.com.bd/youth-and-entrepreneurship/rethinking-hiring-with-mostofa-adib-shakib">Financial Express</a></li>
-                    <li>Featured in <a href="https://www.under30ceo.com/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/">Under30CEO</a> </li>
-                    <li>Featured in <a href="https://mzamin.com/news.php?news=103769&fbclid=IwAR14ocjEhgN_d-e0FeUu2ldmzbZAs2Z7XQxMiyrnsu9QITl6VtRlToXtXJ8_aem_AXmPyE7ssNDVVh671wbOlLaLP_t8Tn7_ELeENt8RplMbjbB8Yolt_DyB_AWhBscTJMd7PtDCOU5hw4xR2FcqV7os">Manab Zamin</a> </li>
-                </ul>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">💼 Affiliation</h2>
-                <ul class="social-list">
-                    <li>Investor at <a href="https://www.gaingels.com/">Gaingels</a></li>
-                    <li>Founder Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li>
-                    <li>Mentor at <a href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation Hub</a></li>
-                </ul>
-            </section>
-            
-            <section class="section">
-                <h2 class="section-title">✍️ Writings</h2>
-                <ul class="social-list">
-                    <li><a href="https://dzone.com/articles/self-supervised-learning-techniques-visual-tracking">Self-Supervised Learning Techniques</a></li>
-                    <li><a href="https://hackernoon.com/how-to-get-the-most-out-of-your-university-life-as-a-software-engineer">How to get the most out of undergrad</a></li>
-                    <li><a href="https://hackernoon.com/unlocking-doors-to-google-and-facebook">How to become a Google Engineer</a></li>
-                    <li><a href="https://www.forbes.com/councils/forbesbusinesscouncil/2024/11/04/unexpected-catalyst-for-innovation-in-developing-nations/">Hackathons In Developing Nations</a></li>
-                    <li><a href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/01/02/how-to-start-a-company-with-little-money/">How to start business with little money</a></li>
-                </ul>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">🤝 Socials</h2>
-                <p>
-                    <a href="https://x.com/mshakib01">X</a>,
-                    <a href="https://www.instagram.com/mshakib01">Instagram</a>,
-                    <a href="www.linkedin.com/in/mostofashakib">LinkedIn</a>,
-                    <a href="https://github.com/mostofashakib">GitHub</a>
-                </p>
-            </section>
-        </aside>
     </div>
+
+    <!-- Writings Page -->
+    <div id="writings" class="page-content">
+        <div class="container">
+            <div class="main-content">
+                <h1 class="section-title">✍️ Writings & Publications</h1>
+                <div class="content">
+                    <p>I write about technology, career development, and entrepreneurship:</p>
+                    <ul class="achievements-list">
+                        <li>Dzone: <a href="https://dzone.com/articles/self-supervised-learning-techniques-visual-tracking">Self-Supervised Learning Techniques for Visual Tracking</a></li>
+                        <li>HackerNoon: <a href="https://hackernoon.com/how-to-get-the-most-out-of-your-university-life-as-a-software-engineer">How to Get the Most Out of Your University Life as a CS Student</a></li>
+                        <li>HackerNoon: <a href="https://hackernoon.com/unlocking-doors-to-google-and-facebook">How to Become a Google Engineer</a></li>
+                        <li>Forbes: <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2024/11/04/unexpected-catalyst-for-innovation-in-developing-nations/">Hackathons In Developing Nations: An Unexpected Catalyst for Innovation</a></li>
+                        <li>Hackernoon: <a href="https://hackernoon.com/devin-ai-end-of-software-engineers-or-just-a-tool">Devin AI: End of Software Engineers or Just A Tool?</a></li>
+                        <li>Forbes: <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/04/21/three-ways-small-businesses-can-use-ai-to-their-advantage/">Three Ways Small Businesses Can Use AI To Their Advantage</a></li>
+                        <li>Forbes: <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/01/02/how-to-start-a-company-with-little-money/">How to Start a Company With Little Money: A Practical Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Page navigation functionality
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+
+            // Update navigation active state
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Find and activate the corresponding nav item
+            const activeNavItem = document.querySelector(`[onclick="showPage('${pageId}')"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+
+            // Scroll to top of the page
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Initialize with home page
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('home');
+        });
+    </script>
 </body>
 
 </html>
