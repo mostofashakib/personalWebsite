@@ -180,6 +180,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -301,6 +302,7 @@
             .gallery {
                 grid-template-columns: 1fr;
             }
+
             .nav-links {
                 gap: 1rem;
                 font-size: 0.95rem;
@@ -353,7 +355,8 @@
         <div class="logo">
             <!-- You can add a logo image here if you want -->
             <!-- <img src="logo.png" alt="Logo"> -->
-            <span class="site-title">Mostofa Shakib</span>
+            <a onclick="showPage('home')" class="site-title"
+                style="color: var(--text-primary); cursor: pointer;">Mostofa Shakib</a>
         </div>
         <div class="nav-links">
             <a onclick="showPage('home')" class="nav-item active">Home</a>
@@ -372,9 +375,20 @@
                     <div class="content">
                         <p>Holla, I'm Mostofa 👋</p>
 
-                        <p>I was born and raised in Dhaka, Bangladesh, with a knack for reverse-engineering. In 2nd grade, I built a makeshift antenna out of scrap wires and tapped into the signal from a nearby cable provider to watch Swat Kats, since cable TV wasn't allowed in our home.</p>
+                        <p>I was born and raised in Dhaka, Bangladesh, with a knack for reverse-engineering. In 2nd
+                            grade, I built a makeshift antenna out of scrap wires and tapped into the signal from a
+                            nearby cable provider to watch Swat Kats, since cable TV wasn't allowed in our home.</p>
 
-                        <p>By high school, that same instinct met necessity. I had dreamed of studying in the U.S. ever since 4th grade, but the cost was far beyond our means, and part-time jobs weren't even an option in Bangladesh. All I had was $5 saved from skipping lunch. One night, I noticed digital items were priced differently across regions. First I flipped them manually; then I used software to trade while I was in class. Over two years, it became Bangladesh's largest eSports marketplace, and that $5 grew into more than $30,000 (600,000% ROI). It was my first real taste of entrepreneurship and my ticket to the U.S. That journey led me to earn bachelor's degrees in Computer Science, Mathematics, and Electrical Engineering. Later, I opted out of <a href="https://www.cs.cmu.edu/">Carnegie Mellon University</a>'s Computer Science graduate program to build things people want</p>
+                        <p>By high school, that same instinct met necessity. I had dreamed of studying in the U.S. ever
+                            since 4th grade, but the cost was far beyond our means, and part-time jobs weren't even an
+                            option in Bangladesh. All I had was $5 saved from skipping lunch. One night, I noticed
+                            digital items were priced differently across regions. First I flipped them manually; then I
+                            used software to trade while I was in class. Over two years, it became Bangladesh's largest
+                            eSports marketplace, and that $5 grew into more than $30,000 (600,000% ROI). It was my first
+                            real taste of entrepreneurship and my ticket to the U.S. That journey led me to earn
+                            bachelor's degrees in Computer Science, Mathematics, and Electrical Engineering. Later, I
+                            opted out of <a href="https://www.cs.cmu.edu/">Carnegie Mellon University</a>'s Computer
+                            Science graduate program to build things people want</p>
                     </div>
                 </section>
 
@@ -387,7 +401,7 @@
                         </div>
                         <div class="gallery-item">
                             <img src="highschool.jpg" alt="Mathematics Achievement">
-                            <div class="gallery-caption">Country Highest in Mathematics</div>
+                            <div class="gallery-caption">Bangladesh Country Highest in Mathematics</div>
                         </div>
                         <div class="gallery-item">
                             <img src="rice.jpg" alt="Rice University Hackathon">
@@ -421,16 +435,22 @@
                     <ul class="social-list">
                         <li>Founder In Residence at <a href="https://www.antler.co//">Antler NYC</a></li>
                         <li>Investor at <a href="https://www.gaingels.com/">Gaingels</a></li>
-                        <li>Member at <a href="https://councils.forbes.com/profile/Mostofa-Shakib-Founder-CEO-Variant-Technologies/fdfc43c6-7fb0-412b-966b-9c5f62c822c8">Forbes Business Council</a></li>
+                        <li>Member at <a
+                                href="https://councils.forbes.com/profile/Mostofa-Shakib-Founder-CEO-Variant-Technologies/fdfc43c6-7fb0-412b-966b-9c5f62c822c8">Forbes
+                                Business Council</a></li>
                         <li>Founder Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li>
-                        <li>Mentor at <a href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation Hub</a></li>
+                        <li>Mentor at <a
+                                href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation
+                                Hub</a></li>
                     </ul>
                 </section>
 
                 <section class="section" id="speaking">
                     <h2 class="section-title">🎤 Speaking</h2>
                     <ul class="achievements-list">
-                        <li><a href="https://www.facebook.com/diucpc.official/posts/pfbid02jitp6ctXB6geWnJ72FeGAPKJsYFWMpMvJf2nkNvARnY86dKVAZ6pu3mEBxDntAfxl">Daffodil International University</a></li>
+                        <li><a
+                                href="https://www.facebook.com/diucpc.official/posts/pfbid02jitp6ctXB6geWnJ72FeGAPKJsYFWMpMvJf2nkNvARnY86dKVAZ6pu3mEBxDntAfxl">Daffodil
+                                International University</a></li>
                         <li><a href="https://www.instagram.com/p/Ch04AegO8Mm/">Texas Tech University</a></li>
                     </ul>
                 </section>
@@ -455,9 +475,15 @@
                 <h1 class="section-title">About Me</h1>
                 <div class="content">
                     <p>Holla, I'm Mostofa Shakib 👋</p>
-                    <p>I was born and raised in Dhaka, Bangladesh, with a knack for reverse-engineering. In 2nd grade, I built a makeshift antenna using scrap wires and tapped into the signal from a nearby cable provider to watch Swat Kats since cable TV wasn't allowed in our home.</p>
-                    <p>In high school, that same instinct led me to an untapped opportunity in eSports arbitrage on Steam, turning $5 into $30k (6000,000% ROI). Combined with scholarships, this helped fund my education in the US, where I earned bachelor's degrees in Computer Science, Mathematics, and Electrical Engineering.</p>
-                    <p>Later, I opted out of Carnegie Mellon University's Computer Science grad school to build things people want.</p>
+                    <p>I was born and raised in Dhaka, Bangladesh, with a knack for reverse-engineering. In 2nd grade, I
+                        built a makeshift antenna using scrap wires and tapped into the signal from a nearby cable
+                        provider to watch Swat Kats since cable TV wasn't allowed in our home.</p>
+                    <p>In high school, that same instinct led me to an untapped opportunity in eSports arbitrage on
+                        Steam, turning $5 into $30k (6000,000% ROI). Combined with scholarships, this helped fund my
+                        education in the US, where I earned bachelor's degrees in Computer Science, Mathematics, and
+                        Electrical Engineering.</p>
+                    <p>Later, I opted out of Carnegie Mellon University's Computer Science grad school to build things
+                        people want.</p>
                 </div>
             </div>
         </div>
@@ -473,12 +499,28 @@
                     <div class="experience-column">
                         <h2>Entrepreneurship</h2>
                         <div class="experience-item">
-                            <h4>Founder at <a href="https://www.csbmain.com/">CSB</a></h4>
-                            <p>An AI talent marketplace that sourced, vetted, and matched technical talent from developing countries with US startups. Scaled to <a href="https://www.facebook.com/csbmain">60k developers</a> and featured in <a href="https://www.msn.com/en-ca/news/technology/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/ar-AA1uaJnu">Microsoft</a>, and <a href="https://thefinancialexpress.com.bd/youth-and-entrepreneurship/rethinking-hiring-with-mostofa-adib-shakib">the Financial Express</a>.</p>
+                            <h4>Founder & CEO at <a href="https://www.csbmain.com/">CSB</a></h4>
+                            <p>An AI talent marketplace that sourced, vetted, and matched technical talent from
+                                developing countries with US startups. Scaled to <a
+                                    href="https://www.facebook.com/csbmain">60k developers</a> and featured in <a
+                                    href="https://www.msn.com/en-ca/news/technology/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/ar-AA1uaJnu">Microsoft</a>,
+                                and <a
+                                    href="https://thefinancialexpress.com.bd/youth-and-entrepreneurship/rethinking-hiring-with-mostofa-adib-shakib">the
+                                    Financial Express</a>.</p>
                         </div>
                         <div class="experience-item">
-                            <h4>Founder at <a href="https://www.facebook.com/kurtssteamstore">Kurt's Steam Store</a></h4>
-                            <p>Built one of the largest eSports marketplaces for virtual cosmetic items, using software-driven arbitrage models to track market trends across regions, and generated 600,000% ROI from $5.</p>
+                            <h4>Co-Founder & CEO at Promethium</h4>
+                            <p>Built a cryptographic wallet using Shamir's Secret Sharing that lets you pass on digital
+                                assets upon death. Backed by US Government and Danielle Strachman (Thiel Fellowship
+                                co-founder)</p>
+                        </div>
+                        <div class="experience-item">
+                            <h4>Founder & CEO at <a href="https://www.facebook.com/kurtssteamstore">Kurt's Steam
+                                    Store</a>
+                            </h4>
+                            <p>Built one of the largest eSports marketplaces for virtual cosmetic items, using
+                                software-driven arbitrage models to track market trends across regions, and generated
+                                600,000% ROI from $5.</p>
                         </div>
                     </div>
 
@@ -486,12 +528,18 @@
                     <div class="experience-column">
                         <h2>Industry</h2>
                         <div class="experience-item">
-                            <h4>Techical Lead at ZipRecruiter</h4>
-                            <p>Led the automation infrastructure initiative to handle complex manual testing workflows, and co-led the development of <a href="https://techcrunch.com/2024/09/05/ziprecruiters-new-tool-will-quickly-match-and-schedule-an-intro-call-with-potential-candidates/">ZipIntro</a>, a video-screening platform that uses AI matching and scheduling to connect employers and candidates in minutes.</p>
+                            <h4>Software Engineer at ZipRecruiter</h4>
+                            <p>Technical Lead for the automation infrastructure to automate manual QA, and co-led the
+                                development of <a
+                                    href="https://techcrunch.com/2024/09/05/ziprecruiters-new-tool-will-quickly-match-and-schedule-an-intro-call-with-potential-candidates/">ZipIntro</a>,
+                                a video-screening platform that uses AI matching and scheduling to connect employers and
+                                candidates in minutes.</p>
                         </div>
                         <div class="experience-item">
                             <h4>Software Engineer at Snapchat</h4>
-                            <p>Refactored the core identity stack to support <a href="https://techcrunch.com/2022/02/17/snapchat-change-username/">username changes</a> across Snapchat for 950M+ monthly active users.</p>
+                            <p>Core Contributor for core identity stack migration to support <a
+                                    href="https://techcrunch.com/2022/02/17/snapchat-change-username/">username
+                                    changes</a> across Snapchat for 950M+ monthly active users</p>
                         </div>
                         <!-- <div class="experience-item">
                             <h4>Software Engineer at CDK Global</h4>
@@ -504,8 +552,10 @@
                         <h2>Non-Profit</h2>
                         <div class="experience-item">
                             <h4>Founder & President at HackCSB</h4>
-                            <p>Transformed Bangladesh's CS education ecosystem through hackathons by uniting top universities, creators with 1M+
-                                followers, and judges from Harvard, Stanford, Google, and Apple that shifted theory-based learning toward
+                            <p>Transformed Bangladesh's CS education ecosystem through hackathons by uniting top
+                                universities, creators with 1M+
+                                followers, and judges from Harvard, Stanford, Google, and Apple that shifted
+                                theory-based learning toward
                                 hands-on innovation, earning recognition from <a
                                     href="https://x.com/UNICEFinnovate/status/1858827565445902392">UNICEF</a>, <a
                                     href="https://www.dhakatribune.com/bangladesh/education/357156/bangladesh%E2%80%99s-tech-sector-energized-by">Dhaka
@@ -515,7 +565,9 @@
                         </div>
                         <div class="experience-item">
                             <h4>Co-Founder & President at RaiderHacks</h4>
-                            <p>Created Texas's first hackathon organization that competed at different hackathons and won awards from Danielle Strachman (Thiel fellowship co-founder), UC Berkeley, and Caltech.</p>
+                            <p>Created Texas's first hackathon organization that competed at different hackathons and
+                                won awards from Danielle Strachman (Thiel fellowship co-founder), UC Berkeley, and
+                                Caltech.</p>
                         </div>
                     </div>
                 </div>
@@ -528,18 +580,32 @@
         <div class="container">
             <div class="main-content">
                 <h1 class="section-title">📰 Media</h1>
-                
+
                 <section class="section">
                     <div class="content">
                         <p>I've been featured in media outlets for my work:</p>
                         <ul class="achievements-list">
-                            <li>Featured in <a href="https://www.businessinsider.com/pivoted-career-upskill-agentic-ai-software-engineering-2025-8">Business Insider</a></li>
-                            <li>Featured in <a href="https://translate.google.com/translate?sl=pt&tl=en&u=https://exame.com/carreira/engenheiro-abandona-big-techs-aposta-em-ia-e-quadruplica-renda-para-us-330-mil-por-ano/">Exame</a></li>
-                            <li>Featured in <a href="https://www.usatoday.com/story/special/contributor-content/2024/06/11/adibs-path-from-steam-trader-to-silicon-valley/74061707007/">USA Today</a></li>
-                            <li>Featured in <a href="https://www.msn.com/en-ca/news/technology/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/ar-AA1uaJnu">Microsoft</a></li>
-                            <li>Featured in <a href="https://thefinancialexpress.com.bd/youth-and-entrepreneurship/rethinking-hiring-with-mostofa-adib-shakib">Financial Express</a></li>
-                            <li>Featured in <a href="https://mzamin.com/news.php?news=103769&fbclid=IwAR14ocjEhgN_d-e0FeUu2ldmzbZAs2Z7XQxMiyrnsu9QITl6VtRlToXtXJ8_aem_AXmPyE7ssNDVVh671wbOlLaLP_t8Tn7X_ELeENt8RplMbjbB8Yolt_DyB_AWhBscTJMd7PtDCOU5hw4xR2FcqV7os">Manab Zamin</a></li>
-                            <li>Featured in <a href="https://hackernoon.com/from-bangladesh-to-texas-shakib-and-the-power-of-hackathons">Hackernoon</a></li>
+                            <li>Featured in <a
+                                    href="https://www.businessinsider.com/pivoted-career-upskill-agentic-ai-software-engineering-2025-8">Business
+                                    Insider</a></li>
+                            <li>Featured in <a
+                                    href="https://translate.google.com/translate?sl=pt&tl=en&u=https://exame.com/carreira/engenheiro-abandona-big-techs-aposta-em-ia-e-quadruplica-renda-para-us-330-mil-por-ano/">Exame</a>
+                            </li>
+                            <li>Featured in <a
+                                    href="https://www.usatoday.com/story/special/contributor-content/2024/06/11/adibs-path-from-steam-trader-to-silicon-valley/74061707007/">USA
+                                    Today</a></li>
+                            <li>Featured in <a
+                                    href="https://www.msn.com/en-ca/news/technology/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/ar-AA1uaJnu">Microsoft</a>
+                            </li>
+                            <li>Featured in <a
+                                    href="https://thefinancialexpress.com.bd/youth-and-entrepreneurship/rethinking-hiring-with-mostofa-adib-shakib">Financial
+                                    Express</a></li>
+                            <li>Featured in <a
+                                    href="https://mzamin.com/news.php?news=103769&fbclid=IwAR14ocjEhgN_d-e0FeUu2ldmzbZAs2Z7XQxMiyrnsu9QITl6VtRlToXtXJ8_aem_AXmPyE7ssNDVVh671wbOlLaLP_t8Tn7X_ELeENt8RplMbjbB8Yolt_DyB_AWhBscTJMd7PtDCOU5hw4xR2FcqV7os">Manab
+                                    Zamin</a></li>
+                            <li>Featured in <a
+                                    href="https://hackernoon.com/from-bangladesh-to-texas-shakib-and-the-power-of-hackathons">Hackernoon</a>
+                            </li>
                             <li>Featured in <a href="https://canvasrebel.com/meet-mostofa-shakib/">CanvasRebel</a></li>
                             <li>Featured in <a href="https://boldjourney.com/meet-mostofa-shakib/">BoldJourney</a></li>
                         </ul>
@@ -551,8 +617,10 @@
                     <div class="content">
                         <p>I've been on podcasts discussing tech, entrepreneurship, and career development:</p>
                         <ul class="achievements-list">
-                            <li><a href="https://youtu.be/lc6NeudSkMk?si=-1ILIFRSJVuIU6mO">Seeam Shahid Noor:</a> Sharing my journey from zero to cracking Amazon, Twitter, etc</li>
-                            <li><a href="https://youtu.be/4m5bO1p8SHg?si=LrP2zD58KTMiUuiM">Short Stories:</a> Building the "Snapchat" of Crypto </li>
+                            <li><a href="https://youtu.be/lc6NeudSkMk?si=-1ILIFRSJVuIU6mO">Seeam Shahid Noor:</a>
+                                Sharing my journey from zero to cracking Amazon, Twitter, etc</li>
+                            <li><a href="https://youtu.be/4m5bO1p8SHg?si=LrP2zD58KTMiUuiM">Short Stories:</a> Building
+                                the "Snapchat" of Crypto </li>
                         </ul>
                     </div>
                 </section>
@@ -564,31 +632,50 @@
     <div id="projects" class="page-content">
         <div class="container">
             <div class="main-content">
-                <h1 class="section-title">🚀 Projects</h1>
+                <h1 class="section-title">Projects</h1>
                 <div class="projects-grid">
                     <div class="project-card">
                         <h3><a href="https://github.com/mostofashakib/AutoFlow">AutoFlow</a></h3>
-                        <p>Developed a Python-based NLP parser that converts text into if-then-else syntax using conditional keyword matching and advanced pattern recognition techniques. Designed a tree module to construct a parse tree from relevant instructions, comprising instructions, targets, and messages, enabling efficient parsing. Built an API module that performs depth-first parsing on the structured parse tree, executing required tasks by invoking APIs</p>
+                        <p>Developed a Python-based NLP parser that converts text into if-then-else syntax using
+                            conditional keyword matching and advanced pattern recognition techniques. Designed a tree
+                            module to construct a parse tree from relevant instructions, comprising instructions,
+                            targets, and messages, enabling efficient parsing. Built an API module that performs
+                            depth-first parsing on the structured parse tree, executing required tasks by invoking APIs
+                        </p>
                     </div>
                     <div class="project-card">
                         <h3><a href="https://github.com/mostofashakib/Project-portal">Portal</a></h3>
-                        <p>Developed a smart door system using TensorFlow and OpenCV to identify pets through advanced image recognition technology with real-time processing capabilities. Trained a convolutional neural network for accurate real-time classification of different pet types with high precision and low latency. Automated door access by integrating recognition results with a motor control module, enabling hands-free entry for authorized pets</p>
-                    </div>
-                    <div class="project-card">
-                        <h3>Promethium</h3>
-                        <p>Built a cryptographic wallet using Shamir's Secret Sharing algorithm that enables secure digital asset inheritance upon death. Designed a distributed key management system that splits cryptographic keys across multiple parties, ensuring assets can only be accessed by authorized beneficiaries. Participated in the NSF Startup Incubator and received funding from the US Government and Danielle Strachman (Thiel Fellowship co-founder)</p>
+                        <p>Developed a smart door system using TensorFlow and OpenCV to identify pets through advanced
+                            image recognition technology with real-time processing capabilities. Trained a convolutional
+                            neural network for accurate real-time classification of different pet types with high
+                            precision and low latency. Automated door access by integrating recognition results with a
+                            motor control module, enabling hands-free entry for authorized pets</p>
                     </div>
                     <div class="project-card">
                         <h3><a href="https://github.com/mostofashakib/AI-Talent-Manager">ViralVisionAI</a></h3>
-                        <p>Engineered a serverless Next.js application on Vercel, automating affiliate marketing tasks. Crafted a user-friendly UI with TailwindCSS, providing tailored brand recommendations that cater to individual needs and preferences. Integrated AI-powered analytics to track performance metrics and optimize marketing strategies, enabling users to maximize their affiliate marketing revenue effectively.</p>
-                    </div>
-                    <div class="project-card">
-                        <h3><a href="https://www.linkedin.com/posts/safallwa_chatgpt-resumegpt-activity-7284949715173974016-oay0/">ResumeGPT</a></h3>
-                        <p>An AI resume optimization tool that analyzes and enhances resumes using advanced natural language processing to improve job application success rates. Provides personalized recommendations to improve formatting, keyword optimization, and content structure, helping job seekers create more effective resumes. Leverages machine learning algorithms to ensure resumes stand out to recruiters and ATS systems</p>
+                        <p>Engineered a serverless Next.js application on Vercel, automating affiliate marketing tasks.
+                            Crafted a user-friendly UI with TailwindCSS, providing tailored brand recommendations that
+                            cater to individual needs and preferences. Integrated AI-powered analytics to track
+                            performance metrics and optimize marketing strategies, enabling users to maximize their
+                            affiliate marketing revenue effectively.</p>
                     </div>
                     <div class="project-card">
                         <h3><a href="https://github.com/mostofashakib/SnapListen">SnapListen</a></h3>
-                        <p>Developed a Next.js application that transforms articles and PDFs into audio content with AI-powered summarization, enabling users to consume information on the go. Built intelligent text extraction and processing capabilities using OpenAI's TTS API, converting written content into natural-sounding speech with customizable playback speeds. Designed progressive loading and chunking mechanisms to handle large documents</p>
+                        <p>Developed a Next.js application that transforms articles and PDFs into audio content with
+                            AI-powered summarization, enabling users to consume information on the go. Built intelligent
+                            text extraction and processing capabilities using OpenAI's TTS API, converting written
+                            content into natural-sounding speech with customizable playback speeds. Designed progressive
+                            loading and chunking mechanisms to handle large documents</p>
+                    </div>
+                    <div class="project-card">
+                        <h3><a
+                                href="https://www.linkedin.com/posts/safallwa_chatgpt-resumegpt-activity-7284949715173974016-oay0/">ResumeGPT</a>
+                        </h3>
+                        <p>An AI resume optimization tool that analyzes and enhances resumes using advanced natural
+                            language processing to improve job application success rates. Provides personalized
+                            recommendations to improve formatting, keyword optimization, and content structure, helping
+                            job seekers create more effective resumes. Leverages machine learning algorithms to ensure
+                            resumes stand out to recruiters and ATS systems</p>
                     </div>
                 </div>
             </div>
@@ -603,14 +690,29 @@
                 <div class="content">
                     <p>I write about technology, career development, and entrepreneurship:</p>
                     <ul class="achievements-list">
-                        <li>Dzone: <a href="https://dzone.com/articles/self-supervised-learning-techniques-visual-tracking">Self-Supervised Learning Techniques for Visual Tracking</a></li>
-                        <li>The Financial Express: <a href="https://today.thefinancialexpress.com.bd/editorial/does-openais-sora-signal-end-of-youtubers-1713279487">Does OpenAI's Sora signal end of YouTubers?</a></li>
-                        <li>Forbes: <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2024/11/04/unexpected-catalyst-for-innovation-in-developing-nations/">Hackathons In Developing Nations: An Unexpected Catalyst for Innovation</a></li>
-                        <li>Forbes: <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/04/21/three-ways-small-businesses-can-use-ai-to-their-advantage/">Three Ways Small Businesses Can Use AI To Their Advantage</a></li>
-                        <li>Forbes: <a href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/01/02/how-to-start-a-company-with-little-money/">How to Start a Company With Little Money: A Practical Guide</a></li>
-                        <li>Hackernoon: <a href="https://hackernoon.com/devin-ai-end-of-software-engineers-or-just-a-tool">Devin AI: End of Software Engineers or Just A Tool?</a></li>
-                        <li>HackerNoon: <a href="https://hackernoon.com/how-to-get-the-most-out-of-your-university-life-as-a-software-engineer">How to Get the Most Out of Your University Life as a CS Student</a></li>
-                        <li>HackerNoon: <a href="https://hackernoon.com/unlocking-doors-to-google-and-facebook">How to Become a Google Engineer</a></li>
+                        <li>Dzone: <a
+                                href="https://dzone.com/articles/self-supervised-learning-techniques-visual-tracking">Self-Supervised
+                                Learning Techniques for Visual Tracking</a></li>
+                        <li>The Financial Express: <a
+                                href="https://today.thefinancialexpress.com.bd/editorial/does-openais-sora-signal-end-of-youtubers-1713279487">Does
+                                OpenAI's Sora signal end of YouTubers?</a></li>
+                        <li>Forbes: <a
+                                href="https://www.forbes.com/councils/forbesbusinesscouncil/2024/11/04/unexpected-catalyst-for-innovation-in-developing-nations/">Hackathons
+                                In Developing Nations: An Unexpected Catalyst for Innovation</a></li>
+                        <li>Forbes: <a
+                                href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/04/21/three-ways-small-businesses-can-use-ai-to-their-advantage/">Three
+                                Ways Small Businesses Can Use AI To Their Advantage</a></li>
+                        <li>Forbes: <a
+                                href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/01/02/how-to-start-a-company-with-little-money/">How
+                                to Start a Company With Little Money: A Practical Guide</a></li>
+                        <li>Hackernoon: <a
+                                href="https://hackernoon.com/devin-ai-end-of-software-engineers-or-just-a-tool">Devin
+                                AI: End of Software Engineers or Just A Tool?</a></li>
+                        <li>HackerNoon: <a
+                                href="https://hackernoon.com/how-to-get-the-most-out-of-your-university-life-as-a-software-engineer">How
+                                to Get the Most Out of Your University Life as a CS Student</a></li>
+                        <li>HackerNoon: <a href="https://hackernoon.com/unlocking-doors-to-google-and-facebook">How to
+                                Become a Google Engineer</a></li>
                     </ul>
                 </div>
             </div>
@@ -652,7 +754,7 @@
         }
 
         // Initialize with home page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             showPage('home');
         });
     </script>
