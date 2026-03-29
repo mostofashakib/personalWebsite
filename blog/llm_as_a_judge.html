@@ -293,8 +293,8 @@
 
             <div class="article-content">
                 <p>Using Large Language Models (LLMs) as judges has become a cornerstone of modern AI evaluation. As
-                    tasks move from simple extraction to open-ended generation and complex workflows, traditional
-                    metrics like BLEU or ROUGE fall short. Instead, we increasingly rely on LLMs to score other LLMs.
+                    tasks move to open-ended generation and complex workflows, traditional
+                    metrics like BLEU or ROUGE fall short. Instead, we rely on LLMs to score other LLMs.
                     This post explores when to use them, their common biases, structured alignment techniques, and how
                     to write a reliable judge prompt.</p>
 
@@ -347,11 +347,11 @@
                     review.</p>
 
                 <p>2) <strong>Verbosity Bias:</strong> Verbosity bias means longer answers get higher scores because
-                    they look more complete or more thoughtful. In reality, they may just contain more filler. This
+                    they look more complete or thoughtful. In reality, they may just contain more filler. This
                     matters a lot because verbosity bias can push your training or model selection in the wrong
                     direction. You end up choosing models that speak more rather than models that answer better. To
-                    mitigate it, include explicit brevity or conciseness criteria. Instruct the judge not to reward
-                    extra length unless it materially improves the answer. You can also compare answers after
+                    mitigate it, include brevity or conciseness criteria. Instruct the judge not to reward
+                    extra length unless it improves the answer. You can also compare answers after
                     normalizing for length or examining quality per unit of content.</p>
 
                 <p>3) <strong>Self Enhancement Bias:</strong> Self enhancement bias appears when a judge model tends to
@@ -382,8 +382,7 @@
                 <ol>
                     <li>If the rubric is vague, the judge becomes vague. Each criterion should say what good looks like,
                         what bad looks like, and how the score should be assigned.</li>
-                    <li>Give the judge examples of high quality and low quality answers scored according to the rubric.
-                    </li>
+                    <li>Give the judge examples of high- and low-quality answers scored by the rubric.</li>
                     <li>If you do not explicitly warn against verbosity, polished style, unsupported confidence, or
                         decorative formatting, the judge may treat those as quality signals.</li>
                     <li>Instead of asking for one overall score, ask the judge to evaluate dimensions separately. For
@@ -451,106 +450,109 @@
 
                 <h3>Sample Judge Prompt Template (Pointwise)</h3>
 
-                <div class="prompt-box">You are an expert evaluator. Your task is to evaluate a candidate answer based on a defined rubric. Do not generate a new answer. Do not assume facts not present in the provided context.
+                <div class="prompt-box">You are an expert evaluator. Your task is to evaluate a candidate answer based
+                    on a defined rubric. Do not generate a new answer. Do not assume facts not present in the provided
+                    context.
 
-### Task
-Evaluate the quality of the candidate answer to the given prompt.
+                    ### Task
+                    Evaluate the quality of the candidate answer to the given prompt.
 
-### Prompt
-{user_prompt}
+                    ### Prompt
+                    {user_prompt}
 
-### Candidate Answer
-{candidate_answer}
+                    ### Candidate Answer
+                    {candidate_answer}
 
-### (Optional) Reference / Context
-{retrieved_context_or_reference}
+                    ### (Optional) Reference / Context
+                    {retrieved_context_or_reference}
 
-### Evaluation Rubric
+                    ### Evaluation Rubric
 
-1. Correctness (0–5)
-- 5: The answer is fully correct with no errors.
-- 3: Mostly correct but contains minor inaccuracies.
-- 1: Contains major errors or incorrect conclusions.
+                    1. Correctness (0–5)
+                    - 5: The answer is fully correct with no errors.
+                    - 3: Mostly correct but contains minor inaccuracies.
+                    - 1: Contains major errors or incorrect conclusions.
 
-2. Factuality / Grounding (0–5)
-- 5: All claims are supported by the provided context or are verifiably true.
-- 3: Some claims are unsupported or weakly grounded.
-- 1: Contains hallucinations or contradicts the context.
+                    2. Factuality / Grounding (0–5)
+                    - 5: All claims are supported by the provided context or are verifiably true.
+                    - 3: Some claims are unsupported or weakly grounded.
+                    - 1: Contains hallucinations or contradicts the context.
 
-3. Completeness (0–5)
-- 5: Fully addresses all aspects of the prompt.
-- 3: Covers the main idea but misses important details.
-- 1: Incomplete or misses key parts.
+                    3. Completeness (0–5)
+                    - 5: Fully addresses all aspects of the prompt.
+                    - 3: Covers the main idea but misses important details.
+                    - 1: Incomplete or misses key parts.
 
-4. Instruction Following (0–5)
-- 5: Fully follows instructions (format, constraints, scope).
-- 3: Minor deviations.
-- 1: Ignores key instructions.
+                    4. Instruction Following (0–5)
+                    - 5: Fully follows instructions (format, constraints, scope).
+                    - 3: Minor deviations.
+                    - 1: Ignores key instructions.
 
-5. Conciseness (0–5)
-- 5: Clear and concise with no unnecessary content.
-- 3: Some redundancy or verbosity.
-- 1: Excessively verbose or too brief to be useful.
+                    5. Conciseness (0–5)
+                    - 5: Clear and concise with no unnecessary content.
+                    - 3: Some redundancy or verbosity.
+                    - 1: Excessively verbose or too brief to be useful.
 
-### Important Constraints
-- Do NOT reward verbosity or stylistic polish unless it improves clarity.
-- Do NOT use outside knowledge unless explicitly allowed.
-- Focus on substance over tone.
+                    ### Important Constraints
+                    - Do NOT reward verbosity or stylistic polish unless it improves clarity.
+                    - Do NOT use outside knowledge unless explicitly allowed.
+                    - Focus on substance over tone.
 
-### Output Format (STRICT JSON ONLY)
+                    ### Output Format (STRICT JSON ONLY)
 
-{
-  "correctness": int,
-  "factuality": int,
-  "completeness": int,
-  "instruction_following": int,
-  "conciseness": int,
-  "overall_score": float,
-  "final_verdict": "pass" | "fail",
-  "failure_tags": ["hallucination", "missing_info", "instruction_violation", "verbosity", "other"],
-  "rationale": "brief explanation (2-3 sentences)"
-}</div>
+                    {
+                        "correctness": int,
+                        "factuality": int,
+                        "completeness": int,
+                        "instruction_following": int,
+                        "conciseness": int,
+                        "overall_score": float,
+                        "final_verdict": "pass" | "fail",
+                        "failure_tags": ["hallucination", "missing_info", "instruction_violation", "verbosity", "other"],
+                        "rationale": "brief explanation (2-3 sentences)"
+                    }</div>
 
                 <h3>Sample Judge Prompt Template (Pairwise)</h3>
 
-                <div class="prompt-box">You are an expert evaluator. Your task is to compare two candidate answers and determine which is better based on the rubric.
+                <div class="prompt-box">You are an expert evaluator. Your task is to compare two candidate answers and
+                    determine which is better based on the rubric.
 
-### Prompt
-{user_prompt}
+                    ### Prompt
+                    {user_prompt}
 
-### Answer A
-{answer_a}
+                    ### Answer A
+                    {answer_a}
 
-### Answer B
-{answer_b}
+                    ### Answer B
+                    {answer_b}
 
-### Evaluation Rubric
+                    ### Evaluation Rubric
 
-Evaluate based on:
-- Correctness
-- Factuality
-- Completeness
-- Instruction Following
-- Conciseness
+                    Evaluate based on:
+                    - Correctness
+                    - Factuality
+                    - Completeness
+                    - Instruction Following
+                    - Conciseness
 
-### Important Constraints
-- Ignore answer order. Position does NOT imply quality.
-- Do NOT reward verbosity unless it improves substance.
-- Focus on correctness and usefulness over style.
+                    ### Important Constraints
+                    - Ignore answer order. Position does NOT imply quality.
+                    - Do NOT reward verbosity unless it improves substance.
+                    - Focus on correctness and usefulness over style.
 
-### Output Format (STRICT JSON ONLY)
+                    ### Output Format (STRICT JSON ONLY)
 
-{
-  "winner": "A" | "B" | "tie",
-  "reasoning": "brief explanation comparing both answers",
-  "dimension_scores": {
-    "correctness": {"A": int, "B": int},
-    "factuality": {"A": int, "B": int},
-    "completeness": {"A": int, "B": int},
-    "instruction_following": {"A": int, "B": int},
-    "conciseness": {"A": int, "B": int}
-  }
-}</div>
+                    {
+                        "winner": "A" | "B" | "tie",
+                        "reasoning": "brief explanation comparing both answers",
+                        "dimension_scores": {
+                            "correctness": {"A": int, "B": int},
+                            "factuality": {"A": int, "B": int},
+                            "completeness": {"A": int, "B": int},
+                            "instruction_following": {"A": int, "B": int},
+                            "conciseness": {"A": int, "B": int}
+                        }
+                    }</div>
             </div>
         </article>
     </div>
