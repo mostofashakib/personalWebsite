@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluating LLMs: Building a Practical Stack</title>
+    <!-- Use a modern premium font like Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0f;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --card-bg: #1a1a1f;
+            --border-subtle: #27272a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            margin-bottom: 4rem;
+        }
+
+        /* Abstract background glow */
+        .bg-glow {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background-color: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .site-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            transition: color 0.3s;
+        }
+
+        .site-title:hover {
+            color: var(--accent-blue);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-subtle);
+            transform: translateX(-4px);
+        }
+
+        .article-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .article-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 4rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .article-content {
+            font-size: 1.15rem;
+            color: #d1d5db;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.8rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+
+        .article-content a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .article-content a:hover {
+            border-bottom-color: var(--accent-blue);
+        }
+
+        .article-content strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .article-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #e5e7eb;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .article-content blockquote {
+            position: relative;
+            padding: 1.5rem 2rem;
+            margin: 3rem 0;
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 0 12px 12px 0;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .highlight-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #ffffff;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2.25rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .article-content {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav class="nav">
+        <div class="logo">
+            <a href="../index.html" class="site-title">Mostofa Shakib</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+        </a>
+
+        <article>
+            <h1 class="article-title">LLM Evaluating & Benchmark</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>March 28, 2026</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>18 min read</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <p>When people say “LLM evaluation,” they often collapse five problems into one. That
+                    leads to weak evaluation setups. In practice, you are answering:
+                </p>
+
+                <div class="highlight-box">
+                    <ul style="margin-bottom: 0;">
+                        <li><strong>Output Quality:</strong> Is the model's final output good?</li>
+                        <li><strong>Correctness:</strong> Is it correct and factually grounded?</li>
+                        <li><strong>Reliability:</strong> Is it reliable across different prompts, runs, and edge
+                            cases?</li>
+                        <li><strong>System Constraints:</strong> Does it behave well under realistic constraints
+                            like tools, APIs, and long multi-step workflows?</li>
+                        <li><strong>Metric Integrity:</strong> Does the metric itself measure what you actually care
+                            about, or does it reward shortcuts?</li>
+                    </ul>
+                </div>
+
+                <p>A lot of teams build an evaluation stack that only answers the first question. They score a final
+                    response, see a number go up, and assume the system improved. In practice, the model could have
+                    learned how to look better according to the metric. That is why evaluations are treated as a
+                    measurement system with failure modes.</p>
+
+                <h2>LLM Evaluation Framework</h2>
+
+                <p>1) <strong>Task Defination:</strong> “Answer user questions well” is not a task.
+                    “Answer user questions using only retrieved documentation and cite evidence” is a task.
+                    “Act as an agent that selects tools, makes API calls, and completes a workflow” is a task.
+                </p>
+
+                <p>2) <strong>Define Success:</strong> In plain English write are you rewarding correctness,
+                    usefulness, speed, clarity, factuality, safety, low cost, or some mix? Without clear definition of
+                    success, the evaluation will drift toward whatever is easiest to measure.</p>
+
+                <p>3) <strong>Choose the evaluation method:</strong> If the task has a narrow answer space, reference
+                    based metrics
+                    may help. If it is open ended, rubric based judging and human evaluation matter more. If it involves
+                    tools, you need trajectory level evaluation. If it requires factual grounding, you need claim
+                    verification.</p>
+
+                <p>4) <strong>Dataset design:</strong> A good eval set should include normal cases, hard
+                    cases, adversarial cases, ambiguous cases, and realistic production cases. Otherwise, your system
+                    will overfit to the happy path.</p>
+
+                <p>5) <strong>Reliability:</strong> You need to know whether the evaluation is stable across repeated
+                    runs, prompt paraphrases, changed answer order, and small formatting differences. If the score
+                    changes a lot under minor changes, you cannot trust it.</p>
+
+                <p>6) <strong>Failure analysis:</strong> Aggregate scores do not tell you what broke. You need to
+                    inspect clusters of failure: hallucination, missing steps, bad tool
+                    routing, policy over refusal, wrong citation, brittle formatting, shallow reasoning, and so on.
+                </p>
+
+                <h2>Kinds of LLM Evaluation</h2>
+
+                <ul>
+                    <li><strong>Reference based evaluation:</strong> Compares model output to one or more reference
+                        answers. This includes BLEU, ROUGE, and METEOR.</li>
+                    <li><strong>Human evaluation:</strong> Uses expert or non expert raters to score outputs according
+                        to a rubric. It is more expensive, but often closer to the real objective.</li>
+                    <li><strong>LLM as a judge:</strong> Uses a model to apply a rubric, compare outputs, or classify
+                        failure modes. It is scalable and flexible, but carries bias and calibration problems.</li>
+                    <li><strong>Task based evaluation:</strong> Measures whether the model actually completes the task.
+                        For code, this could mean test pass rate. For retrieval, it could mean answer correctness
+                        grounded in source documents. For agents, it could mean successful task completion under
+                        realistic tool constraints.</li>
+                    <li><strong>Benchmark evaluation:</strong> Uses public datasets like MMLU, AIME, PIQA, SWE-bench,
+                        HarmBench, and TAU bench.</li>
+                    <li><strong>Reliability evaluation:</strong> Asks whether the model or the evaluation method is
+                        stable. E.g. consistency across runs, judge agreement, and sensitivity to perturbations.</li>
+                </ul>
+
+                <h2>Reference based evaluation</h2>
+
+                <p>Reference based evaluation compares the generated answer to a reference answer. They are cheap, fast,
+                    and easy to automate. The problem is that they measure similarity, not quality. That distinction
+                    matters. If there are many valid ways to answer a question, then overlap with a reference becomes a
+                    weak proxy. The model may produce a better answer than the reference and still score lower. Or it
+                    may memorize the reference style and score high while being less useful. This is why reference
+                    metrics work best when outputs are constrained and least when outputs are open ended. Common
+                    reference based evaluation metrics include
+                </p>
+
+                <div class="highlight-box">
+                    <ul>
+                        <li>
+                            <p><strong>BLEU:</strong> is a precision oriented n-gram overlap metric. It looks at how
+                                much of the candidate answer appears in the reference, usually across different n-gram
+                                sizes. BLEU works well when correct answers tend to use similar wording. The weakness of
+                                BLEU is that it does not understand meaning. It rewards lexical overlap. A correct
+                                paraphrase can score badly. A stiff, literal answer can score well. BLEU also tends to
+                                punish creative or diverse wording. In open ended tasks, this becomes a serious
+                                distortion. Another side effect is optimization pressure. If you optimize a model
+                                against BLEU, the model often becomes more conservative. It learns to stay near the
+                                reference style, even when a more natural phrasing would be better. In practice,
+                                that means BLEU can quietly push a model toward imitation rather than communication.
+                                BLEU is most useful for constrained generation, especially translation or tightly
+                                normalized response tasks. It is much less useful for assistants, reasoning, or
+                                summarization.</p>
+                        </li>
+
+                        <li>
+                            <p><strong>ROUGE:</strong> asks whether the system included important
+                                words or phrases from the reference summary. This makes sense for summarization because
+                                missing a key point matters. If the source text says the company lost money, and the
+                                summary omits that, the summary is incomplete. The problem is that ROUGE can reward
+                                verbosity. A longer summary often has a better chance of overlapping with the reference.
+                                So you can get high ROUGE with a bloated, repetitive summary that a human would consider
+                                worse. ROUGE also tends to reward extractive behavior. A model that copies phrases from
+                                the source can do well even if the summary lacks synthesis. The side effect
+                                is subtle but important. If you use ROUGE alone, the model may drift
+                                toward longer and more extractive summaries. That can hurt readability and usefulness,
+                                especially when users want concise summaries. ROUGE is useful when coverage matters,
+                                especially for summarization. But you usually need to pair it with other checks like
+                                human preference, factuality, conciseness, or answer usefulness.
+                            </p>
+                        </li>
+
+                        <li>
+                            <p><strong>METEOR:</strong> tries to improve on overlap metrics by using
+                                synonym matching, and a better balance of precision and recall. In many cases, it
+                                correlates better with human judgment than BLEU because it can give partial credit for
+                                semantically related wording. That makes METEOR more flexible when there is some
+                                acceptable variation in how an answer is phrased. It is often more forgiving than BLEU
+                                and can better handle paraphrasing.
+                                Still, it remains a reference based metric and does not reason about whether
+                                the answer is true, complete, or useful in context. It is just a more semantically
+                                tolerant way of measuring closeness. The side effect is that people often mistake
+                                “better than BLEU” for “good enough.” It is better than BLEU for many tasks, but it
+                                still fails on open ended assistant quality, multi step reasoning, grounded QA, and
+                                agent tasks. Use METEOR when you have reference answers and some lexical flexibility
+                                matters. Do not use it as your only signal for anything complex.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <p>Modern LLM tasks often involve multiple valid answers, hidden reasoning, real world knowledge,
+                    citations, tools, and safety constraints. Reference based metrics cannot see most of that. They
+                    do not know whether the answer followed the instruction exactly. They do not know whether a
+                    cited fact was hallucinated. They do not know whether a tool was selected correctly. They do not
+                    know whether the reasoning path was valid. They do not know whether the model stayed within
+                    policy. This is why older NLP metrics are still useful as narrow instruments rather than full
+                    evaluations. They can tell you about one slice of behavior, not the whole system.</p>
+
+                <h2>Human Evaluation</h2>
+
+                <p>Human evaluation remains one of the most important evaluation methods because humans can assess
+                    nuanced qualities that automatic metrics miss. They can notice whether an answer feels useful,
+                    whether the reasoning makes sense, whether the tone is appropriate, whether the response resolves
+                    the user’s actual need, and whether the factual claims feel trustworthy. But human evaluation is not
+                    automatically high quality. Humans disagree. Raters bring different standards, attention levels,
+                    domain knowledge, and biases. If the rubric is vague, the labels will be noisy. A good human
+                    evaluation setup uses a clear rubric, rater training, gold examples, adjudication for
+                    disagreements, and spot checks for quality. You also want enough redundancy to estimate inter-rater
+                    agreement. If three humans do not agree on what “good” means, then your evaluation criteria are
+                    underspecified. Human evaluation is also expensive and slow, so most teams only use human evaluation
+                    for calibration, benchmark creation, periodic auditing, and hard cases.
+                </p>
+
+                <h2>LLM as a Judge</h2>
+
+                <p>LLM as a judge means using an LLM to score correctness, completeness,
+                    clarity, tone, instruction following, safety, and more. It works by comparing two candidate answers
+                    and choosing the better one. This makes it more flexible than BLEU or ROUGE, but creates
+                    new problems since the judge model brings its own biases, blind spots,
+                    and instability. So LLM as a judge is powerful, but it is not objective truth. It is a learned
+                    evaluator that must itself be evaluated.</p>
+
+                <p>For a detailed breakdown on when to use LLMs as judges, common biases, and structured outputs, please
+                    refer to our deep dive: <a href="llm_as_a_judge.html">LLM as a Judge Deep Dive</a>.</p>
+
+                <h2>Evaluation Dimensions</h2>
+
+                <ul>
+                    <li><strong>Correctness:</strong> asks whether the answer is actually right. This is the core
+                        dimension for most tasks, but it can mean different things in different settings.</li>
+                    <li><strong>Factuality:</strong> asks whether factual claims are true and grounded in available
+                        evidence. This is important for RAG, search, QA, and assistants that cite sources.</li>
+                    <li><strong>Completeness:</strong> asks whether the answer covers the key parts of the task. A
+                        concise answer can still fail if it omits important elements.</li>
+                    <li><strong>Instruction following:</strong> asks whether the model obeyed the requested format,
+                        scope, constraints, and tone.</li>
+                    <li><strong>Relevance:</strong> asks whether the answer addresses the question instead of drifting.
+                    </li>
+                    <li><strong>Clarity:</strong> asks whether the answer is understandable and well organized.</li>
+                    <li><strong>Conciseness:</strong> asks whether the answer avoids unnecessary material.</li>
+                    <li><strong>Reasoning quality:</strong> asks whether the logic is coherent, especially for multi
+                        step tasks. You must be careful here, since apparent reasoning can be nonsense.</li>
+                    <li><strong>Safety:</strong> asks whether the model avoids harmful, disallowed, or risky outputs.
+                    </li>
+                    <li><strong>Tool correctness:</strong> this includes choosing the correct tool, passing correct
+                        arguments, interpreting outputs correctly, and recovering from failures.</li>
+                    <li><strong>Groundedness:</strong> matters when external evidence is present. A grounded answer ties
+                        claims to source material rather than inventing them.</li>
+                </ul>
+
+                <h2>How to Quantify Factuality</h2>
+
+                <p>Factuality is one of the hardest evaluation dimensions because a fluent answer can feel true while
+                    being wrong. It also breaks simplistic judging. A judge may say something is factual because it
+                    sounds plausible. The better way is to decompose the problem into claims. First, extract atomic
+                    factual claims from the answer then evaluate each claim against evidence. Each claim can be marked
+                    as supported, unsupported, contradicted, unverifiable, or irrelevant. From there you can compute
+                    statistics such as the fraction of supported claims, contradiction rate,
+                    unsupported claim rate, and evidence coverage. This is much more informative than a single
+                    impressionistic “factuality score.”</p>
+
+                <p>When the task is grounded QA or RAG, you should require evidence based
+                    verification. The judge should only use the provided context, not its own background knowledge.
+                    Otherwise the judge itself may hallucinate validation. Citation level evaluation helps here. Ask
+                    whether each cited passage supports the associated claim. A response can cite a real source
+                    and still misrepresent it. For higher stakes tasks, combine LLM judgment with deterministic or
+                    external checks. For example, structured database lookups, exact answer matching on known entities,
+                    human expert review, or claim verification pipelines.</p>
+
+                <h2>Benchmarks</h2>
+
+                <ul>
+                    <li><strong>MMLU:</strong> (Massive Multitask Language Understanding) tests broad knowledge and
+                        academic style question answering across many subjects. It is useful for general reasoning and
+                        knowledge breadth, but not a measure of real world usefulness.</li>
+                    <li><strong>AIME:</strong> (American Invitational Mathematics Examination) tests math reasoning. It
+                        is useful for hard symbolic reasoning, but is not everyday user tasks.</li>
+                    <li><strong>PIQA:</strong> (Physical Interaction Question Answering) tests physical commonsense. It
+                        measures whether a model understands basic interaction with the physical world.</li>
+                    <li><strong>SWE-bench:</strong> measures coding ability in realistic repositories by checking
+                        whether the model can produce patches that resolve actual issues. This is far more meaningful
+                        than code style scoring because it tests real task completion.</li>
+                    <li><strong>HarmBench:</strong> evaluates safety behavior. It tests how the model responds in
+                        harmful or disallowed contexts and whether it resists unsafe instructions.</li>
+                    <li><strong>TAU-bench:</strong> (Tool Agent User Interaction Benchmark) evaluates agents operating
+                        in environments with tools and user like interactions. This matters because tool use introduces
+                        many new failure modes that do not appear in QA benchmarks.</li>
+                </ul>
+
+                <h2>Reliability and Consistency Metrics</h2>
+
+                <p>Most teams focus on “how high was the score?” and neglect “how stable was the score?” this is a
+                    mistake, because reliability is part of evaluation quality. A good evaluation remains consistent
+                    across runs, robust to prompt paraphrases and answer order, and stable under minor formatting noise
+                    unless formatting is relevant. It should also show reasonable agreement with human judgments,
+                    on difficult or ambiguous cases. Useful reliability metrics include run-to-run variance,
+                    inter-judge agreement, agreement with human labels, order sensitivity, rubric adherence rate, and
+                    for structured outputs, schema compliance and missing field rates.</p>
+
+                <h2>Agentic Evaluation</h2>
+
+                <p>Agentic evaluation means evaluating how an agent makes decisions across time. It is selecting
+                    routes, calling tools, handling tool outputs, maintaining state, recovering from failures, and
+                    producing a final result. That means final answer scoring alone is not enough. An agent can arrive
+                    at a correct answer for bad reasons, or fail because of a small tool routing issue even if its
+                    general reasoning is sound. So agentic evaluation needs to examine the trajectory. You should
+                    evaluate whether the agent understood the task, chose the right subgoal sequence, selected the
+                    correct tool, used valid arguments, interpreted the output correctly, recovered from errors, and
+                    terminated appropriately. Each of these can fail independently. Agent systems also need environment
+                    aware evaluation. The same agent can look strong in a sandbox and fail in production because tools
+                    are slower, APIs return partial data, or the naming conventions are confusing.</p>
+
+                <h3>How to Do Agentic Evaluation</h3>
+
+                <p>The best starting point is task decomposition. Break a realistic user workflow into stages. For each
+                    stage, specify what success and failure look like. Then log the entire trace. This includes tool
+                    selection, tool arguments, tool outputs, retries, error handling, internal planning if available,
+                    and the final answer. If you only store the final answer, you lose most of the information needed to
+                    debug agent failure. Then define metrics at multiple levels. Final task success is one metric, but
+                    not the only one. You also want step success rate, tool selection accuracy, argument validity,
+                    tool output interpretation accuracy, recovery success rate, and unnecessary call rate. Then run the
+                    agent on realistic scenarios that includes ambiguous instructions, missing tools, flaky tools,
+                    confusing APIs, contradictory signals, and timeouts. That is where real failure modes appear. Then
+                    inspect failure clusters. If a tool name is ambiguous, many runs will fail the same way. If the API
+                    naming is inconsistent, the agent will repeatedly call the wrong endpoint.</p>
+
+                <h3>Common Agent Failure Modes</h3>
+
+                <ul>
+                    <li><strong>Route Error:</strong> A route error happens when the agent chooses the wrong
+                        path or subworkflow. For example, searching instead of retrieving from memory, summarizing
+                        instead of verifying, or planning when direct execution would suffice. Route errors often come
+                        from ambiguous instructions, weak tool descriptions, or poor prompt scaffolding. The fix is
+                        clearer routing criteria, stronger tool documentation, better
+                        examples, and route specific evaluation.</li>
+                    <li><strong>Using a Tool That Does Not Exist:</strong> Agents sometimes hallucinate tools or
+                        function names. This happens when the tool space is large, naming is inconsistent, or the model
+                        relies too much on prior patterns rather than the actual available tool list. The fix is to
+                        provide the available tools, keep names simple, enforce tool validation, and return errors when
+                        a nonexistent tool is attempted. Training and evaluation should include cases where the correct
+                        behavior is to not call a tool.</li>
+                    <li><strong>Instruction Unclear:</strong> If the user’s request is ambiguous, the agent may choose a
+                        poor strategy. This is not always a model failure. Sometimes the system failed to define when to
+                        ask clarifying questions, when to make reasonable assumptions, and when to stop. The fix is
+                        better instruction policy and evaluation criteria. Test cases should cover ambiguity. The agent
+                        should be judged on whether it handled ambiguity appropriately, not just whether it guessed
+                        right.</li>
+                    <li><strong>API Naming Is Not Logical:</strong> Many agent failures are really interface failures.
+                        If one API is called <code>lookup_user</code>, another is called <code>fetch_profile</code>, and
+                        a third is called <code>get_person</code>, the agent has to infer semantics from weak clues.
+                        Humans struggle with bad API design too. Models struggle even more. The fix is better tool
+                        ergonomics. Use semantically clear names, concise descriptions, typed schemas, example calls,
+                        and consistent argument conventions.</li>
+                    <li><strong>Tool Call Error: No Response:</strong> A tool call that returns no response is a crucial
+                        edge case. A weak agent may treat silence as success. Another may loop forever. Another may
+                        crash. A stronger agent detects the failure, distinguishes between timeout and empty valid
+                        response, retries when safe, and escalates or changes strategy when needed. Evaluation here
+                        should not just mark final success or failure. It should ask: did the agent detect the no
+                        response condition, did it retry appropriately, did it avoid infinite loops, and did it
+                        communicate uncertainty properly? The fix is both behavioral and infrastructural. Tools should
+                        return error states where possible. Agents should have timeout awareness, retry
+                        policies, and fallback logic. Evaluation datasets should include no response cases</li>
+                </ul>
+
+                <h3>How to Fix Agent Failures</h3>
+
+                <div class="highlight-box">
+                    <ul style="margin-bottom: 0;">
+                        <li><strong>Observability:</strong> Log traces, arguments, outputs, errors, and retries.</li>
+                        <li><strong>Tool design:</strong> Use clear names, typed arguments, and informative errors.</li>
+                        <li><strong>Instruction design:</strong> Define when to act, verify, retry, clarify, and stop.
+                        </li>
+                        <li><strong>Targeted training:</strong> Focus on failure clusters. If many failures involve
+                            misreading one tool, add examples for that tool.</li>
+                        <li><strong>Evaluation coverage:</strong> Include messy real-world cases, and happy paths.</li>
+                        <li><strong>Recovery scoring:</strong> Measure recovery ability after failed attempt.</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </div>
+</body>
+
+</html>

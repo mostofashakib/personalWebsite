@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM as a Judge</title>
+    <!-- Use a modern premium font like Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0f;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --card-bg: #1a1a1f;
+            --border-subtle: #27272a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            margin-bottom: 4rem;
+        }
+
+        /* Abstract background glow */
+        .bg-glow {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background-color: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .site-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            transition: color 0.3s;
+        }
+
+        .site-title:hover {
+            color: var(--accent-blue);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+        }
+
+        .article-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #ffffff, #9ca3af);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-content {
+            font-size: 1.125rem;
+            color: #d1d5db;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.8rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+
+        .article-content a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .article-content a:hover {
+            border-bottom-color: var(--accent-blue);
+        }
+
+        .article-content strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .article-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #e5e7eb;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .article-content blockquote {
+            position: relative;
+            padding: 1.5rem 2rem;
+            margin: 3rem 0;
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 0 12px 12px 0;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .highlight-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #ffffff;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .prompt-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+            color: #d1d5db;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2.25rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .article-content {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav class="nav">
+        <div class="logo">
+            <a href="../index.html" class="site-title">Mostofa Shakib</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+        </a>
+
+        <article>
+            <h1 class="article-title">LLM as a Judge</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>March 28, 2026</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>8 min read</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <p>Using Large Language Models (LLMs) as judges has become a cornerstone of modern AI evaluation. As
+                    tasks move from simple extraction to open-ended generation and complex workflows, traditional
+                    metrics like BLEU or ROUGE fall short. Instead, we increasingly rely on LLMs to score other LLMs.
+                    This post explores when to use them, their common biases, structured alignment techniques, and how
+                    to write a reliable judge prompt.</p>
+
+                <h2>When to Use LLM as a Judge</h2>
+                <p>Use LLM as a judge when the task has multiple valid outputs and you care about qualities that are
+                    hard to capture with exact matching. Good examples include helpfulness of chatbot responses, quality
+                    of explanations, grounded summarization, style controlled generation, open ended QA, and pairwise
+                    comparison between two candidate outputs. It is also useful when you need fine grained rubrics. For
+                    example, you might want separate scores for factuality, completeness, conciseness, tone, and
+                    instruction following. A judge can do that better than reference based metrics.</p>
+
+                <p>Use it carefully when the task involves domain expertise and exact truth verification. A judge can
+                    say an answer looks reasonable even when it is wrong. This happens often in math, law, medicine,
+                    code execution, and grounded factual QA. For these cases, use judge models as one layer, not the
+                    final authority. Combine them with deterministic checks, human experts, or tool based verification.
+                </p>
+
+                <h2>What Makes a Good LLM Judge</h2>
+                <ul>
+                    <li><strong>Capability:</strong> Strong understanding of the task, the rubric, and the answer. A
+                        weak model will produce shallow verdicts and miss subtle errors.</li>
+                    <li><strong>Rubric adherence:</strong> Follow the scoring criteria rather than drifting into vague
+                        impressions. Without this, scores become inconsistent and hard to interpret.</li>
+                    <li><strong>Stability:</strong> The same answer should not receive very different scores just
+                        because the prompt wording changed or the answer appeared in a different position.</li>
+                    <li><strong>Calibration:</strong> Correlate well with strong human raters on the desired dimensions.
+                    </li>
+                    <li><strong>Signal Independence:</strong> Do not reward length, confidence, formatting, or
+                        similarity to its own style more than actual quality.</li>
+                </ul>
+
+                <p>It also helps if the judge can explain its decisions in a constrained way because they make error
+                    analysis easier and help you detect rubric drift.</p>
+
+                <h2>What LLM Judges Are Bad At</h2>
+                <p>Judge models struggle with hidden factual errors, subtle logical mistakes, domain specific technical
+                    accuracy, and outputs that sound polished but contain false claims. They are especially weak when
+                    they cannot independently verify the answer. They also struggle when the rubric is underspecified.
+                    If you ask the judge to rate “quality,” it will invent its own definition. That creates noise and
+                    inconsistency. Judge models also have difficulty when they must inspect long agent traces with many
+                    tool calls and latent state changes. They may miss a critical mistake halfway through the trajectory
+                    if the final answer looks good.</p>
+
+                <h2>Common Judge Biases</h2>
+                <p>1) <strong>Position Bias:</strong> Position bias happens when the judge tends to favor the first or
+                    second answer in a pairwise comparison because of order rather than merit. This is common. Even
+                    strong models exhibit it. The fix is straightforward. Randomize answer order and score both
+                    orderings when possible. If answer A wins when shown first but loses when shown second, that tells
+                    you the comparison is unstable. You can average the outcomes or discard unstable cases for closer
+                    review.</p>
+
+                <p>2) <strong>Verbosity Bias:</strong> Verbosity bias means longer answers get higher scores because
+                    they look more complete or more thoughtful. In reality, they may just contain more filler. This
+                    matters a lot because verbosity bias can push your training or model selection in the wrong
+                    direction. You end up choosing models that speak more rather than models that answer better. To
+                    mitigate it, include explicit brevity or conciseness criteria. Instruct the judge not to reward
+                    extra length unless it materially improves the answer. You can also compare answers after
+                    normalizing for length or examining quality per unit of content.</p>
+
+                <p>3) <strong>Self Enhancement Bias:</strong> Self enhancement bias appears when a judge model tends to
+                    prefer answers that resemble its own style, reasoning pattern, or common output format. If you judge
+                    one model using a very similar model family, this can distort rankings. The mitigation is to use a
+                    different model family for judging when possible, or to ensemble multiple judge models. It also
+                    helps to strip metadata and blind the judge so it cannot infer the source model easily.</p>
+
+                <p>4) <strong>Formal Tone Bias:</strong> Formal tone bias rewards answers that sound authoritative, even
+                    when the underlying content is weak or incorrect. This can lead to over scoring polished but shallow
+                    responses. Mitigate it by anchoring evaluation to factual accuracy and reasoning quality rather than
+                    tone.</p>
+
+                <p>5) <strong>Formatting Bias:</strong> Formatting bias rewards answers with clean structure, headings,
+                    or bullet points regardless of substance. Structure should not outweigh correctness or depth and
+                    should only be credited when formatting improves understanding.</p>
+
+                <p>6) <strong>Confidence Bias:</strong> Confidence bias favors assertive answers over uncertain or
+                    nuanced ones, even when the confident answer is wrong. This is risky in ambiguous or knowledge
+                    limited tasks. Judges should prioritize correctness and justification.</p>
+
+                <p>7) <strong>Refusal Bias:</strong> Refusal bias appears in safety evaluation when judges over reward
+                    safe sounding refusals or under penalize subtle harmful compliance. This can skew results toward
+                    overly cautious or inconsistent behavior. Mitigation requires safety criteria and distinction
+                    between appropriate refusal and unnecessary avoidance.</p>
+
+                <h2>Aligning LLM Judges</h2>
+                <ol>
+                    <li>If the rubric is vague, the judge becomes vague. Each criterion should say what good looks like,
+                        what bad looks like, and how the score should be assigned.</li>
+                    <li>Give the judge examples of high quality and low quality answers scored according to the rubric.
+                    </li>
+                    <li>If you do not explicitly warn against verbosity, polished style, unsupported confidence, or
+                        decorative formatting, the judge may treat those as quality signals.</li>
+                    <li>Instead of asking for one overall score, ask the judge to evaluate dimensions separately. For
+                        example: factual accuracy, completeness, instruction following, conciseness, and safety. This
+                        reduces hidden tradeoffs.</li>
+                    <li>Compare the judge’s scores against human judgments on a calibration set. If they do not line up,
+                        adjust the rubric, prompt, or model choice.</li>
+                    <li>Swap answer order, vary prompt phrasing, run repeated judgments, and see whether the judge
+                        remains stable.</li>
+                </ol>
+
+                <h2>Pointwise vs Pairwise LLM as a Judge</h2>
+                <p>Pointwise judging evaluates one answer at a time against a rubric. This is useful when you need
+                    absolute quality scores, pass fail thresholds, or monitoring dashboards. It gives richer per answer
+                    diagnostics, but it is harder for the judge because the model must infer an internal scale.</p>
+
+                <p>Pairwise judging asks the judge which of two answers is better. This is often easier and more
+                    reliable because relative comparison is simpler than assigning absolute scores. It is useful for A/B
+                    testing, model ranking, and preference data collection.</p>
+
+                <p>Pairwise judgments is better for model comparison when the difference between answers is subtle.
+                    Pointwise judgments are often better for longitudinal monitoring and error analysis because they
+                    attach scores to individual outputs.</p>
+
+                <h2>Structured Output for Judge Models</h2>
+                <p>Structured output means the judge returns results in a fixed schema rather than free form prose. For
+                    example, <code>winner</code>, <code>correctness_score</code>, <code>factuality_score</code>,
+                    <code>completeness_score</code>, <code>failure_categories</code>, and a short
+                    <code>rationale</code>.
+                </p>
+
+                <p>This matters because free text explanations are hard to aggregate and easy to misread. A schema gives
+                    consistency and forces you to define exactly what the judge should output, which sharpens the
+                    evaluation design itself.</p>
+
+                <ul>
+                    <li><strong>Prompt-level schema:</strong> Instruct the judge to return strict JSON with required
+                        fields and valid ranges. This helps enforce structure but can drift.</li>
+                    <li><strong>Schema-constrained decoding:</strong> Use constrained decoding or API-level structured
+                        output (e.g., JSON mode) so responses must satisfy a defined schema, reducing malformed outputs.
+                    </li>
+                    <li><strong>Programmatic validation:</strong> Validate responses after generation; checks required
+                        fields, numeric ranges, enums, and reject or retry invalid outputs.</li>
+                    <li><strong>Deterministic postprocessing:</strong> Normalize values, map aliases, handle nulls
+                        safely, and version schemas to prevent drift over time.</li>
+                </ul>
+
+                <h2>How to Write a Good Judge Prompt</h2>
+
+                <p>A strong judge prompt reads less like a casual instruction and more like a contract. You want to
+                    remove ambiguity wherever possible. Start by fixing the role: the model is an evaluator applying a
+                    rubric, not generating new content. Then define the task context clearly so the judge knows what
+                    “good” means in that setting.</p>
+
+                <p>The most important part is the rubric. Each dimension should have a concrete definition, not a vague
+                    label. For example, “factuality” should explain what counts as supported, unsupported, or
+                    contradicted, not just say “be accurate.” Specify what should not influence the
+                    decision, such as length, tone, or formatting, unless those are part of the task. Good
+                    prompts decompose the evaluation into dimensions before asking for an overall judgment, because that
+                    reduces hidden tradeoffs.</p>
+
+                <p>Finally, enforce a structured output format and keep it strict. If the model can drift into free
+                    text, it will. In practice, stability comes from three things working together: a sharp rubric,
+                    calibrated examples, and constrained output.</p>
+
+                <h3>Sample Judge Prompt Template (Pointwise)</h3>
+
+                <div class="prompt-box">You are an expert evaluator. Your task is to evaluate a candidate answer based on a defined rubric. Do not generate a new answer. Do not assume facts not present in the provided context.
+
+### Task
+Evaluate the quality of the candidate answer to the given prompt.
+
+### Prompt
+{user_prompt}
+
+### Candidate Answer
+{candidate_answer}
+
+### (Optional) Reference / Context
+{retrieved_context_or_reference}
+
+### Evaluation Rubric
+
+1. Correctness (0–5)
+- 5: The answer is fully correct with no errors.
+- 3: Mostly correct but contains minor inaccuracies.
+- 1: Contains major errors or incorrect conclusions.
+
+2. Factuality / Grounding (0–5)
+- 5: All claims are supported by the provided context or are verifiably true.
+- 3: Some claims are unsupported or weakly grounded.
+- 1: Contains hallucinations or contradicts the context.
+
+3. Completeness (0–5)
+- 5: Fully addresses all aspects of the prompt.
+- 3: Covers the main idea but misses important details.
+- 1: Incomplete or misses key parts.
+
+4. Instruction Following (0–5)
+- 5: Fully follows instructions (format, constraints, scope).
+- 3: Minor deviations.
+- 1: Ignores key instructions.
+
+5. Conciseness (0–5)
+- 5: Clear and concise with no unnecessary content.
+- 3: Some redundancy or verbosity.
+- 1: Excessively verbose or too brief to be useful.
+
+### Important Constraints
+- Do NOT reward verbosity or stylistic polish unless it improves clarity.
+- Do NOT use outside knowledge unless explicitly allowed.
+- Focus on substance over tone.
+
+### Output Format (STRICT JSON ONLY)
+
+{
+  "correctness": int,
+  "factuality": int,
+  "completeness": int,
+  "instruction_following": int,
+  "conciseness": int,
+  "overall_score": float,
+  "final_verdict": "pass" | "fail",
+  "failure_tags": ["hallucination", "missing_info", "instruction_violation", "verbosity", "other"],
+  "rationale": "brief explanation (2-3 sentences)"
+}</div>
+
+                <h3>Sample Judge Prompt Template (Pairwise)</h3>
+
+                <div class="prompt-box">You are an expert evaluator. Your task is to compare two candidate answers and determine which is better based on the rubric.
+
+### Prompt
+{user_prompt}
+
+### Answer A
+{answer_a}
+
+### Answer B
+{answer_b}
+
+### Evaluation Rubric
+
+Evaluate based on:
+- Correctness
+- Factuality
+- Completeness
+- Instruction Following
+- Conciseness
+
+### Important Constraints
+- Ignore answer order. Position does NOT imply quality.
+- Do NOT reward verbosity unless it improves substance.
+- Focus on correctness and usefulness over style.
+
+### Output Format (STRICT JSON ONLY)
+
+{
+  "winner": "A" | "B" | "tie",
+  "reasoning": "brief explanation comparing both answers",
+  "dimension_scores": {
+    "correctness": {"A": int, "B": int},
+    "factuality": {"A": int, "B": int},
+    "completeness": {"A": int, "B": int},
+    "instruction_following": {"A": int, "B": int},
+    "conciseness": {"A": int, "B": int}
+  }
+}</div>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.prompt-box').forEach(box => {
+                const lines = box.textContent.split('\n');
+                let minIndent = null;
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (line.trim().length === 0) continue;
+                    const indent = line.match(/^\s*/)[0].length;
+                    if (minIndent === null || indent < minIndent) {
+                        minIndent = indent;
+                    }
+                }
+                if (minIndent !== null && minIndent > 0) {
+                    box.textContent = lines.map((line, i) => {
+                        if (i === 0) return line;
+                        return line.startsWith(' '.repeat(minIndent)) ? line.substring(minIndent) : line;
+                    }).join('\n').trim();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

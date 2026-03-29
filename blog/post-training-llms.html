@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everything About Post-Training an LLM</title>
+    <!-- Use a modern premium font like Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0f;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --card-bg: #1a1a1f;
+            --border-subtle: #27272a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            margin-bottom: 4rem;
+        }
+
+        /* Abstract background glow */
+        .bg-glow {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background-color: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .site-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            transition: color 0.3s;
+        }
+
+        .site-title:hover {
+            color: var(--accent-blue);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-subtle);
+            transform: translateX(-4px);
+        }
+
+        .article-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .article-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 4rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .article-content {
+            font-size: 1.15rem;
+            color: #d1d5db;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.8rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+
+        .article-content a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .article-content a:hover {
+            border-bottom-color: var(--accent-blue);
+        }
+
+        .article-content strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .article-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #e5e7eb;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .article-content blockquote {
+            position: relative;
+            padding: 1.5rem 2rem;
+            margin: 3rem 0;
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 0 12px 12px 0;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .highlight-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #ffffff;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2.25rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .article-content {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav class="nav">
+        <div class="logo">
+            <a href="../index.html" class="site-title">Mostofa Shakib</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+        </a>
+
+        <article>
+            <h1 class="article-title">Everything About Post-Training an LLM</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>March 25, 2026</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>25 min read</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <p>When computing labs release new foundation models, people often focus on the large GPU clusters and
+                    the pre-training phase. While pre-training teaches the model language structure and world knowledge,
+                    <strong>post-training</strong> is what turns it from a raw text predictor into a usable,
+                    instruction-following assistant.
+                </p>
+                <p>In this post, we will dive into data preparation, Supervised Fine-Tuning (SFT),
+                    Reward Modeling, environments, and the evaluation required to deploy an LLM.</p>
+
+                <div class="highlight-box">
+                    <h4>Quick Glossary of Terms</h4>
+                    <ul style="margin-bottom: 0;">
+                        <li><strong>Policy:</strong> In reinforcement learning, the policy is simply the LLM itself. It
+                            is the set of rules (the neural network's weights) that dictate what action (next token) the
+                            agent will take given a specific state (the prompt).</li>
+                        <li><strong>Trajectory:</strong> A sequence of actions. For an LLM, a trajectory is the full
+                            sequence of generated tokens, or a multi-step execution path inside a simulated environment.
+                        </li>
+                        <li><strong>Epoch:</strong> One complete pass through the entire training dataset. In
+                            post-training, you typically train for very few epochs (often just 1 to 3) to prevent the
+                            model from overfitting and blindly memorizing the data.</li>
+                        <li><strong>KL Divergence:</strong> A mathematical measurement of how much a model's current
+                            output distribution differs from an older foundation model. It acts as a heavy penalty to
+                            keep the RL model anchored to sanity so it doesn't drift into generating gibberish just to
+                            "game" the reward system.</li>
+                        <li><strong>Fisher Information Matrix:</strong> An array of second-order derivatives used
+                            in advanced optimization algorithms (like TRPO) to measure how sensitively the model's
+                            outputs will shift if its internal parameters change. It acts as a mathematical guarantee
+                            that keeps weight updates safely bounded.</li>
+                    </ul>
+                </div>
+
+                <h2>1. Data Preparation & Synthetic Data Generation</h2>
+                <p>The foundation of post-training is data. You cannot align a model without high-quality examples of
+                    what "good" behavior looks like. Historically, this meant hiring thousands of human annotators.
+                    Today, the meta has heavily shifted toward <strong>synthetic data generation</strong> using frontier
+                    models.</p>
+
+                <h3>Scenario / Dataset Design</h3>
+                <p>Turning a complex research problem into actionable training data requires formulating the capability
+                    into a structured taxonomy. If you simply ask GPT-4, "Generate 100 Python coding problems," you get
+                    a generic, useless dataset. Instead, you must engage in strict Scenario Design. You
+                    prompt the frontier model to create highly specific constraints: e.g., <strong>"Create a Python
+                        script that fails because of a deeply nested circular import, then simulate a terminal
+                        traceback, then write the thought process fixing it."</strong> This ensures your dataset covers
+                    the long-tail edge-cases the target model actually needs to learn.</p>
+
+                <h3>Rubric Design</h3>
+                <p>A Rubric is a set of grading criteria. How do you design a <em>good</em> rubric? You
+                    must define independent grading dimensions: conciseness, safety, logical soundness,
+                    formatting constraints, and instruction-following constraint checks. A strong rubric ensures that
+                    diverse tasks are defined, penalizing repetitive or lazy completions. This
+                    filters for high-variance, high-quality data, which helps the target model learn the
+                    exact desired behaviors during training rather than mimicking a generic AI "tone". High-quality
+                    rubric design is the difference between a capable reasoning model and a babbling one.</p>
+
+                <div class="highlight-box" style="margin-top: 2rem;">
+                    <h4>Example: A Production-Grade Rubric</h4>
+                    <p>Instead of a binary pass/fail, a strict rubric contains exact JSON criteria. For example, if we
+                        are training a
+                        coding assistant, the rubric might look like this:</p>
+                    <ul>
+                        <li style="margin-bottom: 0.5rem;"><strong style="color: var(--text-primary);">Dimension 1:
+                                Formatting (0-1)</strong> - Does the output follow the
+                            <code>&lt;think&gt; ... &lt;/think&gt;</code> XML formatting before delivering the final
+                            code?
+                        </li>
+                        <li style="margin-bottom: 0.5rem;"><strong style="color: var(--text-primary);">Dimension 2:
+                                Conciseness (0-5)</strong> - Deduct 2 points if the model apologizes (e.g., "I'm sorry,
+                            returning the code now"). Deduct 3 points if the model explains basic concepts the user
+                            didn't ask for (e.g., explaining what a <code>for</code> loop is).</li>
+                        <li style="margin-bottom: 0.5rem;"><strong style="color: var(--text-primary);">Dimension 3:
+                                Logic Pass Rate (0-5)</strong> - 5 points if the code uses optimal O(n) time complexity.
+                            1 point if it defaults to a naive O(n²) nested loop.</li>
+                        <li style="margin-bottom: 0.5rem;"><strong style="color: var(--text-primary);">Dimension 4:
+                                Safety (0-1)</strong> - Does the code include hardcoded secrets or execute arbitrary
+                            user-provided bash scripts?</li>
+                    </ul>
+                    <p style="margin-top: 1.5rem;">By varying these dimensions, you create <em>diverse
+                            behaviors</em> the model learns.
+                    </p>
+                </div>
+
+                <h3>Data Quality: LLM-as-a-Judge</h3>
+                <p>Once you have generated synthetic data against your scenarios, you need a scalable
+                    data quality filter to prevent garbage from entering your SFT pipeline. This is where
+                    <strong>LLM-as-a-Judge</strong> comes in.
+                </p>
+                <p>You deploy a powerful frontier model (like GPT-4) and prompt it with the Rubric you
+                    designed. The Judge model evaluates the synthetic data based on the rubric's diverse independent
+                    dimensions, outputting penalty scores and JSON-formatted rationales. Data that scores below a
+                    threshold is discarded. Only the highest-variance, highest-quality examples pass this
+                    LLM-as-a-judge checkpoint and graduate into the final training dataset.</p>
+
+                <h2>2. Supervised Fine-Tuning (SFT) & Optimization</h2>
+                <p>SFT is the process of behavior cloning. The base model is trained on your synthetic dataset to learn
+                    the exact formatting and tone expected of an assistant.</p>
+
+                <h3>Parameter Fine-Tuning with TRL</h3>
+                <p>Training an LLM requires heavily abstracted, highly optimized loops. The industry standard is Hugging
+                    Face's <strong>TRL (Transformers Reinforcement Learning)</strong> library. Parameter fine-tuning
+                    using TRL's <code>SFTTrainer</code> abstracts away the complex batching of large context windows,
+                    gradient accumulation, and learning rate scheduling necessary to prevent forgetting.
+                </p>
+
+                <h3>Optimization: LoRA and Quantization</h3>
+                <p>Full-parameter fine-tuning of a 70-billion parameter model is computationally prohibitive for most
+                    teams. To solve this, the industry relies on two strategies:</p>
+                <ul>
+                    <li><strong>LoRA (Low-Rank Adaptation):</strong> Instead of updating billions of parameters, you
+                        freeze the base model and inject small, trainable rank-decomposition matrices into the
+                        self-attention layers. This cuts memory requirements.</li>
+                    <li><strong>Quantization (QLoRA):</strong> To further save VRAM, the frozen base model weights are
+                        mathematically downcast from 16-bit to 8-bit or 4-bit precision, allowing you to fine-tune
+                        large models on a single consumer GPU.</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <h4>The Tooling Ecosystem</h4>
+                    <p>To achieve maximum throughput, many rely on <strong>Unsloth</strong>. Unsloth rewrites the Triton
+                        kernels for backpropagation, making mathematically identical LoRA training 2x to 5x faster while
+                        slicing VRAM usage. When conducting large-scale evals or synthetic generation,
+                        <strong>vLLM</strong>
+                        (using PagedAttention) handles the extreme batch-processing demands of inference.
+                    </p>
+                </div>
+
+                <h2>3. High-Fidelity Environments</h2>
+                <p>Before advancing to reinforcement alignment, you need an environment to test the model's actions in
+                    real-time. A high-fidelity environment is a deterministic, simulated space where an
+                    AI agent can execute complex and diverse actions exactly as it would in production.</p>
+                <p>Creating this environment requires total <strong>observability over every action and state</strong>.
+                    If the model executes a bash command, the environment must capture the exact
+                    <code>stdout/stderr</code>, track filesystem deltas, monitor memory usage, and inject that state
+                    back into the model's prompt. Without a high-fidelity environment capable of running actual
+                    <code>pip installs</code> or launching headless browsers, your agent is hallucinating code,
+                    not executing it.
+                </p>
+
+                <h2>4. Reward Models & Preference Alignment</h2>
+                <p>SFT alone isn't enough; models often need reinforcement to navigate complex multi-step reasoning
+                    trees. To achieve RL alignment, you must understand the interplay of three distinct models:</p>
+                <ul>
+                    <li><strong>Reference Model (Base SFT):</strong> We freeze this model to calculate a KL-divergence
+                        penalty. This ensures our newly trained model doesn't drift into absolute gibberish just to
+                        "game" the reward system.</li>
+                    <li><strong>Reward Model:</strong> A separate classifier that scores the model's output.</li>
+                    <li><strong>Training Model (Policy Model):</strong> The model being updated via gradient
+                        descent.</li>
+                </ul>
+
+                <h3>Training a Reward Model</h3>
+                <p>To build a reward model, you take your trained SFT model and replace
+                    its "language modeling head" (the neural network layer that outputs probabilities
+                    over a 128k-word vocabulary) with a <strong>regression head</strong>—a
+                    single-neuron output layer that compresses the model's understanding of the text into
+                    one numeric number.</p>
+
+                <p>How does it actually <em>learn</em> what "good" vs "bad" is? You feed the Reward Model a large
+                    dataset of preference pairs: a <code>Prompt</code> and two completed answers,
+                    <code>Response A</code> and <code>Response B</code>, where a judge (human or LLM) has
+                    indicated A &gt; B. If the model is totally untrained, it might read A and output a score of 2.1,
+                    and read B and output a score of 4.8. Since A is the preferred response, the model is currently
+                    failing in its predictions. The system applies a <em>Pairwise Ranking Loss</em> (like the
+                    Bradley-Terry model), which mathematically forces the backpropagation of gradients to adjust the
+                    internal weights of the neural network so that the score for A goes <em>up</em>, and the score for B
+                    goes <em>down</em>. Over millions of text pairs, the Reward Model deeply internalizes the nuances of
+                    conciseness, formatting, and logic, by learning to maximize the numerical margin
+                    between preferred and rejected text.
+                </p>
+
+                <p>Here is a workflow using Hugging Face's <strong>TRL</strong> library:</p>
+                <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li style="margin-bottom: 0.8rem;"><strong>Data Formatting:</strong> You construct a Hugging Face
+                        Dataset containing two specific columns: <code>chosen</code> and <code>rejected</code>. Both
+                        columns must contain the fully formatted multi-turn conversation (the system prompt, user
+                        prompt, and the respective assistant response).</li>
+                    <li style="margin-bottom: 0.8rem;"><strong>Model Initialization:</strong> In your Python script,
+                        instead of loading the model with standard generation weights
+                        (<code>AutoModelForCausalLM</code>), you load your SFT weights using
+                        <code>AutoModelForSequenceClassification.from_pretrained(..., num_labels=1)</code>. Passing the
+                        argument <code>num_labels=1</code> is what strips the language generating head and
+                        attaches the single-neuron regression head.
+                    </li>
+                    <li style="margin-bottom: 1.5rem;"><strong>The Training Loop:</strong> You instantiate TRL's
+                        <code>RewardTrainer</code> class and pass it your dataset and initialized model. Under the hood,
+                        the trainer class automatically tokenizes both the <code>chosen</code> and <code>rejected</code>
+                        texts, passes them independently through the LLM, extracts the final scalar prediction (logit),
+                        dynamically calculates the Bradley-Terry pairwise ranking loss between the two, and executes the
+                        backpropagation step to update the model.
+                    </li>
+                </ol>
+
+                <h3>The Two Strategies: RLHF vs DPO</h3>
+                <p>Once your environment and data are ready, there are two different strategies to align
+                    the policy: <strong>RLHF (Reinforcement Learning from Human Feedback)</strong> and <strong>DPO
+                        (Direct Preference Optimization)</strong>.</p>
+
+                <p><strong>DPO</strong> bypasses the Reward Model during the training step. It maps
+                    preference pairs directly into the language modeling loss function, increasing the probability of
+                    the preferred response and heavily penalizing the rejected one. <br><em>When to use DPO:</em> Use
+                    DPO when you are constrained by GPU VRAM and don't require advanced reasoning capabilities. It folds
+                    alignment into supervised training without the instability of multi-model RL.</p>
+
+                <p><strong>RLHF</strong>, conversely, relies on exploring the environment and updating weights
+                    based on a scalar reward. Because RL actively explores new trajectories rather than just mimicking
+                    static data, it is widely considered to yield higher capability ceilings for multi-step
+                    reasoning, math, and coding.
+                </p>
+
+                <h4>Different RL Algorithms:</h4>
+
+                <ul style="list-style-type: none; padding-left: 0; margin-top: 1.5rem;">
+                    <li style="margin-bottom: 2rem;">
+                        <strong>1. TRPO (Trust Region Policy Optimization)</strong>
+                        <p style="margin-top: 0.5rem; margin-bottom: 0;"> TRPO restricts how much the policy can change
+                            in a single update using a mathematical constraint on the KL divergence. It calculates
+                            second-order derivatives (using the Fisher Information Matrix) to guarantee the new model
+                            stays within a safe "trust region" of the old model, ensuring stable improvement </p>
+                        <p style="margin-top: 0.5rem;"><em>When to use:</em> Rarely used for LLMs today. The
+                            second-order math is computationally brutal and far too slow for models containing billions
+                            of parameters.</p>
+                    </li>
+                    <li style="margin-bottom: 2rem;">
+                        <strong>2. PPO (Proximal Policy Optimization)</strong>
+                        <p style="margin-top: 0.5rem; margin-bottom: 0;">PPO is the
+                            industry standard (used to train ChatGPT). Instead of the expensive hard constraint of TRPO,
+                            PPO uses a soft "clipping" mechanism in its objective function. If a gradient update pushes
+                            the policy too far, PPO simply clips it. It calculates efficient first-order
+                            derivatives but requires a separate "Value Model" (Critic) to estimate the future
+                            reward of any given state.</p>
+                        <p style="margin-top: 0.5rem;"><em>When to use:</em> The default choice for
+                            large-scale RLHF alignment—provided you have the cluster capacity to load 4 distinct models
+                            (Actor, Critic, Reward, Reference) into VRAM.</p>
+                    </li>
+                    <li style="margin-bottom: 1.5rem;">
+                        <strong>3. GRPO (Group Relative Policy Optimization)</strong>
+                        <p style="margin-top: 0.5rem; margin-bottom: 0;"> GRPO is the algorithm powering models like
+                            DeepSeek-R1. PPO’s biggest flaw is the memory
+                            footprint of the Value Model. GRPO completely eliminates the Value Model. Instead, it
+                            generates a <em>group</em> of 4 to 8 responses for the exact same prompt, scores all of them
+                            with the Reward Model, and normalizes the scores relative to each other (e.g., using
+                            z-scores). Good responses in the group get positive advantages, bad ones get negative
+                            advantages.</p>
+                        <p style="margin-top: 0.5rem;"><em>When to use:</em> The best choice for orchestrating
+                            large reasoning models. It cuts VRAM requirements by dropping the Critic model
+                            while matching or exceeding PPO's performance.</p>
+                    </li>
+                </ul>
+
+                <h2>5. Benchmarks</h2>
+                <p>Finally, how do you know if V2 of your model is actually better than V1? You rely on benchmarks. But
+                    tracking a single "85% accuracy" score is fatal. To properly evaluate and iterate, you must
+                    implement taxonomies.</p>
+
+                <h3>Failure Taxonomy + Slice Analysis</h3>
+                <p>When you evaluate the model via <strong>vLLM</strong> on large datasets, you must cut the
+                    performance into slices. Did the model fail on Python specifically? Did it hallucinate API
+                    responses? Did it fail only on high-context prompts exceeding 16k tokens? This <strong>Slice
+                        Analysis</strong> prevents regressions from hiding behind an average score increase.</p>
+
+                <h3>Root Cause Attribution</h3>
+                <p>Once a taxonomy of failures is identified, you perform <strong>Root Cause Attribution</strong>. Does
+                    the model hallucinate imports because the initial <em>Scenario Design</em> didn't include enough
+                    complex module resolutions? Is the <em>Reward Model</em> incorrectly scoring verbose but broken
+                    code? By attributing failures precisely back to the dataset or rubric, you close the iteration loop,
+                    dictating what synthetic data must be generated in the next pre-training cycle.</p>
+            </div>
+        </article>
+    </div>
+</body>
+
+</html>

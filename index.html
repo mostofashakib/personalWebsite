@@ -292,6 +292,116 @@
                 gap: 2rem;
             }
         }
+
+        .blog-card {
+            background: rgba(26, 26, 31, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            background: rgba(26, 26, 31, 0.8);
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15);
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .blog-card:hover::before {
+            opacity: 1;
+        }
+
+        .blog-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .blog-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .blog-desc {
+            color: #d1d5db;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .blog-read-more {
+            color: var(--accent-blue);
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+        }
+
+        .page-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        .page-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -306,6 +416,7 @@
         <div class="nav-links">
             <a onclick="showPage('home')" class="nav-item active">Home</a>
             <a onclick="showPage('experiences')" class="nav-item">Experiences</a>
+            <a onclick="showPage('blog')" class="nav-item">Blog</a>
             <a onclick="showPage('projects')" class="nav-item">Projects</a>
             <a onclick="showPage('writings')" class="nav-item">Writings</a>
             <a onclick="showPage('media')" class="nav-item">Media</a>
@@ -366,27 +477,27 @@
                     </ul>
                 </section>
 
-                <section class="section" id="additional">
+                <!-- <section class="section" id="additional">
                     <h2 class="section-title">🌍 Additional</h2>
                     <ul class="achievements-list">
-                        <!-- <li>US Government Startup Grant Awardee</li> -->
+                        <li>US Government Startup Grant Awardee</li>
                         <li>ZipRecruiter Hackathon Winner</li>
-                        <!-- <li>National Mathematics Olympiad Finalist</li> -->
+                        <li>National Mathematics Olympiad Finalist</li>
                     </ul>
-                </section>
+                </section> -->
 
                 <section class="section" id="affiliation">
                     <h2 class="section-title">💼 Affiliation</h2>
                     <ul class="social-list">
                         <li>Founder at <a href="https://www.antler.co//">Antler NYC</a></li>
+                        <li>Mentor at <a
+                                href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation
+                                Hub</a></li>
                         <li>Investor at <a href="https://www.gaingels.com/">Gaingels</a></li>
                         <li>Member at <a
                                 href="https://councils.forbes.com/profile/Mostofa-Shakib-Founder-CEO-Variant-Technologies/fdfc43c6-7fb0-412b-966b-9c5f62c822c8">Forbes
                                 Business Council</a></li>
-                        <li>Founder Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li>
-                        <li>Mentor at <a
-                                href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation
-                                Hub</a></li>
+                        <li>Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li>
                     </ul>
                 </section>
 
@@ -449,10 +560,10 @@
                         </div> -->
                         <div class="experience-item">
                             <h4>Engineering Lead at ZipRecruiter</h4>
-                            <p>Built company's first autonomous release systems to eliminate manual QA, and Real-Time
-                                Video Interview (<a
+                            <p>Built company's first autonomous systems to eliminate manual QA, and Real-Time Video
+                                Interview (<a
                                     href="https://techcrunch.com/2024/09/05/ziprecruiters-new-tool-will-quickly-match-and-schedule-an-intro-call-with-potential-candidates/">ZipIntro)</a>,
-                                that uses AI to match and connect employers and candidates in minutes.</p>
+                                for 10M job seekers daily </p>
                         </div>
                         <div class="experience-item">
                             <h4>Software Engineer at Snapchat</h4>
@@ -476,8 +587,8 @@
                         </div>
                         <div class="experience-item">
                             <h4>Co-Founder at Promethium</h4>
-                            <p>Built a blockchain wallet for post-death asset inheritance; Received federal grants from
-                                the US Government and 1517 Fund </p>
+                            <p>Built blockchain wallet for asset inheritance; Received funding from US
+                                Government, 1517 Fund </p>
                         </div>
                         <div class="experience-item">
                             <h4>Founder at <a href="https://www.facebook.com/kurtssteamstore">Kurt's Steam
@@ -510,8 +621,8 @@
                         </div>
                         <div class="experience-item">
                             <h4>Co-Founder & President at RaiderHacks</h4>
-                            <p>Created Texas's first hackathon organization; Members won awards from Microsoft, UC
-                                Berkeley, Caltech, Harvard University</p>
+                            <p>Created Texas's first hackathon organization; Won awards from Microsoft,
+                                Berkeley, and Harvard</p>
                         </div>
                     </div>
                 </div>
@@ -606,14 +717,14 @@
                     <div class="writings-subsection">
                         <h2>Research</h2>
                         <ul class="achievements-list">
-                            <li>Dzone: <a
-                                    href="https://dzone.com/articles/self-supervised-learning-techniques-visual-tracking">Self-Supervised
-                                    Learning Techniques for Visual Tracking</a></li>
                             <li>IEEE TSCET: Predicting Drug Super-class Mechanisms of Action From Large-Scale Cell-Line
                                 Sensitivity Profiles Using Autoencoder Latent Representations and Stacked Neural-Boosted
                                 Ensembles</li>
                             <li>IEEE TSCET: CDFNet Based Fusion Network for Interpretable Alzheimer's Disease Prediction
                                 Using Hybrid Imaging and Clinical Meta-Ensemble Learning</li>
+                            <li>Dzone: <a
+                                    href="https://dzone.com/articles/self-supervised-learning-techniques-visual-tracking">Self-Supervised
+                                    Learning Techniques for Visual Tracking</a></li>
                         </ul>
                     </div>
                     <div class="writings-subsection">
@@ -627,13 +738,13 @@
                                     Ways Small Businesses Can Use AI To Their Advantage</a></li>
                             <li>Forbes: <a
                                     href="https://www.forbes.com/councils/forbesbusinesscouncil/2025/01/02/how-to-start-a-company-with-little-money/">How
-                                    to Start a Company With Little Money: A Practical Guide</a></li>
+                                    to Start a Company With Little Money</a></li>
                             <li>The Financial Express: <a
                                     href="https://today.thefinancialexpress.com.bd/editorial/does-openais-sora-signal-end-of-youtubers-1713279487">Does
                                     OpenAI's Sora signal end of YouTubers?</a></li>
-                            <li>Hackernoon: <a
+                            <!-- <li>Hackernoon: <a
                                     href="https://hackernoon.com/devin-ai-end-of-software-engineers-or-just-a-tool">Devin
-                                    AI: End of Software Engineers or Just A Tool?</a></li>
+                                    AI: End of Software Engineers or Just A Tool?</a></li> -->
                             <li>HackerNoon: <a
                                     href="https://hackernoon.com/how-to-get-the-most-out-of-your-university-life-as-a-software-engineer">How
                                     to Get the Most Out of Your University Life as a CS Student</a></li>
@@ -642,6 +753,24 @@
                                     Become a Google Engineer</a></li>
                         </ul>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Page -->
+    <div id="blog" class="page-content">
+        <div class="container">
+            <div class="main-content">
+                <h1 class="section-title" style="margin-bottom: 2rem; text-align: center;">📝 Blog</h1>
+
+                <div id="blog-container" class="experiences-grid"
+                    style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto; gap: 1rem;">
+                    <!-- Blogs rendered via JS -->
+                </div>
+
+                <div class="pagination" id="blog-pagination">
+                    <!-- Pagination rendered via JS -->
                 </div>
             </div>
         </div>
@@ -681,9 +810,89 @@
             });
         }
 
-        // Initialize with home page
+        const blogs = [
+            {
+                title: "LLM Evaluation & Benchmark",
+                description: "Evaluations, why they fail, how to use LLM as a Judge, and why agentic traces are harder to evaluate.",
+                date: "March 28, 2026",
+                readTime: "20 min read",
+                url: "blog/llm_evaluation.html"
+            },
+            {
+                title: "LLM as a Judge",
+                description: "How to reliably use LLMs as evaluators, common biases, mitigation and structured outputs.",
+                date: "March 27, 2026",
+                readTime: "12 min read",
+                url: "blog/llm_as_a_judge.html"
+            },
+            {
+                title: "Everything About LLM Post-Training",
+                description: "A look at SFT, RLHF, and DPO, and how base models are fine-tuned to follow instructions.",
+                date: "March 25, 2026",
+                readTime: "25 min read",
+                url: "blog/post-training-llms.html"
+            }
+        ];
+
+        const BLOGS_PER_PAGE = 3;
+        let currentBlogPage = 1;
+
+        function renderBlogs() {
+            const container = document.getElementById('blog-container');
+            const pagination = document.getElementById('blog-pagination');
+
+            // Calculate slice
+            const startIndex = (currentBlogPage - 1) * BLOGS_PER_PAGE;
+            const endIndex = startIndex + BLOGS_PER_PAGE;
+            const currentBlogs = blogs.slice(startIndex, endIndex);
+
+            // Render Blogs
+            container.innerHTML = currentBlogs.map(blog => `
+                <div class="blog-card" onclick="window.location.href='${blog.url}'">
+                    <div class="blog-meta">
+                        <span>${blog.date}</span>
+                        <span>•</span>
+                        <span>${blog.readTime}</span>
+                    </div>
+                    <div class="blog-title">${blog.title}</div>
+                    <div class="blog-desc">${blog.description}</div>
+                </div>
+            `).join('');
+
+            // Render Pagination
+            const totalPages = Math.ceil(blogs.length / BLOGS_PER_PAGE);
+
+            if (totalPages > 1) {
+                let paginationHTML = `<button class="page-btn" ${currentBlogPage === 1 ? 'disabled' : ''} onclick="changeBlogPage(${currentBlogPage - 1})">←</button>`;
+
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHTML += `<button class="page-btn ${currentBlogPage === i ? 'active' : ''}" onclick="changeBlogPage(${i})">${i}</button>`;
+                }
+
+                paginationHTML += `<button class="page-btn" ${currentBlogPage === totalPages ? 'disabled' : ''} onclick="changeBlogPage(${currentBlogPage + 1})">→</button>`;
+                pagination.innerHTML = paginationHTML;
+            } else {
+                pagination.innerHTML = '';
+            }
+        }
+
+        function changeBlogPage(page) {
+            const totalPages = Math.ceil(blogs.length / BLOGS_PER_PAGE);
+            if (page >= 1 && page <= totalPages) {
+                currentBlogPage = page;
+                renderBlogs();
+                // Scroll to top of blog section smoothly
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Initialize with home page and render blogs
         document.addEventListener('DOMContentLoaded', function () {
             showPage('home');
+            renderBlogs();
         });
     </script>
 </body>
