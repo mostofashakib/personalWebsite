@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Model Architecture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="blog-shared.css">
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav class="nav">
+        <div class="logo">
+            <a href="../index.html" class="site-title">Mostofa Shakib</a>
+        </div>
+    </nav>
+    <div class="container">
+        <a href="llm_training_overview.html" class="back-link">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Overview
+        </a>
+        <article>
+            <h1 class="article-title">LLM Model Architecture</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>March 29, 2026</span>
+                </div>
+            </div>
+            <div class="article-content">
+                <p><strong>Deep Dive Coming Soon.</strong></p>
+                <p>Transformer Architecture, Attention Layer, Multi-Head Attention,
+                    MLPs, Positional Encoding, Normalization, Token Embeddings, Residual Connections, ReLu, Grouped
+                    Query Attention (GQA), Multi-Query Attention (MQA), and Mixture of Experts (MoE).</p>
+            </div>
+
+            <h2>Activation Functions</h2>
+            <p>To understand why these models train at all, you need one more neural network primitive: the
+                activation function. After each layer computes a weighted sum of its inputs, the model applies an
+                activation function to inject non-linearity. Without this step, a deep network would mathematically
+                collapse into something equivalent to a single linear transformation, no matter how many layers you
+                stack.</p>
+
+            <p>One of the simplest and most influential activation functions is ReLU:</p>
+
+            <div class="math-box">
+                ReLU(x) = max(0, x)
+            </div>
+
+            <p>This means any negative value gets snapped to zero, while any positive value passes through
+                unchanged. That simple thresholding behavior makes gradient-based training much easier than older
+                saturating functions like sigmoid or tanh, which often squash values into narrow ranges and cause
+                gradients to vanish.</p>
+
+            <p>ReLU matter in practice because it gives the network a clean way to build sparse, selective
+                feature detectors. A neuron can remain completely inactive for one pattern and activate strongly for
+                another. Across billions of parameters, this helps the model form useful internal circuits for
+                syntax, semantics, and higher-level abstractions.</p>
+
+            <p>That said, modern transformers often use GELU instead of raw ReLU. GELU is smoother and tends to work
+                better in large language models because it softly gates activations rather than applying a hard
+                cutoff. But the core idea is the same: activation functions are what stop the network from being a
+                giant linear calculator and allow it to model complex structure.</p>
+        </article>
+    </div>
+    <script src="blog-shared.js"></script>
+</body>
+
+</html>

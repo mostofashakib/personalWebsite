@@ -4,245 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Everything About Post-Training an LLM</title>
+    <title>LLM Post-Training</title>
     <!-- Use a modern premium font like Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0a0a0f;
-            --text-primary: #f3f4f6;
-            --text-secondary: #9ca3af;
-            --accent-blue: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.15);
-            --card-bg: #1a1a1f;
-            --border-subtle: #27272a;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-            margin-bottom: 4rem;
-        }
-
-        /* Abstract background glow */
-        .bg-glow {
-            position: absolute;
-            top: -10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 600px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            position: relative;
-        }
-
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            background-color: rgba(10, 10, 15, 0.85);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .site-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-decoration: none;
-            letter-spacing: -0.5px;
-            transition: color 0.3s;
-        }
-
-        .site-title:hover {
-            color: var(--accent-blue);
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            margin-bottom: 3rem;
-            transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid transparent;
-        }
-
-        .back-link:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--border-subtle);
-            transform: translateX(-4px);
-        }
-
-        .article-title {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 1.5rem;
-            line-height: 1.15;
-            letter-spacing: -1px;
-            background: linear-gradient(to right, #ffffff, #a1a1aa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .article-meta {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 4rem;
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .article-content {
-            font-size: 1.15rem;
-            color: #d1d5db;
-        }
-
-        .article-content h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-top: 4rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.5px;
-        }
-
-        .article-content h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .article-content p {
-            margin-bottom: 1.8rem;
-            line-height: 1.8;
-        }
-
-        .article-content ul,
-        .article-content ol {
-            margin-bottom: 2rem;
-            padding-left: 1.5rem;
-        }
-
-        .article-content li {
-            margin-bottom: 0.75rem;
-            line-height: 1.7;
-        }
-
-        .article-content a {
-            color: var(--accent-blue);
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-
-        .article-content a:hover {
-            border-bottom-color: var(--accent-blue);
-        }
-
-        .article-content strong {
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .article-content code {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: #e5e7eb;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-        }
-
-        .article-content blockquote {
-            position: relative;
-            padding: 1.5rem 2rem;
-            margin: 3rem 0;
-            background: rgba(59, 130, 246, 0.05);
-            border-left: 4px solid var(--accent-blue);
-            border-radius: 0 12px 12px 0;
-            color: var(--text-primary);
-            font-size: 1.25rem;
-            font-style: italic;
-            line-height: 1.6;
-        }
-
-        .highlight-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2.5rem 0;
-        }
-
-        .highlight-box h4 {
-            color: #ffffff;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .highlight-box p:last-child {
-            margin-bottom: 0;
-        }
-
-        @media (max-width: 768px) {
-            .article-title {
-                font-size: 2.25rem;
-            }
-
-            .container {
-                padding: 2rem 1.5rem;
-            }
-
-            .article-content {
-                font-size: 1.05rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="blog-shared.css">
 </head>
 
 <body>
@@ -262,7 +28,7 @@
         </a>
 
         <article>
-            <h1 class="article-title">Everything About Post-Training an LLM</h1>
+            <h1 class="article-title">LLM Post-Training</h1>
             <div class="article-meta">
                 <div class="meta-item">
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -292,12 +58,20 @@
                 <div class="highlight-box">
                     <h4>Quick Glossary of Terms</h4>
                     <ul style="margin-bottom: 0;">
+                        <li><strong>Activation Function:</strong> A mathematical gate applied after a neural network
+                            layer’s linear computation. Without activations, stacking many layers would still collapse
+                            into one linear transformation, which means the model could not learn complex patterns.
+                            Activations introduce non linearity, allowing the network to represent richer behaviors such
+                            as pattern matching, abstraction, and conditional reasoning.
+                        </li>
+                        <li><strong>Value Function:</strong> The value function estimates how much future reward the
+                            current state or partial trajectory is likely to produce. In PPO, this is learned by a
+                            separate critic model that helps reduce noisy updates.</li>
                         <li><strong>Policy:</strong> In reinforcement learning, the policy is simply the LLM itself. It
                             is the set of rules (the neural network's weights) that dictate what action (next token) the
                             agent will take given a specific state (the prompt).</li>
-                        <li><strong>Trajectory:</strong> A sequence of actions. For an LLM, a trajectory is the full
-                            sequence of generated tokens, or a multi-step execution path inside a simulated environment.
-                        </li>
+                        <li><strong>Trajectory:</strong> A trajectory is the full sequence of generated tokens,
+                            or a multi-step execution path inside a simulated environment.</li>
                         <li><strong>Epoch:</strong> One complete pass through the entire training dataset. In
                             post-training, you typically train for very few epochs (often just 1 to 3) to prevent the
                             model from overfitting and blindly memorizing the data.</li>
@@ -305,10 +79,8 @@
                             output distribution differs from an older foundation model. It acts as a heavy penalty to
                             keep the RL model anchored to sanity so it doesn't drift into generating gibberish just to
                             "game" the reward system.</li>
-                        <li><strong>Fisher Information Matrix:</strong> An array of second-order derivatives used
-                            in advanced optimization algorithms (like TRPO) to measure how sensitively the model's
-                            outputs will shift if its internal parameters change. It acts as a mathematical guarantee
-                            that keeps weight updates safely bounded.</li>
+                        <li><strong>Fisher Information Matrix:</strong> An array of second-order derivatives used to
+                            safely bound parameter updates in algorithms like TRPO.</li>
                     </ul>
                 </div>
 
@@ -366,13 +138,9 @@
                 <h3>Data Quality: LLM-as-a-Judge</h3>
                 <p>Once you have generated synthetic data against your scenarios, you need a scalable
                     data quality filter to prevent garbage from entering your SFT pipeline. This is where
-                    <strong>LLM-as-a-Judge</strong> comes in.
+                    <strong>LLM-as-a-Judge</strong> comes in. <em>(For a deeper dive into crafting rubrics and alignment
+                        prompts, check out <a href="llm_as_a_judge.html">LLM as a Judge</a>.)</em>
                 </p>
-                <p>You deploy a powerful frontier model (like GPT-4) and prompt it with the Rubric you
-                    designed. The Judge model evaluates the synthetic data based on the rubric's diverse independent
-                    dimensions, outputting penalty scores and JSON-formatted rationales. Data that scores below a
-                    threshold is discarded. Only the highest-variance, highest-quality examples pass this
-                    LLM-as-a-judge checkpoint and graduate into the final training dataset.</p>
 
                 <h2>2. Supervised Fine-Tuning (SFT) & Optimization</h2>
                 <p>SFT is the process of behavior cloning. The base model is trained on your synthetic dataset to learn
@@ -387,7 +155,8 @@
 
                 <h3>Optimization: LoRA and Quantization</h3>
                 <p>Full-parameter fine-tuning of a 70-billion parameter model is computationally prohibitive for most
-                    teams. To solve this, the industry relies on two strategies:</p>
+                    teams. To solve this, we use the following two parameter-efficient fine-tuning (PEFT) strategies:
+                </p>
                 <ul>
                     <li><strong>LoRA (Low-Rank Adaptation):</strong> Instead of updating billions of parameters, you
                         freeze the base model and inject small, trainable rank-decomposition matrices into the
@@ -505,51 +274,126 @@
                     </li>
                     <li style="margin-bottom: 2rem;">
                         <strong>2. PPO (Proximal Policy Optimization)</strong>
-                        <p style="margin-top: 0.5rem; margin-bottom: 0;">PPO is the
-                            industry standard (used to train ChatGPT). Instead of the expensive hard constraint of TRPO,
-                            PPO uses a soft "clipping" mechanism in its objective function. If a gradient update pushes
-                            the policy too far, PPO simply clips it. It calculates efficient first-order
-                            derivatives but requires a separate "Value Model" (Critic) to estimate the future
-                            reward of any given state.</p>
-                        <p style="margin-top: 0.5rem;"><em>When to use:</em> The default choice for
-                            large-scale RLHF alignment—provided you have the cluster capacity to load 4 distinct models
-                            (Actor, Critic, Reward, Reference) into VRAM.</p>
+                        <p style="margin-top: 0.5rem;">PPO is the industry standard powering models like ChatGPT. It
+                            abandons the computationally expensive strict math of TRPO in favor of an efficient
+                            first-order derivatives. To maintain training stability and estimate future rewards, it
+                            requires running a separate "Value Model" (the Critic) alongside the active policy.</p>
+
+                        <p style="margin-top: 1rem;">The primary innovation of PPO lies in its "clipping" objective
+                            function. Without any constraints, a gradient update formula scales the
+                            advantage by the probability ratio:</p>
+
+                        <div class="math-box">
+                            L(θ) = E[r<sub>t</sub>(θ)A<sub>t</sub>]
+                        </div>
+
+                        <p>With clipping, PPO prevents the policy from changing too much from its prior state:
+                        </p>
+
+                        <div class="math-box">
+                            L<sub>PPO</sub>(θ) = E[min(r<sub>t</sub>(θ)A<sub>t</sub>, clip(r<sub>t</sub>(θ), 1−ϵ,
+                            1+ϵ)A<sub>t</sub>)]
+                        </div>
+
+                        <p>Here, <strong>r<sub>t</sub>(θ)</strong> is the ratio of new versus old policy probabilities,
+                            and <strong>A<sub>t</sub></strong> is the advantage, i.e., how much better this specific
+                            action is than expected. The clip range <strong>ϵ</strong> strictly controls the update
+                            size. PPO improves the policy when the new response is better, but caps the
+                            update if it moves too far from the previous model.</p>
+
+                        <p style="margin-top: 1rem;">However, optimizing strictly for reward is dangerous. If left
+                            unconstrained, the policy will quickly discover edge cases where it can "game" the reward
+                            model without actually improving quality, a classic phenomenon known as reward hacking. To
+                            counter this, PPO introduces a penalty based on KL Divergence:</p>
+
+                        <div class="math-box">
+                            L = L<sub>PPO</sub> − β D<sub>KL</sub>(π<sub>θ</sub> ∥ π<sub>ref</sub>)
+                        </div>
+
+                        <p style="margin-bottom: 1rem;"><strong>L</strong> is the final objective function,
+                            <strong>L<sub>PPO</sub></strong> is the reward output, and
+                            <strong>D<sub>KL</sub>(π<sub>θ</sub> ∥ π<sub>ref</sub>)</strong> is the KL divergence
+                            between the new policy and the reference policy.
+                        </p>
+
+                        <p>In this objective, the reward term pushes the model toward preferred
+                            outputs, while the KL penalty acts as an elastic band, pulling it back toward the original
+                            SFT behavior. The coefficient <strong>β</strong> dictates the strength of that penalty.
+                            Token by token, the model produces a probability distribution. If the model starts
+                            outputting unusual or low-quality tokens just because they trick the reward model, the KL
+                            divergence will spike, safely reducing the gradient update that caused the shift.</p>
+
+                        <p style="margin-top: 1rem;">This penalty is vital because reward models are trained on finite
+                            preference data and have blind spots. It prevents reward hacking, preserves the core
+                            language intuition and grammar built during pre-training, and acts as a regularizer to
+                            stabilize the otherwise high variance of RL updates. However, getting this balance right is
+                            difficult. If the penalty is too strong (high β), the model suffers from alignment inertia,
+                            it barely deviates from the SFT baseline and reward improvements stall. If it is too weak
+                            (low β), the model drifts rapidly, producing responses that are brittle, verbose, or
+                            unnatural just to exploit the rubric. Without proper KL balancing, you commonly see a
+                            length bias, where the model learns to inflate word count because the reward model
+                            correlates verbosity with quality.</p>
+
+                        <p style="margin-top: 1rem;">To mitigate these issues, standard practice now involves Adaptive
+                            KL control. Instead of a constant coefficient, teams dynamically adjust it: increasing β if
+                            KL grows too large, and dropping β if the model starts stalling on reward improvements.</p>
+
                     </li>
                     <li style="margin-bottom: 1.5rem;">
                         <strong>3. GRPO (Group Relative Policy Optimization)</strong>
-                        <p style="margin-top: 0.5rem; margin-bottom: 0;"> GRPO is the algorithm powering models like
+                        <p style="margin-top: 0.5rem; margin-bottom: 1rem;"> GRPO is the algorithm powering models like
                             DeepSeek-R1. PPO’s biggest flaw is the memory
-                            footprint of the Value Model. GRPO completely eliminates the Value Model. Instead, it
+                            footprint of the Value Model. GRPO completely eliminates the Value Model by ranking
+                            responses relative to each other within a batch. Instead, it
                             generates a <em>group</em> of 4 to 8 responses for the exact same prompt, scores all of them
                             with the Reward Model, and normalizes the scores relative to each other (e.g., using
                             z-scores). Good responses in the group get positive advantages, bad ones get negative
                             advantages.</p>
-                        <p style="margin-top: 0.5rem;"><em>When to use:</em> The best choice for orchestrating
-                            large reasoning models. It cuts VRAM requirements by dropping the Critic model
-                            while matching or exceeding PPO's performance.</p>
+
+                        <div class="math-box">
+                            A<sub>i</sub> = (r<sub>i</sub> − μ) / σ
+                        </div>
+
+                        <ul style="margin-bottom: 1.5rem; margin-left: 1.2rem;">
+                            <li style="margin-bottom: 0.5rem;"><strong>r<sub>i</sub>:</strong> reward for response
+                                <em>i</em>
+                            </li>
+                            <li><strong>μ, σ:</strong> mean and standard deviation over the generated group</li>
+                        </ul>
+                    </li>
+
+                    <li style="margin-bottom: 1.5rem; list-style-type: none;">
+                        <div class="highlight-box" style="margin-top: 1rem; padding: 1.5rem;">
+                            <h4 style="margin-bottom: 1rem; font-size: 1.2rem;">PPO VS GDPO</h4>
+
+                            <p style="margin-bottom: 0;">Use PPO for large-scale RLHF alignment when you have sufficient
+                                infrastructure, since it relies on a full setup with
+                                four models in memory, the Actor, Critic, Reward, and Reference which allows for stable
+                                and well-understood optimization. GDPO, by contrast, is better suited for large
+                                reasoning models when memory efficiency becomes a constraint. By eliminating the Critic
+                                and instead ranking groups of sampled responses relative to each other, GDPO
+                                significantly reduces VRAM requirements while often matching or even exceeding PPO’s
+                                performance in practice.</p>
+                        </div>
                     </li>
                 </ul>
 
-                <h2>5. Benchmarks</h2>
-                <p>Finally, how do you know if V2 of your model is actually better than V1? You rely on benchmarks. But
-                    tracking a single "85% accuracy" score is fatal. To properly evaluate and iterate, you must
-                    implement taxonomies.</p>
+                <h2>5. Evaluation & Benchmarks</h2>
+                <p>Evaluation is the systematic process of scoring a model's capabilities across varied, unseen prompts.
+                    This step is critical because fine-tuning risks <strong>catastrophic
+                        forgetting</strong>, a scenario where a model successfully masters a new behavioral constraint
+                    but loses its underlying reasoning or coding capabilities. Without rigorous evaluation, you
+                    are flying blind. Standardized benchmarks provide the rigid tests necessary to prove your model is
+                    actually adapting rather than just memorizing its SFT data, and they empirically dictate exactly
+                    what new synthetic examples must be generated in the next training cycle to fix newly discovered
+                    blind spots.</p>
 
-                <h3>Failure Taxonomy + Slice Analysis</h3>
-                <p>When you evaluate the model via <strong>vLLM</strong> on large datasets, you must cut the
-                    performance into slices. Did the model fail on Python specifically? Did it hallucinate API
-                    responses? Did it fail only on high-context prompts exceeding 16k tokens? This <strong>Slice
-                        Analysis</strong> prevents regressions from hiding behind an average score increase.</p>
-
-                <h3>Root Cause Attribution</h3>
-                <p>Once a taxonomy of failures is identified, you perform <strong>Root Cause Attribution</strong>. Does
-                    the model hallucinate imports because the initial <em>Scenario Design</em> didn't include enough
-                    complex module resolutions? Is the <em>Reward Model</em> incorrectly scoring verbose but broken
-                    code? By attributing failures precisely back to the dataset or rubric, you close the iteration loop,
-                    dictating what synthetic data must be generated in the next pre-training cycle.</p>
+                <p style="margin-top: 1.5rem; margin-bottom: 2rem;"><em>(For a deeper dive into the evaluation
+                        strategies, check out <a href="llm_evaluation.html">LLM Evaluation</a>.)</em></p>
             </div>
         </article>
     </div>
+    <script src="blog-shared.js"></script>
 </body>
 
 </html>

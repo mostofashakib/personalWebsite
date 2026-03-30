@@ -297,7 +297,7 @@
             background: rgba(26, 26, 31, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
-            padding: 1rem 1rem;
+            padding: 0.5rem 0.75rem;
             transition: all 0.3s ease;
             cursor: pointer;
             display: flex;
@@ -331,26 +331,26 @@
         }
 
         .blog-meta {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            margin-bottom: 1rem;
+            margin-bottom: 0.15rem;
             display: flex;
             gap: 1rem;
         }
 
         .blog-title {
-            font-size: 1.35rem;
+            font-size: 1.15rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.1rem;
             line-height: 1.4;
         }
 
         .blog-desc {
             color: #d1d5db;
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+            font-size: 0.85rem;
+            margin-bottom: 0.15rem;
+            line-height: 1.4;
             flex-grow: 1;
         }
 
@@ -452,15 +452,15 @@
                     <h2 class="section-title">🏆 Awards</h2>
                     <div class="gallery">
                         <div class="gallery-item">
-                            <img src="princetonU.jpg" alt="Princeton University Hackathon">
+                            <img src="images/princetonU.jpg" alt="Princeton University Hackathon">
                             <div class="gallery-caption">Princeton University Hackathon Winner</div>
                         </div>
                         <div class="gallery-item">
-                            <img src="highschool.jpg" alt="Mathematics Achievement">
+                            <img src="images/highschool.jpg" alt="Mathematics Achievement">
                             <div class="gallery-caption">Bangladesh Country Highest in Mathematics</div>
                         </div>
                         <div class="gallery-item">
-                            <img src="rice.jpg" alt="Rice University Hackathon">
+                            <img src="images/rice.jpg" alt="Rice University Hackathon">
                             <div class="gallery-caption">Rice University Hackathon Winner</div>
                         </div>
                     </div>
@@ -765,7 +765,7 @@
                 <h1 class="section-title" style="margin-bottom: 2rem; text-align: center;">📝 Blog</h1>
 
                 <div id="blog-container" class="experiences-grid"
-                    style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto; gap: 1rem;">
+                    style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto; gap: 0.5rem;">
                     <!-- Blogs rendered via JS -->
                 </div>
 
@@ -812,6 +812,13 @@
 
         const blogs = [
             {
+                title: "LLM Training Overview",
+                description: "A visual mapping of how foundational models are designed, trained, aligned, and optimized for inference.",
+                date: "March 29, 2026",
+                readTime: "6 min read",
+                url: "blog/llm_training_overview.html"
+            },
+            {
                 title: "LLM Evaluation & Benchmark",
                 description: "Evaluations, why they fail, how to use LLM as a Judge, and why agentic traces are harder to evaluate.",
                 date: "March 28, 2026",
@@ -826,15 +833,43 @@
                 url: "blog/llm_as_a_judge.html"
             },
             {
-                title: "Everything About LLM Post-Training",
+                title: "LLM Post-Training",
                 description: "A look at SFT, RLHF, and DPO, and how base models are fine-tuned to follow instructions.",
                 date: "March 25, 2026",
                 readTime: "25 min read",
                 url: "blog/post-training-llms.html"
+            },
+            {
+                title: "LLM Model Architecture",
+                description: "Examining core layers: Attention, MLP, Positional Encodings, and variants like MQA and Mixture of Experts.",
+                date: "March 29, 2026",
+                readTime: "Coming Soon",
+                url: "blog/model_architecture.html"
+            },
+            {
+                title: "LLM Pre-Training",
+                description: "Exploring compute scaling laws, distributed architectures, and mixed precision optimization.",
+                date: "March 29, 2026",
+                readTime: "Coming Soon",
+                url: "blog/pretraining.html"
+            },
+            {
+                title: "LLM Inference Ops",
+                description: "Deep dive into model deployment via KV Cache, Speculative Decoding, and PagedAttention.",
+                date: "March 29, 2026",
+                readTime: "Coming Soon",
+                url: "blog/inference.html"
+            },
+            {
+                title: "High Fidelity Environments",
+                description: "Testing model deployments via sandboxing, robust tooling, and mock production scenarios.",
+                date: "March 29, 2026",
+                readTime: "Coming Soon",
+                url: "blog/high_fidelity_environment.html"
             }
         ];
 
-        const BLOGS_PER_PAGE = 3;
+        const BLOGS_PER_PAGE = 6;
         let currentBlogPage = 1;
 
         function renderBlogs() {

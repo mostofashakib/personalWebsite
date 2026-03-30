@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Training Pipeline Overview</title>
+    <!-- Use a modern premium font like Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="blog-shared.css">
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav class="nav">
+        <div class="logo">
+            <a href="../index.html" class="site-title">Mostofa Shakib</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+        </a>
+
+        <article>
+            <h1 class="article-title">LLM Training Overview</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>March 29, 2026</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>6 min read</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <p>Welcome to the core curriculum for understanding how modern Large Language Models (LLMs) are built,
+                    trained, aligned, and optimized for real-world application. Below is a high-level visual pipeline
+                    connecting the entire learning flow from bare-metal architecture up through high-speed inference.
+                </p>
+                <p>Because each of these subjects is massive, this guide serves as your map. Use the deep-dive links in
+                    each section to explore the technical nuances when you are ready.</p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph TD
+    classDef default fill:#1a1a1f,stroke:#27272a,stroke-width:1px,color:#f3f4f6
+    
+    A[Model Architecture] -->|Foundation| B[Pre-Training]
+    B -->|Base Model| C[Post-Training]
+    C -->|Aligned Model| D[Evaluation and Benchmarks]
+    D -->|Validated Release| E[Inference Ops]
+                    </pre>
+                </div>
+
+                <h2>1. Model Architecture</h2>
+                <p>Before a model can learn anything, its blueprint needs to be defined. Most modern LLMs are built on
+                    the Transformer architecture. A core architecture establishes the bedrock logic components: the
+                    Multi-Head Attention layers, Multilayer Perceptrons (MLPs), Positional Encodings, Normalization
+                    paradigms, Token Embeddings, and Residual Connections.</p>
+
+                <p>But architecture is not static. Designing a modern LLM involves balancing parameter capacity against
+                    memory footprint by selecting architectural variants like Grouped Query Attention (GQA), Multi-Query
+                    Attention (MQA), or scaling via Mixture of Experts (MoE) instead of singular dense networks.</p>
+                <a href="model_architecture.html" class="deep-dive-link">
+                    Read the Model Architecture Deep Dive
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+
+                <h2>2. Pretraining</h2>
+                <p>Pre-training is the brutal, compute-heavy phase where the architecture is fed an astronomical amount
+                    of unstructured internet data to learn the statistical representations of human language. This is
+                    where scaling laws (like the Chinchilla Scaling Laws) dictate the precise mathematical ratio between
+                    model parameters and the number of training tokens required for optimal returns on compute.</p>
+                <p>This phase is mostly an infrastructure challenge. Optimizations like mixed precision training (e.g.,
+                    executing calculations in FP16/BF16 while preserving FP32 gradients) and distributed training setups
+                    are rigorously applied to prevent clusters from overheating while keeping costs down.</p>
+                <a href="pretraining.html" class="deep-dive-link">
+                    Read the Pre-Training Deep Dive
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+
+                <h2>3. Post-Training & Alignment</h2>
+                <p>A pre-trained model knows language, but it doesn't know how to follow instructions—it operates as a
+                    wild document autocompleter. Post-training (or Alignment) teaches the model to behave like an
+                    assistant.</p>
+                <p>This process typically starts with synthetic generation of strict high-quality datasets to perform
+                    Supervised Fine-Tuning (SFT). Dependent on compute limits, teams choose between Full Tuning or
+                    Parameter-Efficient Fine-Tuning (PEFT, involving adapters like LoRA or QLoRA). From there, models
+                    are pushed into Preference Tuning (using DPO or RLHF) to explicitly steer outputs away from failure
+                    states and toward human-approved reasoning traces or helpfulness targets.</p>
+                <a href="post-training-llms.html" class="deep-dive-link">
+                    Read the Post-Training Deep Dive
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+
+                <h2>4. Evaluation & Benchmark</h2>
+                <p>A model that memorizes internet data without gaining logic will fail when exposed to novel inputs.
+                    Evaluation ensures that your model is legitimately improving. Because traditional benchmarks (like
+                    MMLU) are increasingly saturated, modern pipelines deploy "LLM as a Judge" setups for granular
+                    failure analysis.</p>
+                <p>Crucially, determining if an LLM is truly useful now goes beyond single-response scoring. We look at
+                    Agentic Evaluation: monitoring if the model can accurately route tools, recall external context, and
+                    reason multi-step paths in complex, long-horizon workflows without diverging or hallucinating.</p>
+                <a href="llm_evaluation.html" class="deep-dive-link">
+                    Read the Evaluation Deep Dive
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+
+                <h2>5. Inference Operations</h2>
+                <p>The finest model in the world means nothing if serving it to users destroys your infrastructure
+                    budget or takes ten seconds per token. The Inference layer focuses exclusively on low-latency
+                    delivery and memory optimization.</p>
+                <p>Here we look beyond greedy decoding, beam search, or base sampling techniques and move into
+                    engineering optimizations: caching computations across long conversations via the KV Cache, solving
+                    memory fragmentation with PagedAttention, and increasing generation speed via Multi-Token Prediction
+                    and Speculative Decoding.</p>
+                <a href="inference.html" class="deep-dive-link">
+                    Read the Inference Ops Deep Dive
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+            </div>
+        </article>
+    </div>
+
+    <!-- Mermaid Initialization -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            fontFamily: 'Inter, sans-serif'
+        });
+    </script>
+    <script src="blog-shared.js"></script>
+</body>
+
+</html>
