@@ -261,6 +261,11 @@
 
                 <h4>Different RL Algorithms:</h4>
 
+                <div style="margin-top: 1.5rem; margin-bottom: 2rem; text-align: center;">
+                    <img src="../images/rl_algorithms.png" alt="Different RL Algorithms Comparison"
+                        style="max-width: 100%; border-radius: 8px;">
+                </div>
+
                 <ul style="list-style-type: none; padding-left: 0; margin-top: 1.5rem;">
                     <li style="margin-bottom: 2rem;">
                         <strong>1. TRPO (Trust Region Policy Optimization)</strong>
@@ -362,21 +367,40 @@
                         </ul>
                     </li>
 
-                    <li style="margin-bottom: 1.5rem; list-style-type: none;">
-                        <div class="highlight-box" style="margin-top: 1rem; padding: 1.5rem;">
-                            <h4 style="margin-bottom: 1rem; font-size: 1.2rem;">PPO VS GDPO</h4>
-
-                            <p style="margin-bottom: 0;">Use PPO for large-scale RLHF alignment when you have sufficient
-                                infrastructure, since it relies on a full setup with
-                                four models in memory, the Actor, Critic, Reward, and Reference which allows for stable
-                                and well-understood optimization. GDPO, by contrast, is better suited for large
-                                reasoning models when memory efficiency becomes a constraint. By eliminating the Critic
-                                and instead ranking groups of sampled responses relative to each other, GDPO
-                                significantly reduces VRAM requirements while often matching or even exceeding PPO’s
-                                performance in practice.</p>
-                        </div>
-                    </li>
                 </ul>
+
+                <h3>PPO vs GRPO</h3>
+                <div style="margin-top: 1.5rem; margin-bottom: 2rem; text-align: center;">
+                    <img src="../images/ppo_vs_grpo.png" alt="PPO vs GRPO Architecture Comparison"
+                        style="max-width: 100%; border-radius: 8px;">
+                </div>
+
+                <p>While both algorithms optimize the policy based on rewards, their fundamental difference lies in
+                    memory architecture. <strong>PPO</strong> requires four models loaded in memory simultaneously
+                    (Actor, Critic, Reward, and Reference), creating the <em>"RLHF VRAM Wall."</em>
+                    <strong>GRPO</strong> sidesteps this by eliminating the Critic model entirely, instead
+                    generating a group of responses and substituting the Critic's baseline with the statistical average
+                    of that group.
+                </p>
+
+
+                <h5><strong>Constraints & Trade-offs:</strong></h5>
+                <p> PPO provides mathematical stability due to
+                    its dedicated value model, resulting in smoother gradients and reliable convergence, but at the cost
+                    of massive infrastructure demands. GRPO drastically cuts VRAM requirements and enables training on
+                    consumer hardware, but relies heavily on the quality of its sampled groups and can experience higher
+                    variance during optimization.</p>
+
+                <div class="highlight-box" style="margin-top: 1.5rem;">
+                    <h4>When to use which?</h4>
+                    <p style="margin-bottom: 0;">Use <strong>PPO</strong> for general-purpose instruct tuning when your
+                        GPU cluster is large enough, as the separate value function yields a safer, smoother
+                        optimization trajectory. Use <strong>GRPO</strong> when memory efficiency is the hard bottleneck
+                        or when you are training a "Reasoning Model" where the reward function is based on
+                        purely verifiable math/code constraints. In those environments, the ability to generate multiple
+                        diverse paths and compare them directly is powerful while significantly cutting VRAM
+                        requirements.</p>
+                </div>
 
                 <h2>5. Evaluation & Benchmarks</h2>
                 <p>Evaluation is the systematic process of scoring a model's capabilities across varied, unseen prompts.
