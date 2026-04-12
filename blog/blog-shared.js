@@ -18,4 +18,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }).join('\n').trim();
         }
     });
+    // Image formatting and modal functionality
+    const modal = document.createElement('div');
+    modal.className = 'image-modal';
+    const modalImg = document.createElement('img');
+    modal.appendChild(modalImg);
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+
+    document.querySelectorAll('.article-content img').forEach(img => {
+        // Enforce the same dimensions for all embedded images
+        img.classList.add('article-image');
+        
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
+            modalImg.src = img.src;
+            modal.classList.add('active');
+        });
+    });
 });

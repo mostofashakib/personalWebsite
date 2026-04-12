@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training with RLHF</title>
+    <!-- Use a modern premium font like Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="blog-shared.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <nav class="nav">
+        <div class="logo">
+            <a href="../index.html" class="site-title">Mostofa Shakib</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="post-training-llms.html" class="back-link">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Post-Training
+        </a>
+
+        <article>
+            <h1 class="article-title">Training with RLHF</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>April 11, 2026</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>1 min read</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <p>SFT alone isn't enough; models often need reinforcement to navigate complex multi-step reasoning
+                    trees. To achieve RL alignment, you must understand the interplay of three distinct models:</p>
+                <ul>
+                    <li><strong>Reference Model (Base SFT):</strong> We freeze this model to calculate a KL-divergence
+                        penalty. This ensures our newly trained model doesn't drift into absolute gibberish just to
+                        "game" the reward system.</li>
+                    <li><strong>Reward Model:</strong> A separate classifier that scores the model's output.</li>
+                    <li><strong>Training Model (Policy Model):</strong> The model being updated via gradient
+                        descent.</li>
+                </ul>
+
+                <h2>Training a Reward Model</h2>
+                <p>To build a reward model, you take your trained SFT model and replace
+                    its "language modeling head" (the neural network layer that outputs probabilities
+                    over a 128k-word vocabulary) with a <strong>regression head</strong>—a
+                    single-neuron output layer that compresses the model's understanding of the text into
+                    one numeric number.</p>
+
+                <p>How does it actually <em>learn</em> what "good" vs "bad" is? You feed the Reward Model a large
+                    dataset of preference pairs: a <code>Prompt</code> and two completed answers,
+                    <code>Response A</code> and <code>Response B</code>, where a judge (human or LLM) has
+                    indicated A &gt; B. If the model is totally untrained, it might read A and output a score of 2.1,
+                    and read B and output a score of 4.8. Since A is the preferred response, the model is currently
+                    failing in its predictions. The system applies a <em>Pairwise Ranking Loss</em> (like the
+                    Bradley-Terry model), which mathematically forces the backpropagation of gradients to adjust the
+                    internal weights of the neural network so that the score for A goes <em>up</em>, and the score for B
+                    goes <em>down</em>. Over millions of text pairs, the Reward Model deeply internalizes the nuances of
+                    conciseness, formatting, and logic, by learning to maximize the numerical margin
+                    between preferred and rejected text.
+                </p>
+
+                <p>Here is a workflow using Hugging Face's <strong>TRL</strong> library:</p>
+                <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li style="margin-bottom: 0.8rem;"><strong>Data Formatting:</strong> You construct a Hugging Face
+                        Dataset containing two specific columns: <code>chosen</code> and <code>rejected</code>. Both
+                        columns must contain the fully formatted multi-turn conversation (the system prompt, user
+                        prompt, and the respective assistant response).</li>
+                    <li style="margin-bottom: 0.8rem;"><strong>Model Initialization:</strong> In your Python script,
+                        instead of loading the model with standard generation weights
+                        (<code>AutoModelForCausalLM</code>), you load your SFT weights using
+                        <code>AutoModelForSequenceClassification.from_pretrained(..., num_labels=1)</code>. Passing the
+                        argument <code>num_labels=1</code> is what strips the language generating head and
+                        attaches the single-neuron regression head.
+                    </li>
+                    <li style="margin-bottom: 1.5rem;"><strong>The Training Loop:</strong> You instantiate TRL's
+                        <code>RewardTrainer</code> class and pass it your dataset and initialized model. Under the hood,
+                        the trainer class automatically tokenizes both the <code>chosen</code> and <code>rejected</code>
+                        texts, passes them independently through the LLM, extracts the final scalar prediction (logit),
+                        dynamically calculates the Bradley-Terry pairwise ranking loss between the two, and executes the
+                        backpropagation step to update the model.
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </div>
+    <script src="blog-shared.js"></script>
+</body>
+</html>

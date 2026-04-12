@@ -56,7 +56,7 @@
                     Reward Modeling, environments, and the evaluation required to deploy an LLM.</p>
 
                 <div class="highlight-box">
-                    <h4>Quick Glossary of Terms</h4>
+                    <h4>Glossary of Terms</h4>
                     <ul style="margin-bottom: 0;">
                         <li><strong>Activation Function:</strong> A mathematical gate applied after a neural network
                             layer’s linear computation. Without activations, stacking many layers would still collapse
@@ -72,9 +72,6 @@
                             agent will take given a specific state (the prompt).</li>
                         <li><strong>Trajectory:</strong> A trajectory is the full sequence of generated tokens,
                             or a multi-step execution path inside a simulated environment.</li>
-                        <li><strong>Epoch:</strong> One complete pass through the entire training dataset. In
-                            post-training, you typically train for very few epochs (often just 1 to 3) to prevent the
-                            model from overfitting and blindly memorizing the data.</li>
                         <li><strong>KL Divergence:</strong> A mathematical measurement of how much a model's current
                             output distribution differs from an older foundation model. It acts as a heavy penalty to
                             keep the RL model anchored to sanity so it doesn't drift into generating gibberish just to
@@ -87,8 +84,7 @@
                 <h2>1. Data Preparation & Synthetic Data Generation</h2>
                 <p>The foundation of post-training is data. You cannot align a model without high-quality examples of
                     what "good" behavior looks like. Historically, this meant hiring thousands of human annotators.
-                    Today, the meta has heavily shifted toward <strong>synthetic data generation</strong> using frontier
-                    models.</p>
+                    Today, the meta has heavily shifted toward synthetic data generation using frontier models.</p>
 
                 <h3>Scenario / Dataset Design</h3>
                 <p>Turning a complex research problem into actionable training data requires formulating the capability
@@ -142,18 +138,19 @@
                         prompts, check out <a href="llm_as_a_judge.html">LLM as a Judge</a>.)</em>
                 </p>
 
-                <h2>2. Supervised Fine-Tuning (SFT) & Optimization</h2>
+                <h2>2. Training</h2>
+                <h3>Supervised Fine-Tuning (SFT)</h3>
                 <p>SFT is the process of behavior cloning. The base model is trained on your synthetic dataset to learn
                     the exact formatting and tone expected of an assistant.</p>
 
-                <h3>Parameter Fine-Tuning with TRL</h3>
+                <h4>Parameter Fine-Tuning with TRL</h4>
                 <p>Training an LLM requires heavily abstracted, highly optimized loops. The industry standard is Hugging
                     Face's <strong>TRL (Transformers Reinforcement Learning)</strong> library. Parameter fine-tuning
                     using TRL's <code>SFTTrainer</code> abstracts away the complex batching of large context windows,
                     gradient accumulation, and learning rate scheduling necessary to prevent forgetting.
                 </p>
 
-                <h3>Optimization: LoRA and Quantization</h3>
+                <h4>Optimization: LoRA and Quantization</h4>
                 <p>Full-parameter fine-tuning of a 70-billion parameter model is computationally prohibitive for most
                     teams. To solve this, we use the following two parameter-efficient fine-tuning (PEFT) strategies:
                 </p>
@@ -176,90 +173,41 @@
                     </p>
                 </div>
 
-                <h2>3. High-Fidelity Environments</h2>
-                <p>Before advancing to reinforcement alignment, you need an environment to test the model's actions in
-                    real-time. A high-fidelity environment is a deterministic, simulated space where an
-                    AI agent can execute complex and diverse actions exactly as it would in production.</p>
-                <p>Creating this environment requires total <strong>observability over every action and state</strong>.
-                    If the model executes a bash command, the environment must capture the exact
-                    <code>stdout/stderr</code>, track filesystem deltas, monitor memory usage, and inject that state
-                    back into the model's prompt. Without a high-fidelity environment capable of running actual
-                    <code>pip installs</code> or launching headless browsers, your agent is hallucinating code,
-                    not executing it.
+
+
+                <h4>The Three Strategies: RLHF, RLVR, and DPO</h4>
+                <p>Once your data is ready, there are three primary strategies to align
+                    the policy: RLHF (Reinforcement Learning from Human Feedback), RLVR (Reinforcement Learning from
+                    Verifiable Rewards), and DPO (Direct Preference Optimization).
                 </p>
 
-                <h2>4. Reward Models & Preference Alignment</h2>
-                <p>SFT alone isn't enough; models often need reinforcement to navigate complex multi-step reasoning
-                    trees. To achieve RL alignment, you must understand the interplay of three distinct models:</p>
-                <ul>
-                    <li><strong>Reference Model (Base SFT):</strong> We freeze this model to calculate a KL-divergence
-                        penalty. This ensures our newly trained model doesn't drift into absolute gibberish just to
-                        "game" the reward system.</li>
-                    <li><strong>Reward Model:</strong> A separate classifier that scores the model's output.</li>
-                    <li><strong>Training Model (Policy Model):</strong> The model being updated via gradient
-                        descent.</li>
-                </ul>
-
-                <h3>Training a Reward Model</h3>
-                <p>To build a reward model, you take your trained SFT model and replace
-                    its "language modeling head" (the neural network layer that outputs probabilities
-                    over a 128k-word vocabulary) with a <strong>regression head</strong>—a
-                    single-neuron output layer that compresses the model's understanding of the text into
-                    one numeric number.</p>
-
-                <p>How does it actually <em>learn</em> what "good" vs "bad" is? You feed the Reward Model a large
-                    dataset of preference pairs: a <code>Prompt</code> and two completed answers,
-                    <code>Response A</code> and <code>Response B</code>, where a judge (human or LLM) has
-                    indicated A &gt; B. If the model is totally untrained, it might read A and output a score of 2.1,
-                    and read B and output a score of 4.8. Since A is the preferred response, the model is currently
-                    failing in its predictions. The system applies a <em>Pairwise Ranking Loss</em> (like the
-                    Bradley-Terry model), which mathematically forces the backpropagation of gradients to adjust the
-                    internal weights of the neural network so that the score for A goes <em>up</em>, and the score for B
-                    goes <em>down</em>. Over millions of text pairs, the Reward Model deeply internalizes the nuances of
-                    conciseness, formatting, and logic, by learning to maximize the numerical margin
-                    between preferred and rejected text.
-                </p>
-
-                <p>Here is a workflow using Hugging Face's <strong>TRL</strong> library:</p>
-                <ol style="margin-left: 1.5rem; margin-top: 1rem;">
-                    <li style="margin-bottom: 0.8rem;"><strong>Data Formatting:</strong> You construct a Hugging Face
-                        Dataset containing two specific columns: <code>chosen</code> and <code>rejected</code>. Both
-                        columns must contain the fully formatted multi-turn conversation (the system prompt, user
-                        prompt, and the respective assistant response).</li>
-                    <li style="margin-bottom: 0.8rem;"><strong>Model Initialization:</strong> In your Python script,
-                        instead of loading the model with standard generation weights
-                        (<code>AutoModelForCausalLM</code>), you load your SFT weights using
-                        <code>AutoModelForSequenceClassification.from_pretrained(..., num_labels=1)</code>. Passing the
-                        argument <code>num_labels=1</code> is what strips the language generating head and
-                        attaches the single-neuron regression head.
-                    </li>
-                    <li style="margin-bottom: 1.5rem;"><strong>The Training Loop:</strong> You instantiate TRL's
-                        <code>RewardTrainer</code> class and pass it your dataset and initialized model. Under the hood,
-                        the trainer class automatically tokenizes both the <code>chosen</code> and <code>rejected</code>
-                        texts, passes them independently through the LLM, extracts the final scalar prediction (logit),
-                        dynamically calculates the Bradley-Terry pairwise ranking loss between the two, and executes the
-                        backpropagation step to update the model.
-                    </li>
-                </ol>
-
-                <h3>The Two Strategies: RLHF vs DPO</h3>
-                <p>Once your environment and data are ready, there are two different strategies to align
-                    the policy: <strong>RLHF (Reinforcement Learning from Human Feedback)</strong> and <strong>DPO
-                        (Direct Preference Optimization)</strong>.</p>
-
-                <p><strong>DPO</strong> bypasses the Reward Model during the training step. It maps
+                <p><strong>DPO</strong> maps
                     preference pairs directly into the language modeling loss function, increasing the probability of
-                    the preferred response and heavily penalizing the rejected one. <br><em>When to use DPO:</em> Use
-                    DPO when you are constrained by GPU VRAM and don't require advanced reasoning capabilities. It folds
-                    alignment into supervised training without the instability of multi-model RL.</p>
+                    the preferred response and heavily penalizing the rejected one. DPO can be a preferred choice when
+                    you are constrained by GPU VRAM and don't require advanced reasoning capabilities. It folds
+                    alignment into supervised training without the instability of multi-model RL. <em>(For a deeper
+                        dive, check out <a href="training-with-dpo.html">Training with DPO</a>.)</em></p>
 
-                <p><strong>RLHF</strong>, conversely, relies on exploring the environment and updating weights
-                    based on a scalar reward. Because RL actively explores new trajectories rather than just mimicking
-                    static data, it is widely considered to yield higher capability ceilings for multi-step
-                    reasoning, math, and coding.
+                <div style="margin-top: 2.5rem; margin-bottom: 2.5rem; text-align: center;">
+                    <img src="../images/rlvr_vs_rlhf.png" alt="RLHF vs RLVR Architecture Concept"
+                        style="max-width: 100%; border-radius: 8px;">
+                </div>
+
+                <p><strong>RLHF</strong> trains a model by sampling outputs and optimizing them using scalar
+                    rewards from a reward model. Unlike supervised fine-tuning, it adjusts behavior based
+                    on preference signals rather than fixed targets. <em>(For a deeper dive, check out <a
+                            href="training-with-rlhf.html">Training with RLHF</a>.)</em>
                 </p>
 
-                <h4>Different RL Algorithms:</h4>
+                <p><strong>RLVR</strong> replaces the reward model with a programmatic verifier (e.g., tests,
+                    symbolic solvers) that assigns rewards based
+                    on correctness. These rewards can be binary or graded. It works well for tasks where correctness can
+                    be checked. While it reduces reliance on reward models, it still depends on the verifier's
+                    robustness. <em>(For a deeper dive, check out <a href="training-with-rlvr.html">Training with
+                            RLVR</a>.)</em>
+                </p>
+
+                <h5>Different RL Algorithms:</h5>
 
                 <div style="margin-top: 1.5rem; margin-bottom: 2rem; text-align: center;">
                     <img src="../images/rl_algorithms.png" alt="Different RL Algorithms Comparison"
@@ -276,6 +224,10 @@
                         <p style="margin-top: 0.5rem;"><em>When to use:</em> Rarely used for LLMs today. The
                             second-order math is computationally brutal and far too slow for models containing billions
                             of parameters.</p>
+                            
+                        <div style="margin-top: 1.5rem; margin-bottom: -0.5rem; text-align: center;">
+                            <img src="../images/post_training_pipeline.png" alt="Post Training Pipeline Outline" style="max-width: 100%; border-radius: 8px;">
+                        </div>
                     </li>
                     <li style="margin-bottom: 2rem;">
                         <strong>2. PPO (Proximal Policy Optimization)</strong>
@@ -347,9 +299,8 @@
                     <li style="margin-bottom: 1.5rem;">
                         <strong>3. GRPO (Group Relative Policy Optimization)</strong>
                         <p style="margin-top: 0.5rem; margin-bottom: 1rem;"> GRPO is the algorithm powering models like
-                            DeepSeek-R1. PPO’s biggest flaw is the memory
-                            footprint of the Value Model. GRPO completely eliminates the Value Model by ranking
-                            responses relative to each other within a batch. Instead, it
+                            DeepSeek-R1. PPO’s biggest flaw is the memory footprint of the Value Model. GRPO eliminates
+                            the Value Model by ranking responses relative to each other within a batch. Instead, it
                             generates a <em>group</em> of 4 to 8 responses for the exact same prompt, scores all of them
                             with the Reward Model, and normalizes the scores relative to each other (e.g., using
                             z-scores). Good responses in the group get positive advantages, bad ones get negative
@@ -369,29 +320,27 @@
 
                 </ul>
 
-                <h3>PPO vs GRPO</h3>
+                <h4>PPO vs GRPO</h4>
                 <div style="margin-top: 1.5rem; margin-bottom: 2rem; text-align: center;">
                     <img src="../images/ppo_vs_grpo.png" alt="PPO vs GRPO Architecture Comparison"
                         style="max-width: 100%; border-radius: 8px;">
                 </div>
 
-                <p>While both algorithms optimize the policy based on rewards, their fundamental difference lies in
-                    memory architecture. <strong>PPO</strong> requires four models loaded in memory simultaneously
-                    (Actor, Critic, Reward, and Reference), creating the <em>"RLHF VRAM Wall."</em>
-                    <strong>GRPO</strong> sidesteps this by eliminating the Critic model entirely, instead
-                    generating a group of responses and substituting the Critic's baseline with the statistical average
-                    of that group.
+                <p>Their fundamental difference lies in memory architecture. <strong>PPO</strong> requires four models
+                    simultaneously loaded in memory (Actor, Critic, Reward, and Reference), creating the <em>"RLHF VRAM
+                        Wall."</em> <strong>GRPO</strong> sidesteps this by eliminating the Critic model entirely,
+                    instead generating a group of responses and substituting the Critic's baseline with the statistical
+                    average of that group.
                 </p>
 
-
-                <h5><strong>Constraints & Trade-offs:</strong></h5>
-                <p> PPO provides mathematical stability due to
-                    its dedicated value model, resulting in smoother gradients and reliable convergence, but at the cost
-                    of massive infrastructure demands. GRPO drastically cuts VRAM requirements and enables training on
-                    consumer hardware, but relies heavily on the quality of its sampled groups and can experience higher
-                    variance during optimization.</p>
-
                 <div class="highlight-box" style="margin-top: 1.5rem;">
+                    <h4><strong>Constraints & Trade-offs</strong></h4>
+                    <p> PPO provides stability due to its dedicated value model, resulting in smoother
+                        gradients and reliable convergence, but at the cost of massive infrastructure demands. GRPO
+                        significantly cuts VRAM requirements and enables training on consumer hardware, but relies
+                        heavily on the quality of its sampled groups and can experience higher
+                        variance during optimization.</p>
+
                     <h4>When to use which?</h4>
                     <p style="margin-bottom: 0;">Use <strong>PPO</strong> for general-purpose instruct tuning when your
                         GPU cluster is large enough, as the separate value function yields a safer, smoother
@@ -402,7 +351,7 @@
                         requirements.</p>
                 </div>
 
-                <h2>5. Evaluation & Benchmarks</h2>
+                <h2>3. Evaluation & Benchmarks</h2>
                 <p>Evaluation is the systematic process of scoring a model's capabilities across varied, unseen prompts.
                     This step is critical because fine-tuning risks <strong>catastrophic
                         forgetting</strong>, a scenario where a model successfully masters a new behavioral constraint
