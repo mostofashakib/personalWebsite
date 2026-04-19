@@ -402,6 +402,37 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        .blog-filter-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .blog-filter-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            padding: 0.5rem 1.25rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .blog-filter-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        .blog-filter-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
     </style>
 </head>
 
@@ -443,7 +474,7 @@
                             eSports marketplace, and that $5 grew into more than $30,000 (600,000% ROI). It was my first
                             real taste of entrepreneurship and my ticket to the U.S. That journey led me to earn
                             bachelor's degrees in Computer Science, Mathematics, and Electrical Engineering. Later, I
-                            dropped out of <a href="https://www.cs.cmu.edu/">Carnegie Mellon University</a>'s Computer
+                            opted out of <a href="https://www.cs.cmu.edu/">Carnegie Mellon University</a>'s Computer
                             Science graduate program to build things people want. </p>
 
                         <p> I make educational content on programming, AI, startups, and
@@ -484,6 +515,14 @@
                         <li><a href="https://steamcommunity.com/id/earthdj">Legendary Eagle</a> at Counter Strike 2</li>
                         <li>Self-proclaimed gym rat</li>
                         <li>Self-development junkie</li>
+                    </ul>
+                </section>
+
+                <section class="section" id="additional">
+                    <h2 class="section-title">Additional</h2>
+                    <ul class="achievements-list">
+                        <li>ZipRecruiter Hackathon Winner</li>
+                        <li>Caltech Hackathon Winner</li>
                     </ul>
                 </section>
 
@@ -557,22 +596,24 @@
                     <div class="experience-column">
                         <h2>Industry</h2>
                         <div class="experience-item">
-                            <h4>AI Software Engineer at Mercor</h4>
-                            <p>Defined and led the development of the RL infrastructure to compute rewards and ensure
-                                high quality datasets for Post Training SOTA Models</p>
+                            <h4>AI Engineer at Mercor</h4>
+                            <p>Led the development of the RL evaluation infrastructure to compute rewards
+                                and ensure high quality datasets for Post Training SOTA Models</p>
                         </div>
                         <div class="experience-item">
                             <h4>Software Engineer at ZipRecruiter</h4>
-                            <p>Drove transition to eliminate manual QA with autonomous systems, and Real-Time Video
-                                Interview (<a
-                                    href="https://techcrunch.com/2024/09/05/ziprecruiters-new-tool-will-quickly-match-and-schedule-an-intro-call-with-potential-candidates/">ZipIntro)</a>,
-                                for 10M job seekers daily </p>
+                            <p>Drove transition to eliminate manual QA with autonomous systems. Enabled launch of
+                                real-time video interview (<a
+                                    href="https://techcrunch.com/2024/09/05/ziprecruiters-new-tool-will-quickly-match-and-schedule-an-intro-call-with-potential-candidates/">ZipIntro)</a>
+                                for 10M job seekers daily, helping ZipRecruiter earn a spot in <a
+                                    href="https://www.fastcompany.com/91269597/human-resources-most-innovative-companies-2025">Fast
+                                    Company’s Most Innovative Companies of 2025</a></p>
                         </div>
                         <div class="experience-item">
                             <h4>Software Engineer at Snapchat</h4>
-                            <p>Led messaging's identity stack migration (<a
+                            <p>Led messaging's identity migration (<a
                                     href="https://techcrunch.com/2022/02/17/snapchat-change-username/">username
-                                    changes</a>) for ~1B+ monthly active users; Core Messaging Platform & Performance
+                                    changes</a>) for ~1B+ monthly active users. Part of Messaging Platform & Performance
                                 Team</p>
                         </div>
                     </div>
@@ -582,7 +623,9 @@
                         <h2>Entrepreneurship</h2>
                         <div class="experience-item">
                             <h4>Founder at <a href="https://www.facebook.com/csbmain/">CSB</a></h4>
-                            <p>An AI hiring OS that vets, and matches technical talent. Generated $4M+ income for
+                            <p>AI hiring OS that vets, and matches technical talent with US startups. 0 -> $300K ARR
+                                in 5 months and
+                                generated $4M+ income for
                                 developers and featured in <a
                                     href="https://www.under30ceo.com/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/">Under30CEO</a>,
                                 and <a
@@ -591,7 +634,7 @@
                         </div>
                         <div class="experience-item">
                             <h4>Co-Founder at Promethium</h4>
-                            <p>Blockchain based wallet + payments infrastructure with native assets inheritance;
+                            <p>Blockchain based wallet + payments infrastructure with built-in assets inheritance;
                                 Received funding from SBIR US Government, 1517 Fund </p>
                         </div>
                         <div class="experience-item">
@@ -625,8 +668,8 @@
                         </div>
                         <div class="experience-item">
                             <h4>Co-Founder & President at RaiderHacks</h4>
-                            <p>Created Texas's first hackathon organization; Won awards from Microsoft,
-                                Berkeley, and Harvard</p>
+                            <p>Created Texas's first hackathon organization; Scaled to 100+ people with members winning
+                                awards from Microsoft, Berkeley, and Harvard</p>
                         </div>
                     </div>
                 </div>
@@ -789,6 +832,13 @@
             <div class="main-content">
                 <h1 class="section-title" style="margin-bottom: 2rem; text-align: center;">📝 Blog</h1>
 
+                <div class="blog-filter-nav" id="blog-filter-nav">
+                    <button class="blog-filter-btn active" onclick="filterBlogs('all')">All</button>
+                    <button class="blog-filter-btn" onclick="filterBlogs('tech')">Tech</button>
+                    <button class="blog-filter-btn" onclick="filterBlogs('startup')">Startup</button>
+                    <button class="blog-filter-btn" onclick="filterBlogs('personal')">Personal</button>
+                </div>
+
                 <div id="blog-container" class="experiences-grid"
                     style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto; gap: 0.5rem;">
                     <!-- Blogs rendered via JS -->
@@ -841,28 +891,32 @@
                 description: "A visual mapping of how foundational models are designed, trained, aligned, and optimized for inference.",
                 date: "November 29, 2025",
                 readTime: "6 min read",
-                url: "blog/llm_training_overview.html"
+                url: "blog/llm_training_overview.html",
+                category: "tech"
             },
             {
                 title: "LLM Evaluation & Benchmark",
                 description: "Evaluations, why they fail, how to use LLM as a Judge, and why agentic traces are harder to evaluate.",
                 date: "November 28, 2025",
                 readTime: "20 min read",
-                url: "blog/llm_evaluation.html"
+                url: "blog/llm_evaluation.html",
+                category: "tech"
             },
             {
                 title: "LLM as a Judge",
                 description: "How to reliably use LLMs as evaluators, common biases, mitigation and structured outputs.",
                 date: "November 27, 2025",
                 readTime: "12 min read",
-                url: "blog/llm_as_a_judge.html"
+                url: "blog/llm_as_a_judge.html",
+                category: "tech"
             },
             {
                 title: "LLM Post-Training",
                 description: "A look at SFT, RLHF, and DPO, and how base models are fine-tuned to follow instructions.",
                 date: "November 25, 2025",
                 readTime: "25 min read",
-                url: "blog/post-training-llms.html"
+                url: "blog/post-training-llms.html",
+                category: "tech"
             },
             // {
             //     title: "LLM Model Architecture",
@@ -896,31 +950,57 @@
 
         const BLOGS_PER_PAGE = 6;
         let currentBlogPage = 1;
+        let currentBlogCategory = 'all';
+
+        function filterBlogs(category) {
+            currentBlogCategory = category;
+            currentBlogPage = 1; // Reset to first page
+
+            // Update active state of buttons
+            const buttons = document.querySelectorAll('.blog-filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(`('${category}')`)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            renderBlogs();
+        }
 
         function renderBlogs() {
             const container = document.getElementById('blog-container');
             const pagination = document.getElementById('blog-pagination');
 
+            // Filter blogs by category
+            const filteredBlogs = currentBlogCategory === 'all'
+                ? blogs
+                : blogs.filter(blog => blog.category === currentBlogCategory);
+
             // Calculate slice
             const startIndex = (currentBlogPage - 1) * BLOGS_PER_PAGE;
             const endIndex = startIndex + BLOGS_PER_PAGE;
-            const currentBlogs = blogs.slice(startIndex, endIndex);
+            const currentBlogs = filteredBlogs.slice(startIndex, endIndex);
 
             // Render Blogs
-            container.innerHTML = currentBlogs.map(blog => `
-                <div class="blog-card" onclick="window.location.href='${blog.url}'">
-                    <div class="blog-meta">
-                        <span>${blog.date}</span>
-                        <span>•</span>
-                        <span>${blog.readTime}</span>
+            if (currentBlogs.length === 0) {
+                container.innerHTML = '<div style="text-align: center; grid-column: 1 / -1; color: var(--text-secondary); padding: 2rem 0;">No articles found in this category.</div>';
+            } else {
+                container.innerHTML = currentBlogs.map(blog => `
+                    <div class="blog-card" onclick="window.location.href='${blog.url}'">
+                        <div class="blog-meta">
+                            <span>${blog.date}</span>
+                            <span>•</span>
+                            <span>${blog.readTime}</span>
+                        </div>
+                        <div class="blog-title">${blog.title}</div>
+                        <div class="blog-desc">${blog.description}</div>
                     </div>
-                    <div class="blog-title">${blog.title}</div>
-                    <div class="blog-desc">${blog.description}</div>
-                </div>
-            `).join('');
+                `).join('');
+            }
 
             // Render Pagination
-            const totalPages = Math.ceil(blogs.length / BLOGS_PER_PAGE);
+            const totalPages = Math.ceil(filteredBlogs.length / BLOGS_PER_PAGE);
 
             if (totalPages > 1) {
                 let paginationHTML = `<button class="page-btn" ${currentBlogPage === 1 ? 'disabled' : ''} onclick="changeBlogPage(${currentBlogPage - 1})">←</button>`;
@@ -937,7 +1017,10 @@
         }
 
         function changeBlogPage(page) {
-            const totalPages = Math.ceil(blogs.length / BLOGS_PER_PAGE);
+            const filteredBlogs = currentBlogCategory === 'all'
+                ? blogs
+                : blogs.filter(blog => blog.category === currentBlogCategory);
+            const totalPages = Math.ceil(filteredBlogs.length / BLOGS_PER_PAGE);
             if (page >= 1 && page <= totalPages) {
                 currentBlogPage = page;
                 renderBlogs();
