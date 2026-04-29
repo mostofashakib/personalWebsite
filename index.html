@@ -25,6 +25,7 @@
             background-color: var(--bg-color);
             color: var(--text-primary);
             line-height: 1.6;
+            overflow-y: scroll;
         }
 
         .container {
@@ -854,6 +855,7 @@
                     <button class="blog-filter-btn" onclick="filterBlogs('tech')">Tech</button>
                     <button class="blog-filter-btn" onclick="filterBlogs('startup')">Startup</button>
                     <button class="blog-filter-btn" onclick="filterBlogs('personal')">Personal</button>
+                    <button class="blog-filter-btn" onclick="filterBlogs('reading-list')">Reading List</button>
                 </div>
 
                 <div id="blog-container" class="experiences-grid"
@@ -871,6 +873,9 @@
     <script>
         // Page navigation functionality
         function showPage(pageId) {
+            // Scroll to top of the page instantly to prevent flickering
+            window.scrollTo(0, 0);
+
             // Hide all pages
             const pages = document.querySelectorAll('.page-content');
             pages.forEach(page => {
@@ -894,12 +899,6 @@
             if (activeNavItem) {
                 activeNavItem.classList.add('active');
             }
-
-            // Scroll to top of the page
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
         }
 
         const blogs = [
@@ -989,6 +988,31 @@
             const container = document.getElementById('blog-container');
             const pagination = document.getElementById('blog-pagination');
 
+            if (currentBlogCategory === 'reading-list') {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: left; padding: 0.5rem 0; width: 100%;">
+                        <h2 style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Startups</h2>
+                        <ul class="achievements-list" style="margin-bottom: 2.5rem; list-style-type: disc; margin-left: 1.5rem; line-height: 1.8;">
+                            <li><strong>Zero to One</strong> by Peter Thiel</li>
+                            <li><strong>Built to Last</strong> by Jim Collins and Jerry I. Porras</li>
+                            <li><strong>Negotiation Genius</strong> by Deepak Malhotra and Max Bazerman</li>
+                            <li><strong>The Mom Test</strong> by Rob Fitzpatrick</li>
+                            <li><strong>Start Small, Stay Small</strong> by Rob Walling</li>
+                            <li><strong>The Unfair Advantage</strong> by Ash Ali and Hasan Kubba</li>
+                        </ul>
+
+                        <h2 style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Personal</h2>
+                        <ul class="achievements-list" style="list-style-type: disc; margin-left: 1.5rem; line-height: 1.8;">
+                            <li><strong>Meditations</strong> by Marcus Aurelius</li>
+                            <li><strong>The 48 Laws of Power</strong> by Robert Greene</li>
+                            <li><strong>Money: The True Story of a Made-Up Thing</strong> by Jacob Goldstein</li>
+                        </ul>
+                    </div>
+                `;
+                pagination.innerHTML = '';
+                return;
+            }
+
             // Filter blogs by category
             const filteredBlogs = currentBlogCategory === 'all'
                 ? blogs
@@ -1041,11 +1065,8 @@
             if (page >= 1 && page <= totalPages) {
                 currentBlogPage = page;
                 renderBlogs();
-                // Scroll to top of blog section smoothly
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+                // Scroll to top of blog section instantly to prevent flickering
+                window.scrollTo(0, 0);
             }
         }
 
