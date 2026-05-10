@@ -137,9 +137,9 @@
 
         .gallery {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         .gallery-item {
@@ -160,7 +160,7 @@
         }
 
         .gallery-caption {
-            padding: 1rem;
+            padding: 0.25rem;
             color: var(--text-secondary);
             text-align: center;
             font-size: 0.9rem;
@@ -241,6 +241,25 @@
             margin: 0;
         }
 
+        .advising-list {
+            line-height: 1.8;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .advising-list {
+                white-space: normal;
+                overflow-x: hidden;
+            }
+
+            .advising-list li {
+                margin-bottom: 0.5rem;
+            }
+        }
+
         .writings-subsection {
             margin-bottom: 2.5rem;
         }
@@ -260,15 +279,28 @@
                 grid-template-columns: 1fr;
                 gap: 2rem;
                 max-width: 100%;
+                padding: 1rem;
+            }
+
+            .nav {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.9rem;
             }
 
             .gallery {
                 grid-template-columns: 1fr;
-            }
-
-            .nav-links {
-                gap: 1rem;
-                font-size: 0.95rem;
             }
 
             .experiences-grid {
@@ -276,14 +308,19 @@
                 gap: 2rem;
             }
 
-            #experiences .main-content {
-                max-width: 100%;
-                padding: 0 1rem;
-            }
-
+            #experiences .main-content,
             #projects .main-content {
                 max-width: 100%;
-                padding: 0 1rem;
+                padding: 0;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .blog-filter-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -457,12 +494,10 @@
 
     <!-- Home Page -->
     <div id="home" class="page-content active">
-        <div class="container">
+        <div class="container" style="padding-bottom: 0;">
             <div class="main-content">
                 <section class="section" id="about">
                     <div class="content">
-                        <p>Holla, I'm Mostofa 👋</p>
-
                         <p>I grew up in Bangladesh, with a knack for reverse-engineering. In 2nd
                             grade, I built an antenna out of scrap wires and intercepted a nearby cable TV signal
                             to watch Swat Kats, since cable wasn't allowed at home.</p>
@@ -496,8 +531,7 @@
                     </div>
                 </section>
 
-                <section class="section" id="awards">
-                    <h2 class="section-title">Awards</h2>
+                <section class="section" id="highlight">
                     <div class="gallery">
                         <div class="gallery-item">
                             <img src="images/princetonU.jpg" alt="Princeton University Hackathon">
@@ -507,12 +541,10 @@
                             <img src="images/highschool.jpg" alt="Mathematics Achievement">
                             <div class="gallery-caption">Bangladesh Country Highest in Mathematics</div>
                         </div>
-                        <div class="gallery-item">
-                            <img src="images/rice.jpg" alt="Rice University Hackathon">
-                            <div class="gallery-caption">Rice University Hackathon Winner</div>
-                        </div>
                     </div>
                 </section>
+
+
             </div>
 
             <aside>
@@ -521,15 +553,15 @@
                     <ul class="achievements-list">
                         <li><a href="images/csgo_le.jpeg" target="_blank">Legendary Eagle</a> in Counter Strike 2</li>
                         <li>Self-proclaimed gym rat</li>
-                        <li>Self-development junkie</li>
                     </ul>
                 </section>
 
                 <section class="section" id="additional">
-                    <h2 class="section-title">Additional</h2>
+                    <h2 class="section-title">Awards</h2>
                     <ul class="achievements-list">
-                        <li>ZipRecruiter Hackathon Winner</li>
                         <li>Caltech Hackathon Winner</li>
+                        <li>Rice University Hackathon Winner</li>
+                        <li>ZipRecruiter Hackathon Winner</li>
                     </ul>
                 </section>
 
@@ -537,11 +569,11 @@
                     <h2 class="section-title">Affiliation</h2>
                     <ul class="social-list">
                         <li>Founder at <a href="https://www.antler.co//">Antler NYC</a></li>
-                        <li>Global Fellow at <a href="https://ai2030.org/global-fellow-program/">AI2030</a></li>
+                        <!-- <li>Global Fellow at <a href="https://ai2030.org/global-fellow-program/">AI2030</a></li> -->
                         <li>Member at <a
                                 href="https://councils.forbes.com/profile/Mostofa-Shakib-Founder-CEO-Variant-Technologies/fdfc43c6-7fb0-412b-966b-9c5f62c822c8">Forbes
                                 Business Council</a></li>
-                        <li>Founder Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li>
+                        <!-- <li>Founder Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li> -->
                     </ul>
                 </section>
 
@@ -565,6 +597,30 @@
                     </p>
                 </section>
             </aside>
+        </div>
+
+        <div class="container" style="display: block; padding-top: 0;">
+            <section class="section" id="advising">
+                <div class="content" style="text-align: left;">
+                    <h2
+                        style="font-size: 1rem; font-style: bold; font-weight: 250; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 1px solid var(--accent-blue); display: inline-block;">
+                        Advising & Investing</h2>
+                    <ul class="achievements-list advising-list">
+                        <li><strong>Accelerator Committee at <a
+                                    href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation
+                                    Hub</a>:</strong> Evaluated and selected startups for the $40K seed accelerator, and
+                            provided technical advisory to portfolio companies.</li>
+                        <li><strong>Technical Advisor at <a href="https://fi.co/">Founder's Institute</a>:</strong>
+                            Advising early-stage founders on technical and AI strategy in the Silicon
+                            Valley Chapter.</li>
+                        <li><strong>Investor at <a href="https://www.gaingels.com/">GaingelsVC</a>:</strong>
+                            Actively investing in early-stage AI and infrastructure startups.</li>
+                        <li><strong>Technical Advisor at <a href="https://relaxy.com.bd/">Relaxy</a>:</strong> Guided
+                            AI and technical strategy for an AI mental health platform backed by Accelerating Asia,
+                            led by a Forbes 30 Under 30 founder.</li>
+                    </ul>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -618,7 +674,7 @@
                         <div class="experience-item">
                             <h4>Co-Founder at Promethium</h4>
                             <p>Blockchain based wallet + payments infrastructure with built-in assets inheritance;
-                                Received funding from US Government SBIR Program, 1517 Fund </p>
+                                Received funding from US Government SBIR Program, and 1517 Fund </p>
                         </div>
                         <!-- <div class="experience-item">
                             <h4>Founder at <a href="https://www.facebook.com/kurtssteamstore">Kurt's Steam
@@ -657,23 +713,6 @@
                         </div>
                     </div>
 
-                    <!-- Advising & Investing Experiences (Inline) -->
-                </div>
-                <div class="content" style="margin-top: 4rem; text-align: left;">
-                    <h2
-                        style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--accent-blue); display: inline-block;">
-                        Advising & Investing</h2>
-                    <ul class="achievements-list" style="line-height: 1.8; font-size: 0.95rem;">
-                        <li><strong>Accelerator Committee at <a
-                                    href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation
-                                    Hub</a>:</strong> Evaluated and selected startups for the $40K seed accelerator, and
-                            provided technical advisory to portfolio companies.</li>
-                        <li><strong>Technical Advisor at <a href="https://relaxy.com.bd/">Relaxy</a>:</strong> Guided
-                            AI and technical strategy for an AI mental health platform backed by Accelerating Asia,
-                            led by a Forbes 30 Under 30 founder.</li>
-                        <li><strong>Angel Investor at <a href="https://www.gaingels.com/">GaingelsVC</a>:</strong>
-                            Actively investing in early-stage AI and infrastructure startups.</li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -704,9 +743,9 @@
                             <li>The Financial Express: <a
                                     href="https://thefinancialexpress.com.bd/youth-and-entrepreneurship/rethinking-hiring-with-mostofa-adib-shakib">Rethinking
                                     hiring with Mostofa Adib Shakib</a></li>
-                            <li>USA Today: <a
+                            <!-- <li>USA Today: <a
                                     href="https://www.usatoday.com/story/special/contributor-content/2024/06/11/adibs-path-from-steam-trader-to-silicon-valley/74061707007/">Adib's
-                                    Path from Steam Trader to Silicon Valley</a></li>
+                                    Path from Steam Trader to Silicon Valley</a></li> -->
                             <li>Hackernoon: <a
                                     href="https://hackernoon.com/from-bangladesh-to-texas-shakib-and-the-power-of-hackathons">From
                                     Bangladesh to Texas: Shakib and the Power of Hackathons</a>
