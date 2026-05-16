@@ -189,75 +189,76 @@
         }
 
         #experiences .main-content {
-            text-align: center;
-            max-width: 1200px;
+            text-align: left;
+            max-width: 800px;
             margin: 0 auto;
             width: 100%;
         }
 
-        .experiences-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 2.5rem;
-            margin-top: 2rem;
+        .experience-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
             width: 100%;
         }
 
-        .experience-column h2 {
-            font-size: 1.5rem;
+        .category-title {
+            font-size: 1.1rem;
             font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--accent-blue);
-            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: inline-block;
         }
 
-        .experience-item {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-align: left;
+        .experience-row {
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
         }
 
-        .experience-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+        .experience-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
         }
 
-        .experience-item h4 {
+        .experience-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .experience-company {
             font-size: 1rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.5rem;
         }
 
-        .experience-item p {
+        .experience-company a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .experience-company a:hover {
+            color: var(--accent-blue);
+        }
+
+        .experience-position {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .experience-highlight {
             color: var(--text-secondary);
             font-size: 0.85rem;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        .advising-list {
-            line-height: 1.8;
-            font-size: 0.95rem;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding-bottom: 0.5rem;
-        }
-
-        @media (max-width: 1024px) {
-            .advising-list {
-                white-space: normal;
-                overflow-x: hidden;
-            }
-
-            .advising-list li {
-                margin-bottom: 0.5rem;
-            }
+            line-height: 1.4;
         }
 
         .writings-subsection {
@@ -303,11 +304,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .experiences-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
             #experiences .main-content,
             #projects .main-content {
                 max-width: 100%;
@@ -325,10 +321,7 @@
         }
 
         @media (max-width: 1024px) and (min-width: 769px) {
-            .experiences-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
-            }
+            /* Kept empty or used for other mid-size screens */
         }
 
         .blog-card {
@@ -484,11 +477,11 @@
         </div>
         <div class="nav-links">
             <a onclick="showPage('home')" class="nav-item active">Home</a>
-            <a onclick="showPage('experiences')" class="nav-item">Experiences</a>
-            <a onclick="showPage('blog')" class="nav-item">Blog</a>
-            <a onclick="showPage('projects')" class="nav-item">Projects</a>
-            <a onclick="showPage('writings')" class="nav-item">Writings</a>
+            <a onclick="showPage('experiences')" class="nav-item">Experience</a>
             <a onclick="showPage('media')" class="nav-item">Media</a>
+            <a onclick="showPage('writings')" class="nav-item">Writings</a>
+            <a onclick="showPage('projects')" class="nav-item">Project</a>
+            <a onclick="showPage('blog')" class="nav-item">Blog</a>
         </div>
     </nav>
 
@@ -571,9 +564,9 @@
                         <li>Founder at <a href="https://www.antler.co//">Antler NYC</a></li>
                         <li>Founder Fellow at <a href="https://www.joinodf.com/">OnDeck</a></li>
                         <li>Global Fellow at <a href="https://ai2030.org/global-fellow-program/">AI2030</a></li>
-                        <!-- <li>Member at <a
+                        <li>Member at <a
                                 href="https://councils.forbes.com/profile/Mostofa-Shakib-Founder-CEO-Variant-Technologies/fdfc43c6-7fb0-412b-966b-9c5f62c822c8">Forbes
-                                Business Council</a></li> -->
+                                Business Council</a></li>
                     </ul>
                 </section>
 
@@ -604,118 +597,83 @@
 
     <!-- Experiences Page -->
     <div id="experiences" class="page-content">
-        <div class="container">
+        <div class="container" style="display: block;">
             <div class="main-content">
-                <h1 class="section-title">Experiences</h1>
-                <div class="experiences-grid">
-                    <!-- Industry Experiences -->
-                    <div class="experience-column">
-                        <h2>Industry</h2>
-                        <!-- <div class="experience-item">
-                            <h4>AI Engineer at Mercor</h4>
-                            <p>Led the development of evaluation infrastructure to compute rewards for LLM Post Training
-                            </p>
-                        </div> -->
-                        <div class="experience-item">
-                            <h4>Software Engineer at ZipRecruiter</h4>
-                            <p>Drove transition to eliminate manual QA; enabled launch of
-                                real-time video interview (<a
-                                    href="https://techcrunch.com/2024/09/05/ziprecruiters-new-tool-will-quickly-match-and-schedule-an-intro-call-with-potential-candidates/">ZipIntro)</a>
+                <div class="experience-list-container">
+                    <!-- Entrepreneurship -->
+                    <div class="experience-category">
+                        <h2 class="category-title">Entrepreneurship</h2>
+                        <ul class="achievements-list" style="margin-bottom: 0.5rem; line-height: 1.6;">
+                            <li><strong style="color: var(--text-primary);">Founder at CSB:</strong>
+                                Bootstrapped an AI Recruitment startup focused on evaluating and hiring foreign talent
+                                from $0 to mid-six figures run rate in 3 months while generating $4M+ for developers.
+                                Managed a team of 7 people
+                            </li>
+                            <li><strong style="color: var(--text-primary);">Co-Founder at Promethium:</strong>
+                                Blockchain based wallet + payments infrastructure with built-in assets inheritance;
+                                Received funding and support from US Government's SBIR Program, and 1517 Fund.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Industry -->
+                    <div class="experience-category">
+                        <h2 class="category-title">Industry</h2>
+                        <ul class="achievements-list" style="margin-bottom: 0.5rem; line-height: 1.6;">
+                            <li><strong style="color: var(--text-primary);">Software Engineer at ZipRecruiter:</strong>
+                                Enabled launch of real-time video interview (<a
+                                    href="https://techcrunch.com/2024/09/05/ziprecruiters-new-tool-will-quickly-match-and-schedule-an-intro-call-with-potential-candidates/">ZipIntro</a>)
                                 for 10M job seekers daily, helping ZipRecruiter earn a spot in <a
                                     href="https://www.fastcompany.com/91269597/human-resources-most-innovative-companies-2025">Fast
-                                    Company’s Most Innovative Companies</a></p>
-                        </div>
-                        <div class="experience-item">
-                            <h4>Software Engineer at Snapchat</h4>
-                            <p>Led messaging's identity migration (<a
+                                    Company’s Most Innovative Companies</a></li>
+                            <li><strong style="color: var(--text-primary);">Software Engineer at Snapchat:</strong> Led
+                                messaging's identity migration (<a
                                     href="https://techcrunch.com/2022/02/17/snapchat-change-username/">username
-                                    change</a>) for ~1B+ monthly active users.</p>
-                        </div>
-                        <!-- <div class="experience-item">
-                            <h4>Founding Engineer at CDK Global</h4>
-                            <p>Early engineer at the new fortellis marketplace; built the subscription billing infrastructure.</p>
-                        </div> -->
+                                    change</a>) for ~1B+ MAU.</li>
+                        </ul>
                     </div>
 
-                    <!-- Entrepreneurship Experiences -->
-                    <div class="experience-column">
-                        <h2>Entrepreneurship</h2>
-                        <div class="experience-item">
-                            <h4>Founder at CSB (AI Recruitment)</h4>
-                            <p>Bootstrapped from $0 to $305K ARRR in 3 months while generating $4M+ for developers;
-                                featured in <a
-                                    href="https://www.under30ceo.com/how-a-gaming-arbitrage-strategy-led-to-revolutionizing-tech-education/">Under30CEO</a>,
-                                and <a
-                                    href="https://thefinancialexpress.com.bd/youth-and-entrepreneurship/rethinking-hiring-with-mostofa-adib-shakib">
-                                    Financial Express</a>.</p>
-                        </div>
-                        <div class="experience-item">
-                            <h4>Co-Founder at Promethium</h4>
-                            <p>Blockchain based wallet + payments infrastructure with built-in assets inheritance;
-                                Received funding from US Government SBIR Program, and 1517 Fund </p>
-                        </div>
-                        <!-- <div class="experience-item">
-                            <h4>Founder at <a href="https://www.facebook.com/kurtssteamstore">Kurt's Steam
-                                    Store</a>
-                            </h4>
-                            <p>Built <a href="https://www.facebook.com/kurtssteamstore">Bangladesh's largest eSports
-                                    marketplace</a> using software to track market trends
-                                across regions, and generated 600,000% ROI from $5.</p>
-                        </div> -->
+                    <!-- Advising & Investing -->
+                    <div class="experience-category">
+                        <h2 class="category-title">Advising & Investing</h2>
+                        <ul class="achievements-list" style="margin-bottom: 0.5rem; line-height: 1.6;">
+                            <li><strong style="color: var(--text-primary);">Accelerator Committee at <a
+                                        href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa"
+                                        style="color: var(--accent-blue);">Innovation Hub</a>:</strong> Evaluated and
+                                selected startups for the $40K seed accelerator.</li>
+                            <li><strong style="color: var(--text-primary);">Technical Advisor at <a
+                                        href="https://fi.co/mentors#:~:text=mostofa%20shakib"
+                                        style="color: var(--accent-blue);">Founder's
+                                        Institute</a>:</strong> Advised early-stage founders focused on AI and
+                                infrastructure.</li>
+                            <li><strong style="color: var(--text-primary);">Investor at <a href="https://gaingels.com/"
+                                        style="color: var(--accent-blue);">Gaingels</a>:</strong> Investing in
+                                early-stage AI and infrastructure startups.</li>
+                            <li><strong style="color: var(--text-primary);">Technical Advisor at <a
+                                        href="https://relaxy.com.bd/"
+                                        style="color: var(--accent-blue);">RelaxyAI</a>:</strong> Advised an
+                                Accelerating Asia-backed, Forbes 30 Under 30-led startup.</li>
+                        </ul>
                     </div>
 
-                    <!-- Non-profit Experiences -->
-                    <div class="experience-column">
-                        <h2>Non-Profit</h2>
-                        <!-- <div class="experience-item">
-                            <h4>Research at Applied Vision Lab</h4>
-                            <p>Conducted image segmentation using deformable models and CNN to detect multi-scale
-                                visual features for early-stage plantation yield estimation.</p>
-                        </div> -->
-
-                        <div class="experience-item">
-                            <h4>Founder & President at HackCSB</h4>
-                            <p>Bangladesh's first hackathon ecosystem; collaborated with top universities, influencers
-                                with 1M+
-                                followers; earned recognition from <a
+                    <!-- Non-Profit -->
+                    <div class="experience-category">
+                        <h2 class="category-title">Non-Profit</h2>
+                        <ul class="achievements-list" style="margin-bottom: 0.5rem; line-height: 1.6;">
+                            <li><strong style="color: var(--text-primary);">Founder & President at HackCSB:</strong>
+                                Bangladesh's first hackathon ecosystem; collaborated with top universities, influencers
+                                with 1M+ followers; Featured by <a
                                     href="https://x.com/UNICEFinnovate/status/1858827565445902392">UNICEF</a>, <a
                                     href="https://www.dhakatribune.com/bangladesh/education/357156/bangladesh%E2%80%99s-tech-sector-energized-by">Dhaka
                                     Tribune</a>, and <a
                                     href="https://thefinancialexpress.com.bd/sci-tech/how-a-bangladeshi-hackathon-is-inspiring-a-generation">The
-                                    Financial Express</a></p>
-                        </div>
-                        <div class="experience-item">
-                            <h4>Co-Founder & President at RaiderHacks</h4>
-                            <p>West Texas’s first hackathon org; grew to 100+ members who won at
-                                Harvard, Microsoft, Berkeley</p>
-                        </div>
+                                    Financial Express</a></li>
+                            <li><strong style="color: var(--text-primary);">Co-Founder & President at
+                                    RaiderHacks:</strong> West Texas’s first hackathon organization; grew to 100+
+                                members </li>
+                        </ul>
                     </div>
-
                 </div>
             </div>
-        </div>
-
-        <div class="container" style="display: block; padding-top: 0;">
-            <section class="section" id="advising">
-                <div class="content" style="text-align: left;">
-                    <h2
-                        style="font-size: 1rem; font-style: bold; font-weight: 250; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 1px solid var(--accent-blue); display: inline-block;">
-                        Advising & Investing</h2>
-                    <ul class="achievements-list advising-list">
-                        <li><strong>Accelerator Committee at <a
-                                    href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa">Innovation
-                                    Hub</a>:</strong> Evaluated and selected startups for the $40K seed accelerator, and
-                            provided technical advisory to portfolio companies.</li>
-                        <li><strong>Technical Advisor at <a href="https://fi.co/">Founder's Institute</a> Silicon Valley
-                                & Investor at <a href="https://www.gaingels.com/">GaingelsVC</a>:</strong>
-                            Advising and investing in early-stage founders focused on AI and infrastructure startups.
-                        </li>
-                        <li><strong>Technical Advisor at <a href="https://relaxy.com.bd/">Relaxy</a>:</strong> Guided
-                            AI and technical strategy for an AI mental health platform backed by Accelerating Asia,
-                            led by a Forbes 30 Under 30 founder.</li>
-                    </ul>
-                </div>
-            </section>
         </div>
     </div>
 
