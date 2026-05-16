@@ -5,466 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mostofa Shakib</title>
-    <style>
-        :root {
-            --bg-color: #0a0a0f;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a5;
-            --accent-blue: #3b82f6;
-            --card-bg: #1a1a1f;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-y: scroll;
-        }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 4rem;
-        }
-
-        #experiences .container {
-            grid-template-columns: 1fr;
-            justify-items: center;
-        }
-
-        #projects .container {
-            grid-template-columns: 1fr;
-            justify-items: center;
-        }
-
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background-color: rgba(26, 26, 31, 0.8);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo img {
-            width: 40px;
-            height: 40px;
-        }
-
-        .site-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-primary);
-            font-weight: 500;
-            font-size: 1rem;
-            text-decoration: none;
-            padding: 0.5rem 0.8rem;
-            border-radius: 6px;
-            transition: background 0.2s, color 0.2s;
-            cursor: pointer;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            background: var(--accent-blue);
-            color: #fff;
-        }
-
-        .main-content {
-            margin-top: 1rem;
-        }
-
-        .section {
-            margin-bottom: 1rem;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .content p {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-        }
-
-        a {
-            color: var(--accent-blue);
-            text-decoration: none;
-            transition: opacity 0.3s ease;
-        }
-
-        a:hover {
-            opacity: 0.8;
-        }
-
-        .achievements-list {
-            list-style: none;
-            color: var(--text-secondary);
-        }
-
-        .achievements-list li {
-            margin-bottom: 0.5rem;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .gallery-item {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .gallery-caption {
-            padding: 0.25rem;
-            color: var(--text-secondary);
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        /* Page content styles */
-        .page-content {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .page-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        #experiences .main-content {
-            text-align: left;
-            max-width: 800px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .experience-list-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            width: 100%;
-        }
-
-        .category-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.25rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: inline-block;
-        }
-
-        .experience-row {
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .experience-row:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .experience-header {
-            display: flex;
-            align-items: baseline;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .experience-company {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .experience-company a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .experience-company a:hover {
-            color: var(--accent-blue);
-        }
-
-        .experience-position {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .experience-highlight {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-
-        .writings-subsection {
-            margin-bottom: 2.5rem;
-        }
-
-        .writings-subsection h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            padding-bottom: 0.4rem;
-            border-bottom: 2px solid var(--accent-blue);
-            display: inline-block;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                max-width: 100%;
-                padding: 1rem;
-            }
-
-            .nav {
-                flex-direction: column;
-                padding: 1rem;
-                gap: 1rem;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 0.5rem;
-            }
-
-            .nav-links a {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.9rem;
-            }
-
-            .gallery {
-                grid-template-columns: 1fr;
-            }
-
-            #experiences .main-content,
-            #projects .main-content {
-                max-width: 100%;
-                padding: 0;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .blog-filter-btn {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.85rem;
-            }
-        }
-
-        @media (max-width: 1024px) and (min-width: 769px) {
-            /* Kept empty or used for other mid-size screens */
-        }
-
-        .blog-card {
-            background: rgba(26, 26, 31, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 0.5rem 0.75rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            text-align: left;
-        }
-
-        .blog-card:hover {
-            transform: translateY(-5px);
-            background: rgba(26, 26, 31, 0.8);
-            border-color: var(--accent-blue);
-            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15);
-        }
-
-        .blog-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-blue), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .blog-card:hover::before {
-            opacity: 1;
-        }
-
-        .blog-meta {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.15rem;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .blog-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.1rem;
-            line-height: 1.4;
-        }
-
-        .blog-desc {
-            color: #d1d5db;
-            font-size: 0.85rem;
-            margin-bottom: 0.15rem;
-            line-height: 1.4;
-            flex-grow: 1;
-        }
-
-        .blog-read-more {
-            color: var(--accent-blue);
-            font-size: 0.95rem;
-            font-weight: 500;
-            margin-top: auto;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 3rem;
-        }
-
-        .page-btn {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-secondary);
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .page-btn:hover:not(:disabled) {
-            border-color: var(--accent-blue);
-            color: var(--text-primary);
-        }
-
-        .page-btn.active {
-            background: var(--accent-blue);
-            color: white;
-            border-color: var(--accent-blue);
-        }
-
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .blog-filter-nav {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .blog-filter-btn {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-secondary);
-            padding: 0.5rem 1.25rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .blog-filter-btn:hover {
-            border-color: var(--accent-blue);
-            color: var(--text-primary);
-        }
-
-        .blog-filter-btn.active {
-            background: var(--accent-blue);
-            color: white;
-            border-color: var(--accent-blue);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -479,8 +20,8 @@
             <a onclick="showPage('home')" class="nav-item active">Home</a>
             <a onclick="showPage('experiences')" class="nav-item">Experience</a>
             <a onclick="showPage('media')" class="nav-item">Media</a>
-            <a onclick="showPage('writings')" class="nav-item">Writings</a>
             <a onclick="showPage('projects')" class="nav-item">Project</a>
+            <a onclick="showPage('writings')" class="nav-item">Writings</a>
             <a onclick="showPage('blog')" class="nav-item">Blog</a>
         </div>
     </nav>
@@ -583,10 +124,10 @@
                 <section class="section" id="socials">
                     <h2 class="section-title">Socials</h2>
                     <p>
-                        <a href="https://x.com/mshakib01">X</a>,
-                        <a href="https://www.instagram.com/mshakib01">Instagram</a>,
                         <a href="https://www.linkedin.com/in/mostofashakib">LinkedIn</a>,
-                        <a href="https://github.com/mostofashakib">GitHub</a>
+                        <a href="https://github.com/mostofashakib">GitHub</a>,
+                        <a href="https://x.com/mshakib01">X</a>,
+                        <a href="https://www.instagram.com/mshakib01">Instagram</a>
                     </p>
                 </section>
             </aside>
@@ -619,39 +160,16 @@
                     <div class="experience-category">
                         <h2 class="category-title">Industry</h2>
                         <ul class="achievements-list" style="margin-bottom: 0.5rem; line-height: 1.6;">
+                            <li><strong style="color: var(--text-primary);">Software Engineer at Snapchat:</strong> Led
+                                messaging's identity migration (<a
+                                    href="https://techcrunch.com/2022/02/17/snapchat-change-username/">username
+                                    change</a>) for ~1B+ MAU.</li>
                             <li><strong style="color: var(--text-primary);">Software Engineer at ZipRecruiter:</strong>
                                 Enabled launch of real-time video interview (<a
                                     href="https://techcrunch.com/2024/09/05/ziprecruiters-new-tool-will-quickly-match-and-schedule-an-intro-call-with-potential-candidates/">ZipIntro</a>)
                                 for 10M job seekers daily, helping ZipRecruiter earn a spot in <a
                                     href="https://www.fastcompany.com/91269597/human-resources-most-innovative-companies-2025">Fast
                                     Company’s Most Innovative Companies</a></li>
-                            <li><strong style="color: var(--text-primary);">Software Engineer at Snapchat:</strong> Led
-                                messaging's identity migration (<a
-                                    href="https://techcrunch.com/2022/02/17/snapchat-change-username/">username
-                                    change</a>) for ~1B+ MAU.</li>
-                        </ul>
-                    </div>
-
-                    <!-- Advising & Investing -->
-                    <div class="experience-category">
-                        <h2 class="category-title">Advising & Investing</h2>
-                        <ul class="achievements-list" style="margin-bottom: 0.5rem; line-height: 1.6;">
-                            <li><strong style="color: var(--text-primary);">Accelerator Committee at <a
-                                        href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa"
-                                        style="color: var(--accent-blue);">Innovation Hub</a>:</strong> Evaluated and
-                                selected startups for the $40K seed accelerator.</li>
-                            <li><strong style="color: var(--text-primary);">Technical Advisor at <a
-                                        href="https://fi.co/mentors#:~:text=mostofa%20shakib"
-                                        style="color: var(--accent-blue);">Founder's
-                                        Institute</a>:</strong> Advised early-stage founders focused on AI and
-                                infrastructure.</li>
-                            <li><strong style="color: var(--text-primary);">Investor at <a href="https://gaingels.com/"
-                                        style="color: var(--accent-blue);">Gaingels</a>:</strong> Investing in
-                                early-stage AI and infrastructure startups.</li>
-                            <li><strong style="color: var(--text-primary);">Technical Advisor at <a
-                                        href="https://relaxy.com.bd/"
-                                        style="color: var(--accent-blue);">RelaxyAI</a>:</strong> Advised an
-                                Accelerating Asia-backed, Forbes 30 Under 30-led startup.</li>
                         </ul>
                     </div>
 
@@ -670,6 +188,29 @@
                             <li><strong style="color: var(--text-primary);">Co-Founder & President at
                                     RaiderHacks:</strong> West Texas’s first hackathon organization; grew to 100+
                                 members </li>
+                        </ul>
+                    </div>
+
+                    <!-- Advising & Investing -->
+                    <div class="experience-category">
+                        <h2 class="category-title">Advising & Investing</h2>
+                        <ul class="achievements-list" style="margin-bottom: 0.5rem; line-height: 1.6;">
+                            <li><strong style="color: var(--text-primary);">Accelerator Committee at <a
+                                        href="https://www.depts.ttu.edu/research/research-park/About_Us/mentors/mentor/?name=shakib-adib-mostofa"
+                                        style="color: var(--accent-blue);">Innovation Hub</a>:</strong> Evaluated and
+                                selected startups for the $40K seed accelerator.</li>
+                            <li><strong style="color: var(--text-primary);">Technical Advisor at <a
+                                        href="https://relaxy.com.bd/"
+                                        style="color: var(--accent-blue);">RelaxyAI</a>:</strong> Advised an
+                                Accelerating Asia-backed, Forbes 30 Under 30-led startup.</li>
+                            <li><strong style="color: var(--text-primary);">Investor at <a href="https://gaingels.com/"
+                                        style="color: var(--accent-blue);">Gaingels</a>:</strong> Investing in
+                                early-stage AI and infrastructure startups.</li>
+                            <li><strong style="color: var(--text-primary);">Technical Advisor at <a
+                                        href="https://fi.co/mentors#:~:text=mostofa%20shakib"
+                                        style="color: var(--accent-blue);">Founder's
+                                        Institute</a>:</strong> Advised early-stage founders focused on AI and
+                                infrastructure.</li>
                         </ul>
                     </div>
                 </div>
@@ -743,7 +284,6 @@
     <div id="projects" class="page-content">
         <div class="container">
             <div class="main-content">
-                <h1 class="section-title">Projects</h1>
                 <div class="content" style="margin-top: 1.5rem;">
                     <ul class="achievements-list">
                         <li><a href="https://github.com/mostofashakib/Forge">Forge</a>: Built infrastructure for
@@ -752,26 +292,26 @@
                             behavior, and scalable trajectory generation for reasoning, planning, and tool-use
                             evaluation
                         </li>
-                        <!-- <li><a href="https://github.com/mostofashakib/GideonAI">GideonAI</a>: Built a multimodal
+                        <li><a href="https://github.com/mostofashakib/GideonAI">GideonAI</a>: Built a multimodal
                             video
                             moderation agent with compliance validation, cross-model disagreement detection, drift
                             monitoring across content distributions, and cost-aware inference routing for per-clip
                             model
                             selection. Integrated confidence-based human review loops with policy feedback
                             refinement
-                        </li> -->
-                        <!-- <li><a href="https://github.com/mostofashakib/Friday">Friday</a>: An AI Interview Coach that
+                        </li>
+                        <li><a href="https://github.com/mostofashakib/Friday">Friday</a>: An AI Interview Coach that
                             adapts in real time — asking harder questions when you're doing well, probing weak spots
                             when you're not, and coaching itself on how to push you further;
                             personalizes every session to the candidate by reading their GitHub, resume,
                             publications,
-                            and the job posting before the interview begins</li> -->
-                        <!-- <li><a href="https://github.com/mostofashakib/VidQ">VidQ</a>: Agentic video downloader that
+                            and the job posting before the interview begins</li>
+                        <li><a href="https://github.com/mostofashakib/VidQ">VidQ</a>: Agentic video downloader that
                             downloads any video from any websites with no browser extensions or site-specific
                             configs.
                             Runs a two-pass pipeline inside headless Chromium that intercepts video streams and
                             downloads via ffmpeg, with a MediaRecorder fallback for DRM-adjacent or blob-URL content
-                        </li> -->
+                        </li>
 
                         <li><a
                                 href="https://www.linkedin.com/posts/safallwa_chatgpt-resumegpt-activity-7284949715173974016-oay0/">ResumeGPT</a>:
@@ -870,212 +410,7 @@
         </div>
     </div>
 
-    <script>
-        // Page navigation functionality
-        function showPage(pageId) {
-            // Scroll to top of the page instantly to prevent flickering
-            window.scrollTo(0, 0);
-
-            // Hide all pages
-            const pages = document.querySelectorAll('.page-content');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-
-            // Show selected page
-            const selectedPage = document.getElementById(pageId);
-            if (selectedPage) {
-                selectedPage.classList.add('active');
-            }
-
-            // Update navigation active state
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
-                item.classList.remove('active');
-            });
-
-            // Find and activate the corresponding nav item
-            const activeNavItem = document.querySelector(`[onclick="showPage('${pageId}')"]`);
-            if (activeNavItem) {
-                activeNavItem.classList.add('active');
-            }
-        }
-
-        const blogs = [
-            {
-                title: "LLM Training Overview",
-                description: "A visual mapping of how foundational models are designed, trained, aligned, and optimized for inference.",
-                date: "November 29, 2025",
-                readTime: "6 min read",
-                url: "blog/llm_training_overview.html",
-                category: "tech"
-            },
-            {
-                title: "LLM Evaluation & Benchmark",
-                description: "Evaluations, why they fail, how to use LLM as a Judge, and why agentic traces are harder to evaluate.",
-                date: "November 28, 2025",
-                readTime: "20 min read",
-                url: "blog/llm_evaluation.html",
-                category: "tech"
-            },
-            {
-                title: "LLM as a Judge",
-                description: "How to reliably use LLMs as evaluators, common biases, mitigation and structured outputs.",
-                date: "November 27, 2025",
-                readTime: "12 min read",
-                url: "blog/llm_as_a_judge.html",
-                category: "tech"
-            },
-            {
-                title: "LLM Post-Training",
-                description: "A look at SFT, RLHF, and DPO, and how base models are fine-tuned to follow instructions.",
-                date: "November 25, 2025",
-                readTime: "25 min read",
-                url: "blog/post-training-llms.html",
-                category: "tech"
-            },
-            // {
-            //     title: "LLM Model Architecture",
-            //     description: "Examining core layers: Attention, MLP, Positional Encodings, and variants like MQA and Mixture of Experts.",
-            //     date: "March 29, 2026",
-            //     readTime: "Coming Soon",
-            //     url: "blog/model_architecture.html"
-            // },
-            // {
-            //     title: "LLM Pre-Training",
-            //     description: "Exploring compute scaling laws, distributed architectures, and mixed precision optimization.",
-            //     date: "March 29, 2026",
-            //     readTime: "Coming Soon",
-            //     url: "blog/pretraining.html"
-            // },
-            // {
-            //     title: "LLM Inference Ops",
-            //     description: "Deep dive into model deployment via KV Cache, Speculative Decoding, and PagedAttention.",
-            //     date: "March 29, 2026",
-            //     readTime: "Coming Soon",
-            //     url: "blog/inference.html"
-            // },
-            // {
-            //     title: "High Fidelity Environments",
-            //     description: "Testing model deployments via sandboxing, robust tooling, and mock production scenarios.",
-            //     date: "March 29, 2026",
-            //     readTime: "Coming Soon",
-            //     url: "blog/high_fidelity_environment.html"
-            // }
-        ];
-
-        const BLOGS_PER_PAGE = 6;
-        let currentBlogPage = 1;
-        let currentBlogCategory = 'all';
-
-        function filterBlogs(category) {
-            currentBlogCategory = category;
-            currentBlogPage = 1; // Reset to first page
-
-            // Update active state of buttons
-            const buttons = document.querySelectorAll('.blog-filter-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('onclick').includes(`('${category}')`)) {
-                    btn.classList.add('active');
-                }
-            });
-
-            renderBlogs();
-        }
-
-        function renderBlogs() {
-            const container = document.getElementById('blog-container');
-            const pagination = document.getElementById('blog-pagination');
-
-            if (currentBlogCategory === 'reading-list') {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: left; padding: 0.5rem 0; width: 100%;">
-                        <h2 style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Startups</h2>
-                        <ul class="achievements-list" style="margin-bottom: 2.5rem; list-style-type: disc; margin-left: 1.5rem; line-height: 1.8;">
-                            <li><strong>Zero to One</strong> by Peter Thiel</li>
-                            <li><strong>Built to Last</strong> by Jim Collins and Jerry I. Porras</li>
-                            <li><strong>Negotiation Genius</strong> by Deepak Malhotra and Max Bazerman</li>
-                            <li><strong>The Mom Test</strong> by Rob Fitzpatrick</li>
-                            <li><strong>Start Small, Stay Small</strong> by Rob Walling</li>
-                            <li><strong>The Unfair Advantage</strong> by Ash Ali and Hasan Kubba</li>
-                        </ul>
-
-                        <h2 style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Personal</h2>
-                        <ul class="achievements-list" style="list-style-type: disc; margin-left: 1.5rem; line-height: 1.8;">
-                            <li><strong>Meditations</strong> by Marcus Aurelius</li>
-                            <li><strong>The 48 Laws of Power</strong> by Robert Greene</li>
-                            <li><strong>Money: The True Story of a Made-Up Thing</strong> by Jacob Goldstein</li>
-                        </ul>
-                    </div>
-                `;
-                pagination.innerHTML = '';
-                return;
-            }
-
-            // Filter blogs by category
-            const filteredBlogs = currentBlogCategory === 'all'
-                ? blogs
-                : blogs.filter(blog => blog.category === currentBlogCategory);
-
-            // Calculate slice
-            const startIndex = (currentBlogPage - 1) * BLOGS_PER_PAGE;
-            const endIndex = startIndex + BLOGS_PER_PAGE;
-            const currentBlogs = filteredBlogs.slice(startIndex, endIndex);
-
-            // Render Blogs
-            if (currentBlogs.length === 0) {
-                container.innerHTML = '<div style="text-align: center; grid-column: 1 / -1; color: var(--text-secondary); padding: 2rem 0;">No articles found in this category.</div>';
-            } else {
-                container.innerHTML = currentBlogs.map(blog => `
-                    <div class="blog-card" onclick="window.location.href='${blog.url}'">
-                        <div class="blog-meta">
-                            <span>${blog.date}</span>
-                            <span>•</span>
-                            <span>${blog.readTime}</span>
-                        </div>
-                        <div class="blog-title">${blog.title}</div>
-                        <div class="blog-desc">${blog.description}</div>
-                    </div>
-                `).join('');
-            }
-
-            // Render Pagination
-            const totalPages = Math.ceil(filteredBlogs.length / BLOGS_PER_PAGE);
-
-            if (totalPages > 1) {
-                let paginationHTML = `<button class="page-btn" ${currentBlogPage === 1 ? 'disabled' : ''} onclick="changeBlogPage(${currentBlogPage - 1})">←</button>`;
-
-                for (let i = 1; i <= totalPages; i++) {
-                    paginationHTML += `<button class="page-btn ${currentBlogPage === i ? 'active' : ''}" onclick="changeBlogPage(${i})">${i}</button>`;
-                }
-
-                paginationHTML += `<button class="page-btn" ${currentBlogPage === totalPages ? 'disabled' : ''} onclick="changeBlogPage(${currentBlogPage + 1})">→</button>`;
-                pagination.innerHTML = paginationHTML;
-            } else {
-                pagination.innerHTML = '';
-            }
-        }
-
-        function changeBlogPage(page) {
-            const filteredBlogs = currentBlogCategory === 'all'
-                ? blogs
-                : blogs.filter(blog => blog.category === currentBlogCategory);
-            const totalPages = Math.ceil(filteredBlogs.length / BLOGS_PER_PAGE);
-            if (page >= 1 && page <= totalPages) {
-                currentBlogPage = page;
-                renderBlogs();
-                // Scroll to top of blog section instantly to prevent flickering
-                window.scrollTo(0, 0);
-            }
-        }
-
-        // Initialize with home page and render blogs
-        document.addEventListener('DOMContentLoaded', function () {
-            showPage('home');
-            renderBlogs();
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
